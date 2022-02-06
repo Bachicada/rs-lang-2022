@@ -1,0 +1,17 @@
+{
+  "files": {
+    "main.css": "/rs-lang/my-app/lang-build/static/css/main.09252667.css",
+    "main.js": "/rs-lang/my-app/lang-build/static/js/main.3f6b7712.js",
+    "static/js/787.28cb0dcd.chunk.js": "/rs-lang/my-app/lang-build/static/js/787.28cb0dcd.chunk.js",
+    "static/media/creative_minds.png": "/rs-lang/my-app/lang-build/static/media/creative_minds.1d4d418196a92663ac1d.png",
+    "static/media/git-icon.png": "/rs-lang/my-app/lang-build/static/media/git-icon.02d18541fa31268c467c.png",
+    "index.html": "/rs-lang/my-app/lang-build/index.html",
+    "main.09252667.css.map": "/rs-lang/my-app/lang-build/static/css/main.09252667.css.map",
+    "main.3f6b7712.js.map": "/rs-lang/my-app/lang-build/static/js/main.3f6b7712.js.map",
+    "787.28cb0dcd.chunk.js.map": "/rs-lang/my-app/lang-build/static/js/787.28cb0dcd.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.09252667.css",
+    "static/js/main.3f6b7712.js"
+  ]
+}
