@@ -9,7 +9,7 @@ import { Styling } from '../../types';
 export class Landing extends React.Component {
     render(){
      return (
-       <div className={styles.landing} >
+       <div id='mainContainer' className={styles.landing} >
           <AboutApp />
           <Benefits />
           <Team />

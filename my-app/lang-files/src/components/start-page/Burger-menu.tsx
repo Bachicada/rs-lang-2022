@@ -1,10 +1,20 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
+import Textbook from '../textbook/Textbook'
 
 export default class BurgerMenu extends React.Component {
+    renderTextbook(){
+        ReactDOM.render(
+            <Textbook/>,
+            document.getElementById('mainContainer')
+          );
+    }
+
     render (){
+        
         return (
             <ul className='menuList'>
-                <li className='menuItem'>Учебник</li>
+                <li className='menuItem' onClick={this.renderTextbook}>Учебник</li>
                    <ul className='menuBook'>
                       <li className='bookItem'>Раздел 1</li>
                       <li className='bookItem'>Раздел 2</li>
