@@ -1,10 +1,6 @@
-.header {
-    background-color: green;
-}
 
 .landing {
     padding: 24px;
-    margin-top: 64px;
     background-color: #ffff;
 }
 .section {
@@ -43,4 +39,16 @@ color: green;
     color:whitesmoke;
     font-size: 1.25rem;
     padding: 5px 10px;
+    cursor: pointer;
+}
+
+.menuItem,
+.bookItem {
+ cursor: pointer;
+ height: 20px;
+}
+
+.menuItem:hover,
+.bookItem:hover {
+    background-color: #F1764E;
 }

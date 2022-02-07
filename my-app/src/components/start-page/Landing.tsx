@@ -6,10 +6,10 @@ import {Team} from './Team';
 
 import { Styling } from '../../types';
 
-export class Landing extends React.Component {
+export default class Landing extends React.Component {
     render(){
      return (
-       <div id='mainContainer' className={styles.landing} >
+       <div className={styles.landing} >
           <AboutApp />
           <Benefits />
           <Team />

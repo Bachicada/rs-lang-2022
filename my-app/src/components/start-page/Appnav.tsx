@@ -112,6 +112,7 @@ export function PersistentDrawerRight() {
           <IconButton sx={{color:'#ffff'}} onClick={handleDrawerClose}>
             {theme.direction === 'rtl' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
           </IconButton>
+       
         </DrawerHeader>
         <BurgerMenu />
       </Drawer>
