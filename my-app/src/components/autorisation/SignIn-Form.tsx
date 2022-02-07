@@ -1,5 +1,5 @@
 import * as React from 'react';
-import styles from '../start-page/landing.module.css'
+import styles from './autorisation.module.css'
 import { FormControl, InputLabel, Input, TextField} from '@mui/material';
 import ReactDOM from 'react-dom';
 

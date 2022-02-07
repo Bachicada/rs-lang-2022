@@ -18,37 +18,4 @@
     width:100%;
     height: auto;
 }
-.createLink{
-text-decoration: underline;
-color: green;
-}
 
-.inputForm{
-    margin-bottom: 10px;
-}
-
-.formBtn {
-    height: 20px;
-    background-color: rgba(6, 141, 78, 0.966);
-    color:whitesmoke;
-    border-radius:10px;
-}
-
-.signInBtn{
-    background-color: #F1764E;
-    color:whitesmoke;
-    font-size: 1.25rem;
-    padding: 5px 10px;
-    cursor: pointer;
-}
-
-.menuItem,
-.bookItem {
- cursor: pointer;
- height: 20px;
-}
-
-.menuItem:hover,
-.bookItem:hover {
-    background-color: #F1764E;
-}

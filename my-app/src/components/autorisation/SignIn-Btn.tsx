@@ -5,7 +5,7 @@ import Modal from '@mui/material/Modal';
 import Fade from '@mui/material/Fade';
 
 import SignInForm from './SignIn-Form';
-import styles from './landing.module.css';
+import styles from './autorisation.module.css';
 
 const style = {
   position: 'absolute' as 'absolute',

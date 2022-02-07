@@ -1,10 +1,8 @@
 import * as React from 'react';
-import { GlobalStyles } from '@mui/material';
-import styles from './landing.module.css';
 import type {} from '@mui/lab/themeAugmentation';
 
 import { createTheme, styled, ThemeProvider, useTheme } from '@mui/material/styles';
-import Box from '@mui/material/Box';
+
 import Drawer from '@mui/material/Drawer';
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
@@ -16,8 +14,8 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 
 import BurgerMenu from './Burger-menu';
-import TransitionsModal from './SignIn-Btn';
-import {Styling} from './../../types';
+import TransitionsModal from '../autorisation/SignIn-Btn';
+import {Styling} from '../../types';
 
 const drawerWidth = 240;
 

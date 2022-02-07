@@ -1,6 +1,7 @@
 #mainContainer {
     margin-top: 64px;
     flex-grow: 1;
+    min-height: calc(100vh - 64px - 25px - 48px);
 }
 .footer {
     position: relative;
@@ -22,4 +23,15 @@
 .gitIcon {
     height: 100%;
     width:auto;
+}
+.menuItem,
+.bookItem {
+ cursor: pointer;
+ height: 20px;
+ color: whitesmoke;
+}
+
+.menuItem:hover,
+.bookItem:hover {
+    background-color: #F1764E;
 }
