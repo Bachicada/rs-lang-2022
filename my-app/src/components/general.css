@@ -1,0 +1,37 @@
+#mainContainer {
+    margin-top: 64px;
+    flex-grow: 1;
+    min-height: calc(100vh - 64px - 25px - 48px);
+}
+.footer {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 25px;
+    padding: 24px;
+    background-color: #5393E1;
+    color: whitesmoke;
+}
+.footerLink {
+    position:relative;
+    display:flex;
+    align-items: center;
+    color: whitesmoke;
+    height: 100%;
+}
+.gitIcon {
+    height: 100%;
+    width:auto;
+}
+.menuItem,
+.bookItem {
+ cursor: pointer;
+ height: 20px;
+ color: whitesmoke;
+}
+
+.menuItem:hover,
+.bookItem:hover {
+    background-color: #F1764E;
+}

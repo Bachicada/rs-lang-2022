@@ -1,0 +1,21 @@
+
+.landing {
+    padding: 24px;
+    background-color: #ffff;
+}
+.section {
+    display:flex;
+    position: relative;
+    width:100%;
+}
+.aboutSection{
+    justify-content: space-between;
+}
+.imgContainer{
+    width:50%;
+}
+.innerImg {
+    width:100%;
+    height: auto;
+}
+
