@@ -1,12 +1,23 @@
-import * as React from 'react';
-import styles from './Sprint.module.css'
+import { Box } from '@mui/material';
+import React, { FC } from 'react';
+import LevelModal from './LevelModal';
+import PopupLevel from './PopupLevel';
 
-export default class Sprint extends React.Component {
-    render(){
-     return (
-             <div className={styles.sptintContainer}>
-                <h2>Sprint game(will be here)</h2>
-             </div>
-     )   
-    }
-} 
+interface SprintProps {
+  level?: number;
+}
+
+const Sprint: FC<SprintProps> = (props) => {
+  return (
+    <Box
+      sx={{
+        width: '100%',
+        height: 'calc(100vh - 64px - 25px - 48px)',
+      }}
+    >
+      <LevelModal></LevelModal>
+    </Box>
+  );
+}
+
+export default Sprint;
