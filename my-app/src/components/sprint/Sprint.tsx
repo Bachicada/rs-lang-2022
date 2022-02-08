@@ -9,8 +9,8 @@ interface SprintProps {
 
 const Sprint: FC<SprintProps> = (props) => {
   const [level, setLevel] = React.useState(props.level || 0);
-  
-
+  const [modalOpen, setModalOpen] = React.useState(props ? true : false)
+  console.log('level', level)
   return (
     <Box
       sx={{
@@ -20,7 +20,7 @@ const Sprint: FC<SprintProps> = (props) => {
         alignItems: 'center',
       }}
     >
-      <LevelModal></LevelModal>
+      <LevelModal active={modalOpen} setActive={setModalOpen} setLevel={setLevel}></LevelModal>
     </Box>
   );
 }
