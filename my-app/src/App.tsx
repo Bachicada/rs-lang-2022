@@ -10,6 +10,7 @@ import Textbook from './components/textbook/Textbook';
 import Sprint from './components/sprint/Sprint';
 import Audiocall from './components/audiocall/Audiocall';
 import Stat from './components/statistics/Stat';
+import PartOfTextBook from './components/textbook/PartOfTextbook';
 
 function App() {
   return (
@@ -21,7 +22,9 @@ function App() {
                 <Route path={APP_ROUTES.MAIN} element={<Landing/>}/>
                 <Route path='*' element={<Landing/>}/>
                 <Route path={APP_ROUTES.TEXTBOOK} element={<Textbook/>}/>
-                <Route path={`${APP_ROUTES.TEXTBOOK}${APP_ROUTES.PART1}`} element={<div>part 1</div>} />
+               {/*
+               <Route path={`${APP_ROUTES.TEXTBOOK}${APP_ROUTES.PART1}`} element={<PartOfTextBook />} />
+               */}
                 <Route path={`${APP_ROUTES.TEXTBOOK}${APP_ROUTES.PART2}`} element={<div>part 2</div>} /> 
                 <Route path={`${APP_ROUTES.TEXTBOOK}${APP_ROUTES.PART3}`} element={<div>part 3</div>} /> 
                 <Route path={`${APP_ROUTES.TEXTBOOK}${APP_ROUTES.PART4}`} element={<div>part 4</div>} /> 

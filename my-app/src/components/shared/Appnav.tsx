@@ -16,6 +16,7 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import BurgerMenu from './Burger-menu';
 import TransitionsModal from '../autorisation/SignIn-Btn';
 import {Styling} from '../../types';
+import { CurrentUser } from '../../utils/Constants';
 
 const drawerWidth = 240;
 
@@ -70,13 +71,27 @@ export function PersistentDrawerRight() {
     setOpen(false);
   };
 
+  const checkUser =()=>{
+    let greetingName:string;
+    if (localStorage.getItem('CurrentUser')){
+      const userObj = localStorage.getItem('CurrentUser');
+      const user = JSON.parse(userObj || '{}');
+      greetingName = user.name;
+    }
+    else {greetingName = CurrentUser.name} 
+    return greetingName;
+}
+
   return (
     <div>
        <AppBar sx={style} position="fixed" open={open}>
         <Toolbar>
           <TransitionsModal />
+          <Typography variant="h6" noWrap sx={{ flexGrow: 2 }} component="div">
+            Здравствуй, {checkUser()}
+          </Typography>
           <Typography variant="h6" noWrap sx={{ flexGrow: 1 }} component="div">
-            Menu
+            Меню
           </Typography>
          
           <IconButton

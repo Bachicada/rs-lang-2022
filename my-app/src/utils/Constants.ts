@@ -1,3 +1,5 @@
+import { CurUser } from "../types";
+
 export const APP_ROUTES = {
     MAIN: '/',
     TEXTBOOK: '/textbook',
@@ -15,5 +17,12 @@ export const APP_ROUTES = {
 export const API_URL = 'https://app-rs-lang-2022.herokuapp.com';
 
 export const ENDPOINTS = {
-    words: '/words'
+    words: '/words',
+    users: '/users'
 };
+
+export const CurrentUser: CurUser = {
+    id:'',
+    name:'Гость',
+    email:''
+}

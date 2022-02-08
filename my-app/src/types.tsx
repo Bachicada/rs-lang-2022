@@ -7,3 +7,19 @@ declare module 'react' {
       custom?: string;
     }
   }
+
+export interface NewUser {
+  name: string | null,
+  email: string | null,
+  password: string | null
+}
+
+export interface CurUser {
+  id: string,
+  name: string,
+  email: string 
+}
+
+export interface PartProps {
+  part: string | undefined;
+}

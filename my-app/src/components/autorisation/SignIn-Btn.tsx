@@ -5,6 +5,7 @@ import Modal from '@mui/material/Modal';
 import Fade from '@mui/material/Fade';
 
 import SignInForm from './SignIn-Form';
+import RegForm from './RegisterForm';
 import styles from './autorisation.module.css';
 
 const style = {
@@ -26,7 +27,7 @@ export default function TransitionsModal() {
 
   return (
     <div>
-      <button className={styles.signInBtn} onClick={handleOpen} >Sign In</button>
+      <button className={styles.signInBtn} onClick={handleOpen} >Войти</button>
       <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
@@ -40,7 +41,7 @@ export default function TransitionsModal() {
       >
         <Fade in={open}>
           <Box id='popupForm' sx={style}>
-            <SignInForm></SignInForm>
+            <RegForm />
           </Box>
         </Fade>
       </Modal>

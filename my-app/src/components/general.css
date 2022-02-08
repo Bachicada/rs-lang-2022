@@ -2,6 +2,7 @@
     margin-top: 64px;
     flex-grow: 1;
     min-height: calc(100vh - 64px - 25px - 48px);
+    padding-left:24px;
 }
 .footer {
     position: relative;
