@@ -15,7 +15,7 @@ const LevelModal = (props: ModalProps) => {
     <Container maxWidth="sm" style={{display: props.active ? 'block' : 'none'}}>
       <h2 style={{textAlign: 'center'}}>Выбери свой уровень</h2>
       <Container maxWidth="sm" sx={{ display: 'flex', justifyContent: 'space-between', }}>
-        {LEVELS.map((item) => <LevelButton item={item} props={props}/>)}
+        {LEVELS.map((item, index) => <LevelButton item={item} props={props} key={index}/>)}
       </Container>
     </Container>
   );

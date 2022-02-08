@@ -10,7 +10,7 @@ interface SprintProps {
 const Sprint: FC<SprintProps> = (props) => {
   const [level, setLevel] = React.useState(props.level || 0);
   const [modalOpen, setModalOpen] = React.useState(props ? true : false)
-  console.log('level', level)
+  
   return (
     <Box
       sx={{
