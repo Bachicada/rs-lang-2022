@@ -11,7 +11,7 @@ import PartOfTextBook from "./PartOfTextbook";
 
 export default function Textbook(){
 
-  const [partNumber, setPartNumber] = useState<string | undefined>('1')
+  const [partNumber, setPartNumber] = useState<string | undefined>('0')
 
   return (
     <div> 

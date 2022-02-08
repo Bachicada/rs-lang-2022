@@ -15,7 +15,7 @@ export async function getWords() {
     }
 
 export const getPartOfTextbook = async(partNumber: string | undefined) =>{
-  const page = await fetch(`${API_URL}${ENDPOINTS.words}?page=1&group=${partNumber}`,{
+  const page = await fetch(`${API_URL}${ENDPOINTS.words}?page=0&group=${partNumber}`,{
     method: 'GET',
   });
   return page.json();

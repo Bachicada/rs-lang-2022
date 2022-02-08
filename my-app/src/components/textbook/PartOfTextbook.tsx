@@ -5,7 +5,7 @@ import styles from './textbook.module.css'
 import { PartProps } from '../../types';
 import { getPartOfTextbook } from '../../services/WordService';
 import { useEffect, useState } from 'react';
-import { setSourceMapRange } from 'typescript';
+
 import WordCard from '../shared/WordCard';
 import PaginationRounded from './PaginationPages';
 
@@ -20,12 +20,15 @@ export default function PartOfTextBook(props: PartProps) {
       })
     }, [props.part])
 
+    const [pageNumber, setPageNumber] = useState<string | undefined>('1')
+
+
    return (
        <div>
-       <p>Раздел {Number(props.part)+1} </p>
+       <h3>Раздел {Number(props.part)+1} </h3>
        <PaginationRounded />
-       <div>
-           Слова 
+       <h4>Слова</h4>
+       <div className={styles.wordsCont}>
            { partWords.length > 0 && partWords.map((item) => <WordCard word={item} />)}
        </div>
        </div>

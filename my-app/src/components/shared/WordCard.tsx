@@ -1,42 +1,48 @@
-import * as React from "react";
-import Card from "@mui/material/Card";
-import CardActions from "@mui/material/CardActions";
-import CardContent from "@mui/material/CardContent";
-import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
-import { CardMedia } from "@mui/material";
-import { API_URL } from "../../utils/Constants";
+import * as React from 'react';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import CardMedia from '@mui/material/CardMedia';
+import Typography from '@mui/material/Typography';
+import { Button, CardActionArea, CardActions } from '@mui/material';
+import { API_URL } from '../../utils/Constants';
+import { WordCardProp, WordItem } from '../../types';
 
-interface WordCardProps {
-  word: any;
-}
+export default function WordCard (props: WordCardProp) {
+  const word = props.word;
 
- const WordCard: React.FC<WordCardProps> = ({ word }) => {
   return (
-    <Card sx={{ minWidth: 275 }}>
-      <CardMedia
-        component="img"
-        height="140"
-        image={`${API_URL}/${word.image}`}
-        alt="green iguana"
-      />
-      <CardContent>
-        <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-          Word of the Day
-        </Typography>
-        <Typography variant="h5" component="div">
-          {word.word}
-        </Typography>
-        <Typography sx={{ mb: 1.5 }} color="text.secondary">
-          {word.transcriprion}
-        </Typography>
-        <Typography variant="body2">{word.textExample}</Typography>
-      </CardContent>
+    <Card sx={{ maxWidth: 345, backgroundColor: '#1B2D46' }}>
+      <CardActionArea>
+        <CardMedia
+          component="img"
+          height="140"
+          image={`${API_URL}/${word.image}`}
+          alt="green iguana"
+        />
+        <CardContent>
+          <Typography gutterBottom variant="h5" component="div" color="whitesmoke">
+            {word.word}
+          </Typography>
+          <Typography variant="body2" color="whitesmoke" >
+           {word.transcription}
+          </Typography>
+          <Typography variant="body2" color="whitesmoke">
+           {word.wordTranslate}
+          </Typography>
+          <Typography variant="body2" color="whitesmoke">
+          {word.textMeaning}
+          </Typography>
+        </CardContent>
+      </CardActionArea>
       <CardActions>
-        <Button size="small">Learn More</Button>
+        <Button size="small" color="primary">
+          Сложное 
+        </Button>
+        <Button size="small" color="primary">
+          Изученное
+        </Button>
       </CardActions>
     </Card>
   );
-};
+}
 
-export default WordCard;

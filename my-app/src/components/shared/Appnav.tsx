@@ -15,7 +15,6 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 
 import BurgerMenu from './Burger-menu';
 import TransitionsModal from '../autorisation/SignIn-Btn';
-import {Styling} from '../../types';
 import { CurrentUser } from '../../utils/Constants';
 
 const drawerWidth = 240;
@@ -25,7 +24,7 @@ interface AppBarProps extends MuiAppBarProps {
 }
 
 const style = {
-  innerHeight: Styling.headerHeight,
+  innerHeight: '40',
   bgcolor: '#5393E1',
   textAlign: 'right',
 };
