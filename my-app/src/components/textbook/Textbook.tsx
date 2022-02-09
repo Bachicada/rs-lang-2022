@@ -1,6 +1,5 @@
 import * as React from "react";
 import { useEffect, useState } from "react";
-//import getWords from "../../services/WordService";
 import WordCard from '../shared/WordCard';
 import styles from "./textbook.module.css";
 import GamesMenu from './GamesMenu';
@@ -38,28 +37,6 @@ export default function Textbook(){
           </li>
         </ul>
         <PartOfTextBook part={partNumber} />
-      
     </div>
   )
 }
-
-/*const Textbook = () => {
-  const [words, setWords] = useState<any[]>([]);
-
-  useEffect(() => {
-    getWords().then((words) => {
-      console.log("words :>> ", words);
-      setWords(words);
-    });
-  }, []);
-
-  return (
-    <div className={styles.textbook}>
-        <h2>Textbook</h2>
-       { words.length > 0 && words.map((item) => <WordCard word={item} />)}
-    </div>
-  );
-};
-
-export default Textbook;
-*/

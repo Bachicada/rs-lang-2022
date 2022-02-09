@@ -14,6 +14,10 @@ export interface PartProps {
   part: string | undefined;
 }
 
+export interface PageProps extends PartProps{
+  page: string | undefined;
+}
+
 export interface WordItem {
   id: string,
   group: 0,

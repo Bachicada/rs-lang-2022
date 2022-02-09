@@ -4,7 +4,7 @@ import { API_URL, ENDPOINTS } from "../utils/Constants";
 
 export async function getWords() {
         try {
-            const words = await fetch(`${API_URL}${ENDPOINTS.words}`, {
+            const words = await fetch(`${API_URL}${ENDPOINTS.WORDS}`, {
               method: 'GET'
             });
             return await words.json();
@@ -14,8 +14,8 @@ export async function getWords() {
         }
     }
 
-export const getPartOfTextbook = async(partNumber: string | undefined) =>{
-  const page = await fetch(`${API_URL}${ENDPOINTS.words}?page=0&group=${partNumber}`,{
+export const getPartOfTextbook = async(pageNumber: string | undefined, partNumber: string | undefined ) =>{
+  const page = await fetch(`${API_URL}${ENDPOINTS.WORDS}?${ENDPOINTS.PAGE}${pageNumber}&${ENDPOINTS.GROUP}${partNumber}`,{
     method: 'GET',
   });
   return page.json();

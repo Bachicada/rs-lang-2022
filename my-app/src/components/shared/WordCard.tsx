@@ -9,6 +9,9 @@ import { WordCardProp, WordItem } from '../../types';
 
 export default function WordCard (props: WordCardProp) {
   const word = props.word;
+  function createMarkup(){
+    return { __html: word.textMeaning };
+  }
 
   return (
     <Card sx={{ maxWidth: 345, backgroundColor: '#1B2D46' }}>
@@ -29,8 +32,7 @@ export default function WordCard (props: WordCardProp) {
           <Typography variant="body2" color="whitesmoke">
            {word.wordTranslate}
           </Typography>
-          <Typography variant="body2" color="whitesmoke">
-          {word.textMeaning}
+          <Typography  dangerouslySetInnerHTML={createMarkup()} variant="body2" color="whitesmoke" >
           </Typography>
         </CardContent>
       </CardActionArea>

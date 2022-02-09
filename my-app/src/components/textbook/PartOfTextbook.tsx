@@ -7,30 +7,43 @@ import { getPartOfTextbook } from '../../services/WordService';
 import { useEffect, useState } from 'react';
 
 import WordCard from '../shared/WordCard';
-import PaginationRounded from './PaginationPages';
-
+import Pagination from '@mui/material/Pagination';
+import Stack from '@mui/material/Stack';
+import WordsContainer from './WordsContainer';
 
 export default function PartOfTextBook(props: PartProps) {
-    const [partWords, setPage] = useState<any[]>([])
-
-    useEffect(() => {
-      getPartOfTextbook(props.part). then((partWords)=>{
-        console.log(partWords);
-        setPage(partWords);
-      })
-    }, [props.part])
-
-    const [pageNumber, setPageNumber] = useState<string | undefined>('1')
-
-
+    const [pageNumber, setPageNumber] = useState('0');
+ 
+    function checkPage(event: React.SyntheticEvent): string{
+      //target.ariaLabel returns `Go to page 1(2,3...)`
+      const target = (event.target as HTMLButtonElement).ariaLabel;
+      let pageNumber;
+      if (target ===`page 1`){
+        pageNumber = (Number(target.replace(`page `,``)) - 1).toString()
+      }
+      else{
+        pageNumber = (Number(target.replace(`Go to page `,``)) - 1).toString();
+      }
+      console.log(pageNumber)
+      return pageNumber;
+    }
+    
+    const styles = {
+      ul: {
+        justifyContent:'space-between',
+      }
+  };
    return (
        <div>
        <h3>Раздел {Number(props.part)+1} </h3>
-       <PaginationRounded />
-       <h4>Слова</h4>
-       <div className={styles.wordsCont}>
-           { partWords.length > 0 && partWords.map((item,i) => <WordCard key={i} word={item} />)}
-       </div>
+       <Stack spacing={2}>
+         <Pagination  sx={styles} boundaryCount={4} siblingCount={2} count={30} variant="outlined" shape="rounded" onClick={(event)=>(setPageNumber(checkPage(event)))}/>
+      </Stack>
+      <WordsContainer page={pageNumber} part={props.part}/>
        </div>
    )
 } 
+/*
+<Stack spacing={2}>
+<Pagination count={30} variant="outlined" shape="rounded" onClick={(event)=>{setPageNumber(checkPage(event))}}/>
+</Stack>*/

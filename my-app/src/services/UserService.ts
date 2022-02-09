@@ -3,7 +3,7 @@ import {NewUser} from '../types';
 
 
 export const createUser = async (user: NewUser)=> 
-await fetch(`${API_URL}${ENDPOINTS.users}`, {
+await fetch(`${API_URL}${ENDPOINTS.USERS}`, {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
