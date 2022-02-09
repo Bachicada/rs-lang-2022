@@ -10,7 +10,7 @@ const Timer = (props: TimerProps) => {
   if(!props.isGameReady) {
     return <div>60</div>
   } else {
-    props.setTimerActive(true);
+    // props.setTimerActive(true);
     return (
       <div>{props.time}</div>
     )

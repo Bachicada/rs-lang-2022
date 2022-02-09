@@ -72,15 +72,21 @@ const Sprint: FC<SprintProps> = (props) => {
 
   const [ seconds, setSeconds ] = React.useState(60);
   const [ timerActive, setTimerActive ] = React.useState(false);
+  const [ isGameFinished, setIsGameFinished ] = React.useState(false);
 
   useEffect(() => {
-    if (seconds > 0 && timerActive) {
+    if (seconds > 0 && timerActive && !isGameFinished) {
       setTimeout(setSeconds, 1000, seconds - 1);
     } else {
       setTimerActive(false);
     }
-  }, [ seconds, timerActive ]);
+  }, [ seconds, timerActive, isGameFinished ]);
 
+  useEffect(() => {
+    if (wordsId >= 60 || seconds === 0) {
+      setIsGameFinished(true);
+    }
+  }, [ wordsId, seconds ]);
 
   useEffect(() => {
     if (level) {
@@ -97,11 +103,12 @@ const Sprint: FC<SprintProps> = (props) => {
               .then((result) => {
                 setWords(getRandomWords(result));
                 setIsGameReady(true);
+                setTimerActive(true);
               })
         });
     }
   }, [level]);
-
+  
   return (
     <Box
       sx={{
@@ -113,7 +120,8 @@ const Sprint: FC<SprintProps> = (props) => {
     >
       <LevelModal active={modalOpen} setActive={setModalOpen} setLevel={setLevel}></LevelModal>
       <Timer time={seconds} setTimerActive={setTimerActive} isGameReady={isGameReady}></Timer>
-      <SprintGame words={words} wordsId={wordsId} setWordsId={setWordsId} isGameReady={isGameReady}></SprintGame>
+      <SprintGame words={words} wordsId={wordsId} setWordsId={setWordsId} 
+          isGameReady={isGameReady} setIsGameFinished={setIsGameFinished}></SprintGame>
     </Box>
   );
 }
