@@ -9,15 +9,63 @@ interface SprintProps {
 }
 
 interface WordsItem {
+  audio: string;
+  audioExample: string;
+  audioMeaning: string;
+  group: number;
   id: string;
   image: string;
+  page: number;
+  textExample: string;
+  textExampleTranslate: string;
+  textMeaning: string;
+  textMeaningTranslate: string;
+  transcription: string;
   word: string;
+  wordTranslate: string;
+}
+
+interface IWords {
+  item: WordsItem;
+  correct: boolean;
+  incorrect: string;
+}
+
+const random = (min: number, max: number) => {
+  return min + Math.floor(Math.random() * (max - min + 1));
+}
+
+const getRandomWords = (arr: WordsItem[][]) => {
+  const idxArr: number[] = [];
+  for (let i = 0; i < 3; i++) {
+    if (i === 0) idxArr.push(random(0, 29));
+    else {
+      let rand = random(0, 29);
+      while (rand === idxArr[i - 1]) {
+        rand = random(0, 29);
+      }
+      idxArr.push(rand);
+    }
+  }
+  const piece = idxArr.map((id) => {
+    return arr[id]
+  }).flat();
+
+  const result = piece.map((item) => {
+    return {
+      item: item,
+      correct: random(0,1) === 1 ? true: false,
+      incorrect: piece[random(0, 29)].wordTranslate
+    }
+  });
+  
+  return result;
 }
 
 const Sprint: FC<SprintProps> = (props) => {
   const [level, setLevel] = React.useState(props.level || 0);
   const [modalOpen, setModalOpen] = React.useState(props ? true : false)
-  const [words, setWords] = React.useState<WordsItem[][]>([]);
+  const [words, setWords] = React.useState<IWords[]>([]);
 
   useEffect(() => {
     const fetchArr = []
@@ -26,13 +74,13 @@ const Sprint: FC<SprintProps> = (props) => {
       fetchArr.push(fetch(`${API_URL}${ENDPOINTS.words}?page=${i}&group=${level}`));
     }
 
+
     Promise.all(fetchArr)
         .then((item) => {
           const jsonArr = item.map((item) => item.json());
           Promise.all(jsonArr)
               .then((result) => {
-                console.log('result', result[0][0]);
-                setWords(result);
+                setWords(getRandomWords(result));
               })
         });
 
