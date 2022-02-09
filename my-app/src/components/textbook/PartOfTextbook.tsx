@@ -29,7 +29,7 @@ export default function PartOfTextBook(props: PartProps) {
        <PaginationRounded />
        <h4>Слова</h4>
        <div className={styles.wordsCont}>
-           { partWords.length > 0 && partWords.map((item) => <WordCard word={item} />)}
+           { partWords.length > 0 && partWords.map((item,i) => <WordCard key={i} word={item} />)}
        </div>
        </div>
    )
