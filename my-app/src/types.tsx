@@ -37,3 +37,7 @@ export interface WordItem {
 export interface WordCardProp {
   word: WordItem;
 }
+
+export interface FormProps {
+  hasAccount: boolean;
+}

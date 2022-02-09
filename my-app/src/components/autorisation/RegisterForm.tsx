@@ -3,8 +3,6 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
@@ -14,11 +12,21 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import {createUser} from '../../services/UserService';
 import { CurrentUser } from '../../utils/Constants';
+import { useState } from 'react';
+import { create } from 'domain';
 
 
 const theme = createTheme();
 
 export default function RegRorm() {
+  const [name, setName]= useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const [nameError, setNameError] = useState('Пожалуйста, укажите Имя');
+  const [emailError, setEmailError] = useState('Укажите адрес почты');
+  const [passError, setPassError] = useState('Обязательно придумайте пароль');
+  
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -28,13 +36,20 @@ export default function RegRorm() {
       'email': data.get('email') as string,
       'password': data.get('password') as string
     }
-    const resp = await createUser(newUser);
-    const cont = await resp.json();
-    CurrentUser.id = cont.id;
-    CurrentUser.name = cont.name;
-    CurrentUser.email = cont.email;
-    
-    localStorage.setItem('CurrentUser', JSON.stringify(CurrentUser));
+ 
+
+    const newData: void | Response| undefined = await createUser(newUser);
+    if (newData){
+      const newInfo = await newData.json();
+        CurrentUser.id = newInfo.id;
+        CurrentUser.name = newInfo.name;
+        CurrentUser.email = newInfo.email;
+        localStorage.setItem('CurrentUser', JSON.stringify(CurrentUser));
+        console.log(newInfo)
+    }
+    else {
+      console.log('Возможно, аккаунт уже существует. Попробуйте войти')
+    }
   }
 
   return (
@@ -96,7 +111,7 @@ export default function RegRorm() {
             <Grid container>
               <Grid item>
                 <span>Уже есть аккаунт?</span>
-                <Link href="#" variant="body2">
+                <Link href="#" variant="body2" id='signInBtn'>
                   {" Войти"}
                 </Link>
               </Grid>

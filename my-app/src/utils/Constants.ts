@@ -2,6 +2,8 @@ import { CurUser } from "../types";
 
 export const APP_ROUTES = {
     MAIN: '/',
+    SIGNIN: '/signIn',
+    REGFORM: '/registration',
     TEXTBOOK: '/textbook',
     SPRINT: '/sprint',
     STATISTICS: '/statistics',

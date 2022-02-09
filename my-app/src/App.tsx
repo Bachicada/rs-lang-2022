@@ -10,7 +10,8 @@ import Textbook from './components/textbook/Textbook';
 import Sprint from './components/sprint/Sprint';
 import Audiocall from './components/audiocall/Audiocall';
 import Stat from './components/statistics/Stat';
-import PartOfTextBook from './components/textbook/PartOfTextbook';
+import SignInForm from './components/autorisation/SignIn-Form';
+import RegForm from './components/autorisation/RegisterForm';
 
 function App() {
   return (

@@ -14,10 +14,12 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useEffect, useState } from 'react';
 import RegRorm from './RegisterForm';
+import { APP_ROUTES } from '../../utils/Constants';
 
 const theme = createTheme();
 
-export default function SignIn() { 
+
+export default function SignInForm() { 
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -28,7 +30,7 @@ export default function SignIn() {
       password: data.get('password'),
     });
   };
-
+  
   return (
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="xs">
@@ -80,8 +82,8 @@ export default function SignIn() {
             <Grid container>
               <Grid item>
                 <span>Впервые на сайте? </span>
-                <Link href="#" variant="body2" id='RegFormBtn' >
-                  {"Создать аккаунт"}
+                <Link variant="body2" id='RegFormBtn' >
+                  "Создать аккаунт"
                 </Link>
               </Grid>
             </Grid>
@@ -89,6 +91,7 @@ export default function SignIn() {
         </Box>
       </Container>
     </ThemeProvider>
+
   );
 }
 
@@ -99,12 +102,6 @@ import { FormControl, InputLabel, Input, TextField} from '@mui/material';
 import ReactDOM from 'react-dom';
 
 
-function renderSignInForm(){
-    ReactDOM.render(
-        <SignInForm/>,
-        document.getElementById('popupForm')
-      );
-} 
 
 export function RegisterForm () {
         return (

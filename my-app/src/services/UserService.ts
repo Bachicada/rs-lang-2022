@@ -1,18 +1,30 @@
 import { API_URL, ENDPOINTS } from "../utils/Constants";
 import {NewUser} from '../types';
 
+  export async function createUser(user: NewUser){
 
-export const createUser = async (user: NewUser)=> 
-await fetch(`${API_URL}${ENDPOINTS.USERS}`, {
+    const data = await fetch(`${API_URL}${ENDPOINTS.USERS}`, {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(user)
-    });
-/*
-    const content = await rawResponse.json();
-    console.log(content);
-    
-  */
+    })
+      .then((response) => {
+         console.log(response.status)
+         if (response.status===417) {
+         throw new Error("Пользователь с такими данными уже существует");
+               }
+               else if (response.status ===200){
+                console.log(response);
+                return response;
+               }
+        })
+    .catch((error) => {
+          console.log(error)
+            });
+  
+      return data;
+    }
+  

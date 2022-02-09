@@ -10,7 +10,7 @@ export default function WordsContainer(props: PageProps){
   const [pageWords, setWords] = useState ([]);
 
   useEffect(() => {
-    getPartOfTextbook(props.page, props.part). then((pageWords)=>{
+    getPartOfTextbook(props.page, props.part).then((pageWords)=>{
       console.log(pageWords);
       setWords(pageWords);
     })
