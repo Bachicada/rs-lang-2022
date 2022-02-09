@@ -5,7 +5,7 @@ import LevelButton from './LevelButton';
 export interface ModalProps {
   active: boolean;
   setActive: Dispatch<SetStateAction<boolean>>;
-  setLevel: Dispatch<SetStateAction<number>>;
+  setLevel: Dispatch<SetStateAction<number | null>>;
 }
 
 

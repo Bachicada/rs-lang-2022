@@ -3,6 +3,7 @@ import React, { FC, useEffect } from 'react';
 import { API_URL, ENDPOINTS } from '../../utils/Constants';
 import LevelModal from './LevelModal';
 import SprintGame from './SprintGame';
+import Timer from './Timer';
 
 export interface SprintProps {
   level?: number;
@@ -63,13 +64,26 @@ const getRandomWords = (arr: WordsItem[][]) => {
 }
 
 const Sprint: FC<SprintProps> = (props) => {
-  const [level, setLevel] = React.useState(props.level || 0);
+  const [level, setLevel] = React.useState(props.level || null);
   const [modalOpen, setModalOpen] = React.useState(props ? true : false)
   const [words, setWords] = React.useState<IWords[]>([]);
   const [wordsId, setWordsId] = React.useState(0);
   const [isGameReady, setIsGameReady] = React.useState(false);
 
+  const [ seconds, setSeconds ] = React.useState(60);
+  const [ timerActive, setTimerActive ] = React.useState(false);
+
   useEffect(() => {
+    if (seconds > 0 && timerActive) {
+      setTimeout(setSeconds, 1000, seconds - 1);
+    } else {
+      setTimerActive(false);
+    }
+  }, [ seconds, timerActive ]);
+
+
+  useEffect(() => {
+    if (level) {
     const fetchArr = []
 
     for (let i = 0; i < 30; i++) {
@@ -85,7 +99,7 @@ const Sprint: FC<SprintProps> = (props) => {
                 setIsGameReady(true);
               })
         });
-
+    }
   }, [level]);
 
   return (
@@ -98,6 +112,7 @@ const Sprint: FC<SprintProps> = (props) => {
       }}
     >
       <LevelModal active={modalOpen} setActive={setModalOpen} setLevel={setLevel}></LevelModal>
+      <Timer time={seconds} setTimerActive={setTimerActive} isGameReady={isGameReady}></Timer>
       <SprintGame words={words} wordsId={wordsId} setWordsId={setWordsId} isGameReady={isGameReady}></SprintGame>
     </Box>
   );
