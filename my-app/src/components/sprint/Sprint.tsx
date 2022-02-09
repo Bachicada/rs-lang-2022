@@ -19,7 +19,7 @@ const Sprint: FC<SprintProps> = (props) => {
   const [modalOpen, setModalOpen] = React.useState(props ? true : false)
   const [test, setTest] = React.useState<Test[]>([]);
 
-  const fetchArr: Test[] = [];
+  // const fetchArr: Test[] = [];
   // for (let i = 0; i < 30; i++) {
   //   (async function () {
   //     try {
@@ -44,7 +44,26 @@ const Sprint: FC<SprintProps> = (props) => {
   //     // setTest(result);
   //   })
   // });
+
+
+const fetchArr = []
+
+for (let i = 0; i < 5; i++) {
+ fetchArr.push(fetch(`${API_URL}${ENDPOINTS.words}?page=${i}&group${level}`))
   
+}
+console.log('DONE');
+
+Promise.all(fetchArr).then((item) => {
+    const jsonArr = item.map((item) => item.json());
+    Promise.all(jsonArr).then((result) => {
+      console.log('result');
+    })
+ });
+  
+ fetch(`${API_URL}${ENDPOINTS.words}?page=${1}&group${level}`).then((result) => {
+   console.log('result is', result);
+ })
 
   return (
     <Box
