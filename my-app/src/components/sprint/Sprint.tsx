@@ -102,7 +102,7 @@ const Sprint: FC<SprintProps> = (props) => {
     const fetchArr = []
 
     for (let i = 0; i < 30; i++) {
-      fetchArr.push(fetch(`${API_URL}${ENDPOINTS.words}?page=${i}&group=${level}`));
+      fetchArr.push(fetch(`${API_URL}${ENDPOINTS.WORDS}?page=${i}&group=${level}`));
     }
 
     Promise.all(fetchArr)
