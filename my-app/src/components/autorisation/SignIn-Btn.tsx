@@ -3,9 +3,10 @@ import Backdrop from '@mui/material/Backdrop';
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import Fade from '@mui/material/Fade';
-
 import SignInForm from './SignIn-Form';
+import RegForm from './RegisterForm';
 import styles from './autorisation.module.css';
+import FormContainer from './FormContainer';
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -23,10 +24,22 @@ export default function TransitionsModal() {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  
+  const [hasAccount, setStatus] = React.useState(true)
 
+  const checkForm =(event: React.SyntheticEvent) =>{
+     const id = (event.target as HTMLElement).id;
+     let userStatus;
+     if ((id==='mainEnterBtn') || (id==='signInBtn')){
+       userStatus = true;
+     }
+     else {userStatus = false}
+     return userStatus;
+  }
+   
   return (
-    <div>
-      <button className={styles.signInBtn} onClick={handleOpen} >Sign In</button>
+    <div onClick={(event)=>setStatus(checkForm(event))}>
+      <button className={styles.signInBtn} onClick={handleOpen} id='mainEnterBtn'>Войти</button>
       <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
@@ -39,8 +52,8 @@ export default function TransitionsModal() {
         }}
       >
         <Fade in={open}>
-          <Box id='popupForm' sx={style}>
-            <SignInForm></SignInForm>
+          <Box id='popupForm' sx={style} >
+            <FormContainer hasAccount={hasAccount} />
           </Box>
         </Fade>
       </Modal>

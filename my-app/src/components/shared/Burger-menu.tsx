@@ -1,48 +1,10 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-import Landing from '../start-page/Landing'
-import Textbook from '../textbook/Textbook';
-import Audiocall from '../audiocall/Audiocall';
-import Sprint from '../sprint/Sprint';
-import Stat from '../statistics/Stat';
 import './../general.css'
 import { APP_ROUTES } from '../../utils/Constants';
 import { Link } from 'react-router-dom';
 
 export default class BurgerMenu extends React.Component {
-    renderTextbook(){
-        ReactDOM.render(
-            <Textbook/>,
-            document.getElementById('mainContainer')
-          );
-    }
-    renderStartPage(){
-        ReactDOM.render(
-            <Landing/>,
-            document.getElementById('mainContainer')
-          );
-    }
-    renderAudioCall(){
-        ReactDOM.render(
-            <Audiocall/>,
-            document.getElementById('mainContainer')
-          );
-    }
-    renderSprint(){
-        ReactDOM.render(
-            <Sprint/>,
-            document.getElementById('mainContainer')
-          );
-    }
-    renderStat(){
-        ReactDOM.render(
-            <Stat/>,
-            document.getElementById('mainContainer')
-          );
-    }
-
     render (){
-        
         return (
             <ul className='menuList'>
                 <li className='menuItem'>

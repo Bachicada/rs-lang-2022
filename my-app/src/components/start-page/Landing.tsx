@@ -4,7 +4,6 @@ import {AboutApp} from './AboutApp';
 import {Benefits} from './Benefits';
 import {Team} from './Team';
 
-import { Styling } from '../../types';
 
 export default class Landing extends React.Component {
     render(){
