@@ -1,7 +1,7 @@
 import { Container } from '@mui/material'
 import React, { Dispatch, SetStateAction } from 'react'
 import { API_URL } from '../../utils/Constants'
-import { IWords } from './Sprint'
+import { GameAnswers, IWords } from './Sprint'
 
 interface SprintGameProps {
   words: IWords[];
@@ -9,6 +9,7 @@ interface SprintGameProps {
   setWordsId: Dispatch<SetStateAction<number>>;
   isGameReady: boolean;
   setIsGameFinished: Dispatch<SetStateAction<boolean>>;
+  gameAnswers: GameAnswers[];
 }
 
 const SprintGame = (props: SprintGameProps) => {
@@ -33,10 +34,16 @@ const SprintGame = (props: SprintGameProps) => {
       <div>
         <button onClick={() => {
           // obj.correct ? alert('wrong') : alert('right!');
+          props.gameAnswers.push(
+            obj.correct ? {item: item, answer: false} : {item: item, answer: true}
+          );
           props.setWordsId(props.wordsId + 1);
         }}>Неверно</button>
         <button onClick={() => {
           // obj.correct ? alert('right!') : alert('wrong');
+          props.gameAnswers.push(
+            obj.correct ? {item: item, answer: true} : {item: item, answer: false}
+          );
           props.setWordsId(props.wordsId + 1);
         }}>Верно</button>
       </div>

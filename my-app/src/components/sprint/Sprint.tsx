@@ -1,12 +1,18 @@
 import { Box } from '@mui/material';
-import React, { FC, useEffect } from 'react';
+import React, { FC, useEffect, useRef } from 'react';
 import { API_URL, ENDPOINTS } from '../../utils/Constants';
 import LevelModal from './LevelModal';
 import SprintGame from './SprintGame';
+import SprintResults from './SprintResults';
 import Timer from './Timer';
 
 export interface SprintProps {
   level?: number;
+}
+
+export interface GameAnswers {
+  item: WordsItem;
+  answer: boolean;
 }
 
 export interface WordsItem {
@@ -63,6 +69,8 @@ const getRandomWords = (arr: WordsItem[][]) => {
   return result;
 }
 
+let gameAnswers: GameAnswers[] = [];
+
 const Sprint: FC<SprintProps> = (props) => {
   const [level, setLevel] = React.useState(props.level || null);
   const [modalOpen, setModalOpen] = React.useState(props ? true : false)
@@ -73,6 +81,7 @@ const Sprint: FC<SprintProps> = (props) => {
   const [ seconds, setSeconds ] = React.useState(60);
   const [ timerActive, setTimerActive ] = React.useState(false);
   const [ isGameFinished, setIsGameFinished ] = React.useState(false);
+
 
   useEffect(() => {
     if (seconds > 0 && timerActive && !isGameFinished) {
@@ -121,7 +130,9 @@ const Sprint: FC<SprintProps> = (props) => {
       <LevelModal active={modalOpen} setActive={setModalOpen} setLevel={setLevel}></LevelModal>
       <Timer time={seconds} setTimerActive={setTimerActive} isGameReady={isGameReady}></Timer>
       <SprintGame words={words} wordsId={wordsId} setWordsId={setWordsId} 
-          isGameReady={isGameReady} setIsGameFinished={setIsGameFinished}></SprintGame>
+          isGameReady={isGameReady} setIsGameFinished={setIsGameFinished}
+          gameAnswers={gameAnswers}></SprintGame>
+      <SprintResults isGameFinished={isGameFinished} gameAnswers={gameAnswers}></SprintResults>
     </Box>
   );
 }
