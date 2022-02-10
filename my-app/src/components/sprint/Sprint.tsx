@@ -1,6 +1,8 @@
 import { Box } from '@mui/material';
-import React, { FC, useEffect, useRef } from 'react';
-import { API_URL, ENDPOINTS } from '../../utils/Constants';
+import React, { FC, useEffect } from 'react';
+import { getPartOfTextbook } from '../../services/WordService';
+import { WordItem } from '../../types';
+import Utils from '../../utils/Utils';
 import LevelModal from './LevelModal';
 import SprintGame from './SprintGame';
 import SprintResults from './SprintResults';
@@ -11,76 +13,29 @@ export interface SprintProps {
 }
 
 export interface GameAnswers {
-  item: WordsItem;
+  item: WordItem;
   answer: boolean;
 }
 
-export interface WordsItem {
-  audio: string;
-  audioExample: string;
-  audioMeaning: string;
-  group: number;
-  id: string;
-  image: string;
-  page: number;
-  textExample: string;
-  textExampleTranslate: string;
-  textMeaning: string;
-  textMeaningTranslate: string;
-  transcription: string;
-  word: string;
-  wordTranslate: string;
-}
-
 export interface IWords {
-  item: WordsItem;
+  item: WordItem;
   correct: boolean;
   incorrect: string;
-}
-
-const random = (min: number, max: number) => {
-  return min + Math.floor(Math.random() * (max - min + 1));
-}
-
-const getRandomWords = (arr: WordsItem[][]) => {
-  const idxArr: number[] = [];
-  for (let i = 0; i < 3; i++) {
-    if (i === 0) idxArr.push(random(0, 29));
-    else {
-      let rand = random(0, 29);
-      while (rand === idxArr[i - 1]) {
-        rand = random(0, 29);
-      }
-      idxArr.push(rand);
-    }
-  }
-  const piece = idxArr.map((id) => {
-    return arr[id]
-  }).flat();
-
-  const result = piece.map((item) => {
-    return {
-      item: item,
-      correct: random(0,1) === 1 ? true: false,
-      incorrect: piece[random(0, 29)].wordTranslate
-    }
-  });
-  
-  return result;
 }
 
 let gameAnswers: GameAnswers[] = [];
 
 const Sprint: FC<SprintProps> = (props) => {
   const [level, setLevel] = React.useState(props.level || null);
-  const [modalOpen, setModalOpen] = React.useState(props ? true : false)
   const [words, setWords] = React.useState<IWords[]>([]);
   const [wordsId, setWordsId] = React.useState(0);
+  
+  const [modalOpen, setModalOpen] = React.useState(props ? true : false)
   const [isGameReady, setIsGameReady] = React.useState(false);
+  const [ isGameFinished, setIsGameFinished ] = React.useState(false);
 
   const [ seconds, setSeconds ] = React.useState(60);
   const [ timerActive, setTimerActive ] = React.useState(false);
-  const [ isGameFinished, setIsGameFinished ] = React.useState(false);
 
 
   useEffect(() => {
@@ -98,23 +53,19 @@ const Sprint: FC<SprintProps> = (props) => {
   }, [ wordsId, seconds ]);
 
   useEffect(() => {
-    if (level) {
-    const fetchArr = []
+    if (level !== null) {
+      const fetchArr = []
 
-    for (let i = 0; i < 30; i++) {
-      fetchArr.push(fetch(`${API_URL}${ENDPOINTS.WORDS}?page=${i}&group=${level}`));
-    }
-
-    Promise.all(fetchArr)
-        .then((item) => {
-          const jsonArr = item.map((item) => item.json());
-          Promise.all(jsonArr)
-              .then((result) => {
-                setWords(getRandomWords(result));
-                setIsGameReady(true);
-                setTimerActive(true);
-              })
-        });
+      for (let i = 0; i < 30; i++) {
+        fetchArr.push(getPartOfTextbook(`${i}`, `${level}`));
+      }
+    
+      Promise.all(fetchArr)
+          .then((result) => {
+            setWords(Utils.getRandomWords(result));
+            setIsGameReady(true);
+            setTimerActive(true);
+          });
     }
   }, [level]);
   
