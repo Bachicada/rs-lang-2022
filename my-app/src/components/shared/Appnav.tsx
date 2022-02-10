@@ -71,13 +71,15 @@ export function PersistentDrawerRight() {
   };
 
   const checkUser =()=>{
-    let greetingName:string;
+    let greetingName:string='';
     if (localStorage.getItem('CurrentUser')){
       const userObj = localStorage.getItem('CurrentUser');
       const user = JSON.parse(userObj || '{}');
-      greetingName = user.name;
+      if(user.name){
+        greetingName = user.name;
+      }
+      else {greetingName = CurrentUser.name} 
     }
-    else {greetingName = CurrentUser.name} 
     return greetingName;
 }
 
