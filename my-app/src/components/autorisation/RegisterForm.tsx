@@ -19,14 +19,14 @@ import { create } from 'domain';
 const theme = createTheme();
 
 export default function RegRorm() {
-  const [name, setName]= useState('');
+  /*const [name, setName]= useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const [nameError, setNameError] = useState('Пожалуйста, укажите Имя');
   const [emailError, setEmailError] = useState('Укажите адрес почты');
   const [passError, setPassError] = useState('Обязательно придумайте пароль');
-  
+  */
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
