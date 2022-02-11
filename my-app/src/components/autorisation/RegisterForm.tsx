@@ -12,7 +12,7 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import {createUser} from '../../services/UserService';
 import { useState } from 'react';
-import {Link} from 'react-router-dom'
+import {Link, useNavigate} from 'react-router-dom'
 import { NewUser } from '../../types';
 import { APP_ROUTES } from '../../utils/Constants';
 import styles from './Autorisation.module.css';
@@ -21,20 +21,78 @@ import styles from './Autorisation.module.css';
 const theme = createTheme();
 
 export default function RegForm() {
-  const [regError, setError] = useState('');
+  const navigate = useNavigate();
+  function checkLocation(){
+   navigate(-2);
+  }
+
+  const [success, setSuccess] = useState(false);
 
   const [name, setName]= useState('');
+  const [nameError, setNameError] = useState(false);
+  const [nameErrorText, setNameErrorText] =  useState('');
+
   const [email, setEmail] = useState('');
+  const [emailError, setEmailError] = useState(false);
+  const [emailErrorText, setEmailErrorText] =  useState('');
+
   const [password, setPassword] = useState('');
+  const [passError, setPassError] = useState(false);
+  const [passErrorText, setPassErrorText] =  useState('');
 
-  const [nameClick, setNameClicked] = useState(false);
-  const [emailClick, setEmailClicked] = useState(false)
-  const [passwordClick, setPasswordClicked] = useState(false)
-
-  const [nameError, setNameError] = useState('');
-  const [emailError, setEmailError] = useState('Укажите адрес почты');
-  const [passError, setPassError] = useState('Обязательно придумайте пароль');
+  function nameValidation(inputName: string){
+    if (inputName && inputName.length>3){
+      setNameError(false);
+      setNameErrorText('');
+    }
+    else{
+      setNameError(true);
+      setNameErrorText('Имя должно содержать более 3х символов');
+    }
+  }
   
+  const nameHandler = (event: React.SyntheticEvent) =>{
+    const inputName = (event.target as HTMLInputElement).value;
+    setName(inputName);
+    nameValidation(inputName);
+  }
+
+  function emailValidation(inputEmail: string){
+    const regEm = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    if (regEm.test(inputEmail)){
+      setEmailError(false);
+      setEmailErrorText('');
+  } else {
+    setEmailError(true);
+    setEmailErrorText('Введите корректный адрес почты');
+  }
+  }
+
+  const emailHandler = (event: React.SyntheticEvent) =>{
+    const inputEmail= (event.target as HTMLInputElement).value;
+    setEmail(inputEmail);
+    emailValidation(inputEmail);
+  }
+
+  function passValidation(inputPass: string){
+    if (inputPass && inputPass.length>7){
+      setPassError(false);
+      setPassErrorText('');
+    }
+    else{
+      setPassError(true);
+      setPassErrorText('Пароль должен содержать минимум 8 символов');
+    }
+  }
+  
+  const passHandler = (event: React.SyntheticEvent) =>{
+    const inputPass = (event.target as HTMLInputElement).value;
+    setPassword(inputPass);
+    passValidation(inputPass);
+  }
+
+  const [alreadyRegError, setAlreadyRegError] = useState(false);
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -46,8 +104,7 @@ export default function RegForm() {
     }
     const user: NewUser = {};
     const newData: void | Response| undefined = await createUser(newUser);
-    
-    console.log(`newData`, newData)
+
     if (newData){
       const newInfo = await newData.json();
         user.userId = newInfo.id;
@@ -55,29 +112,14 @@ export default function RegForm() {
         user.email = newInfo.email;
         localStorage.setItem('CurrentUser', JSON.stringify(user));
         console.log(newInfo)
+        setAlreadyRegError(false);
+        setSuccess(true);
+
+        setTimeout(checkLocation, 1500)
     }
     else {
+      setAlreadyRegError(true);
       console.log('Aккаунт уже существует. Попробуйте войти')
-    }
-  }
-  
-  const blurCheck = (event: React.SyntheticEvent) => {
-    const inputField = (event.target as HTMLInputElement).name;
-    if (inputField==='name'){
-      setNameClicked(true)
-    }
-    if (inputField==='email'){
-      setEmailClicked(true)
-    } 
-    else if (inputField==='password'){
-      setPasswordClicked(true)
-    }
-  }
-
-  const nameHandler = (event: React.SyntheticEvent) =>{
-    const inputName = (event.target as HTMLInputElement).value;
-    if (inputName.length <4){
-      setNameError('Пожалуйста, укажите Имя');
     }
   }
 
@@ -101,19 +143,24 @@ export default function RegForm() {
              Регистрация
           </Typography>
           <Box component="form" onSubmit={handleSubmit} noValidate id='formBox'>
-            {(nameError && nameClick) && <div>{nameError}</div>}
           <TextField
+              error={nameError}
+              helperText={nameErrorText}
+              onChange={nameHandler}
+              value={name}
               margin="normal"
               required
               fullWidth
               id="userName"
               label="Имя"
-              name="userName"
-              onChange={nameHandler}
-              onBlur={blurCheck}
+              name="userName"           
               autoFocus
             />
             <TextField
+              error={emailError}
+              helperText={emailErrorText}
+              onChange={emailHandler}
+              value={email}
               margin="normal"
               required
               fullWidth
@@ -121,9 +168,12 @@ export default function RegForm() {
               label="Адрес email"
               name="email"
               autoComplete="email"
-              value={email}
             />
             <TextField
+              error={passError}
+              helperText={passErrorText}
+              onChange={passHandler}
+              value={password}
               margin="normal"
               required
               fullWidth
@@ -132,16 +182,28 @@ export default function RegForm() {
               type="password"
               id="password"
               autoComplete="current-password"
-              value={password}
             />
+            { success ?  
             <Button
-              type="submit"
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
+              style={{backgroundColor:'#19d219' }}
+              disabled={passError || nameError || emailError}
             >
-              Создать аккаунт
-            </Button>
+              Регистрация завершена
+            </Button> :
+             <Button
+               type="submit"
+               fullWidth
+               variant="contained"
+               sx={{ mt: 3, mb: 2 }}
+               disabled={passError || nameError || emailError}
+             >
+               Создать аккаунт
+             </Button>
+            }
+
             <Grid container>
               <Grid item>
                 <span>Уже есть аккаунт?</span>
@@ -150,7 +212,7 @@ export default function RegForm() {
                 </Link>
               </Grid>
             </Grid>
-            <div ></div>
+           { alreadyRegError ? <div className={styles.errorBox}>Aккаунт уже существует. Попробуйте войти</div> : ''}
           </Box>
         </Box>
       </Container>
