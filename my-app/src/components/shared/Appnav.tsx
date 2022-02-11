@@ -14,8 +14,9 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 
 import BurgerMenu from './Burger-menu';
-import TransitionsModal from '../autorisation/SignIn-Btn';
-import { CurrentUser } from '../../utils/Constants';
+import { useState, useEffect } from 'react';
+import LogOutBtn from '../autorisation/LogOutBtn';
+import { SignInBtn } from '../autorisation/SignInBtn';
 
 const drawerWidth = 240;
 
@@ -70,26 +71,22 @@ export function PersistentDrawerRight() {
     setOpen(false);
   };
 
-  const checkUser =()=>{
-    let greetingName:string='';
-    if (localStorage.getItem('CurrentUser')){
-      const userObj = localStorage.getItem('CurrentUser');
-      const user = JSON.parse(userObj || '{}');
-      if(user.name){
-        greetingName = user.name;
-      }
-      else {greetingName = CurrentUser.name} 
-    }
-    return greetingName;
-}
+  const [userName, setUserName] = useState('Гость');
+  
+    useEffect(()=>{
+      if (localStorage.getItem('CurrentUser')){
+        const userObj = localStorage.getItem('CurrentUser');
+        const user = JSON.parse(userObj || '{}');
+        setUserName(user.name);
+    }}, [localStorage.getItem('CurrentUser')]);
 
   return (
     <div>
        <AppBar sx={style} position="fixed" open={open}>
         <Toolbar>
-          <TransitionsModal />
+          { localStorage.getItem('CurrentUser') ? <LogOutBtn /> : <SignInBtn/> }
           <Typography variant="h6" noWrap sx={{ flexGrow: 2 }} component="div">
-            Здравствуй, {checkUser()}
+            Здравствуй, {userName}
           </Typography>
           <Typography variant="h6" noWrap sx={{ flexGrow: 1 }} component="div">
             Меню

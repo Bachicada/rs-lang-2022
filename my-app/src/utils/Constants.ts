@@ -1,5 +1,3 @@
-import { CurUser } from "../types";
-
 export const APP_ROUTES = {
     MAIN: '/',
     SIGNIN: '/signIn',
@@ -22,11 +20,6 @@ export const ENDPOINTS = {
     WORDS: '/words',
     USERS: '/users',
     PAGE:'page=',
-    GROUP:'group='
+    GROUP:'group=',
+    SIGNIN: '/signin'
 };
-
-export const CurrentUser: CurUser = {
-    id:'',
-    name:'Гость',
-    email:''
-}
