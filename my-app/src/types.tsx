@@ -1,13 +1,15 @@
 export interface NewUser {
-  name: string | null,
-  email: string | null,
-  password: string | null
+  userId?: string,
+  name?: string | null,
+  email?: string | null,
+  password?: string | null
 }
 
 export interface CurUser {
-  id: string,
-  name: string,
-  email: string 
+  name?: string,
+  token?: string,
+  refreshToken?: string,
+  userId?: string
 }
 
 export interface PartProps {
@@ -20,8 +22,8 @@ export interface PageProps extends PartProps{
 
 export interface WordItem {
   id: string,
-  group: 0,
-  page: 0,
+  group:number,
+  page: string,
   word?: string,
   image: string,
   audio: string,
@@ -33,9 +35,11 @@ export interface WordItem {
   wordTranslate: string,
   textMeaningTranslate: string,
   textExampleTranslate: string
+ 
 }
 export interface WordCardProp {
   word: WordItem;
+  style?: Function
 }
 
 export interface FormProps {

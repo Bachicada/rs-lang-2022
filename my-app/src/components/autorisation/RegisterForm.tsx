@@ -3,7 +3,7 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import Link from '@mui/material/Link';
+
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
@@ -11,50 +11,79 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import {createUser} from '../../services/UserService';
-import { CurrentUser } from '../../utils/Constants';
 import { useState } from 'react';
-import { create } from 'domain';
+import {Link} from 'react-router-dom'
+import { NewUser } from '../../types';
+import { APP_ROUTES } from '../../utils/Constants';
+import styles from './Autorisation.module.css';
 
 
 const theme = createTheme();
 
-export default function RegRorm() {
-  /*const [name, setName]= useState('');
+export default function RegForm() {
+  const [regError, setError] = useState('');
+
+  const [name, setName]= useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const [nameError, setNameError] = useState('Пожалуйста, укажите Имя');
+  const [nameClick, setNameClicked] = useState(false);
+  const [emailClick, setEmailClicked] = useState(false)
+  const [passwordClick, setPasswordClicked] = useState(false)
+
+  const [nameError, setNameError] = useState('');
   const [emailError, setEmailError] = useState('Укажите адрес почты');
   const [passError, setPassError] = useState('Обязательно придумайте пароль');
-  */
+  
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
 
     const newUser={
-      'name': data.get('userName') as string,
-      'email': data.get('email') as string,
-      'password': data.get('password') as string
+      name: data.get('userName') as string,
+      email: data.get('email') as string,
+      password: data.get('password') as string
     }
- 
-
+    const user: NewUser = {};
     const newData: void | Response| undefined = await createUser(newUser);
+    
+    console.log(`newData`, newData)
     if (newData){
       const newInfo = await newData.json();
-        CurrentUser.id = newInfo.id;
-        CurrentUser.name = newInfo.name;
-        CurrentUser.email = newInfo.email;
-        localStorage.setItem('CurrentUser', JSON.stringify(CurrentUser));
+        user.userId = newInfo.id;
+        user.name = newInfo.name;
+        user.email = newInfo.email;
+        localStorage.setItem('CurrentUser', JSON.stringify(user));
         console.log(newInfo)
     }
     else {
-      console.log('Возможно, аккаунт уже существует. Попробуйте войти')
+      console.log('Aккаунт уже существует. Попробуйте войти')
+    }
+  }
+  
+  const blurCheck = (event: React.SyntheticEvent) => {
+    const inputField = (event.target as HTMLInputElement).name;
+    if (inputField==='name'){
+      setNameClicked(true)
+    }
+    if (inputField==='email'){
+      setEmailClicked(true)
+    } 
+    else if (inputField==='password'){
+      setPasswordClicked(true)
+    }
+  }
+
+  const nameHandler = (event: React.SyntheticEvent) =>{
+    const inputName = (event.target as HTMLInputElement).value;
+    if (inputName.length <4){
+      setNameError('Пожалуйста, укажите Имя');
     }
   }
 
   return (
     <ThemeProvider theme={theme}>
-      <Container component="main" maxWidth="xs">
+      <Container component="main" maxWidth="xs" >
         <CssBaseline />
         <Box
           sx={{
@@ -62,7 +91,7 @@ export default function RegRorm() {
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-            padding: 0
+            padding: 0,
           }}
         >
           <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
@@ -71,7 +100,8 @@ export default function RegRorm() {
           <Typography component="h1" variant="h5">
              Регистрация
           </Typography>
-          <Box component="form" onSubmit={handleSubmit} noValidate >
+          <Box component="form" onSubmit={handleSubmit} noValidate id='formBox'>
+            {(nameError && nameClick) && <div>{nameError}</div>}
           <TextField
               margin="normal"
               required
@@ -79,6 +109,8 @@ export default function RegRorm() {
               id="userName"
               label="Имя"
               name="userName"
+              onChange={nameHandler}
+              onBlur={blurCheck}
               autoFocus
             />
             <TextField
@@ -89,6 +121,7 @@ export default function RegRorm() {
               label="Адрес email"
               name="email"
               autoComplete="email"
+              value={email}
             />
             <TextField
               margin="normal"
@@ -99,6 +132,7 @@ export default function RegRorm() {
               type="password"
               id="password"
               autoComplete="current-password"
+              value={password}
             />
             <Button
               type="submit"
@@ -111,11 +145,12 @@ export default function RegRorm() {
             <Grid container>
               <Grid item>
                 <span>Уже есть аккаунт?</span>
-                <Link href="#" variant="body2" id='signInBtn'>
-                  {" Войти"}
+                <Link to={APP_ROUTES.SIGNIN}>
+                   <span className={styles.formLink}>Войти</span>
                 </Link>
               </Grid>
             </Grid>
+            <div ></div>
           </Box>
         </Box>
       </Container>

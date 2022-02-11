@@ -12,9 +12,22 @@ export default function WordCard (props: WordCardProp) {
   function createMarkup(){
     return { __html: word.textMeaning };
   }
+  
+  function checkBg(word: WordItem){
+
+    let bg;
+    if(word.group === 0){
+      bg = '#82B2ED'
+    }
+    else{
+      bg = '#689BDC'
+    }
+    return bg;
+  }
+
 
   return (
-    <Card sx={{ maxWidth: 345, backgroundColor: '#1B2D46' }}>
+    <Card sx={{ maxWidth: 345, backgroundColor: `${checkBg(word)}`}} >
       <CardActionArea>
         <CardMedia
           component="img"
