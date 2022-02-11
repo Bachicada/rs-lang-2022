@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { APP_ROUTES } from '../../utils/Constants';
-import { Link } from 'react-router-dom';
+import { Link, useParams, useNavigate } from 'react-router-dom';
 import styles from './textbook.module.css'
 import { PartProps } from '../../types';
 import { getPartOfTextbook } from '../../services/WordService';
@@ -11,40 +11,48 @@ import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 import WordsContainer from './WordsContainer';
 
-export default function PartOfTextBook(props: PartProps) {
-    const [pageNumber, setPageNumber] = useState('0');
- 
-    function checkPage(event: React.SyntheticEvent): string{
-      //target.ariaLabel returns `Go to page 1(2,3...)`
-      const target = (event.target as HTMLButtonElement).ariaLabel;
-      let pageNumber;
-      if (target ===`page 1`){
-        pageNumber = (Number(target.replace(`page `,``)) - 1).toString()
-      }
-      else{
-        pageNumber = (Number(target.replace(`Go to page `,``)) - 1).toString();
-      }
-      console.log(pageNumber)
-      return pageNumber;
+export default function PartOfTextBook() {
+  const [pageNumber, setPageNumber] = useState("0");
+  const [currentPart, setCurrentPart] = useState<string>("0");
+  const params = useParams<{ part: string; page: string }>();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!params.page) {
+      navigate(`${APP_ROUTES.TEXTBOOK}/${params.part}/0`);
+    } else {
+      setPageNumber(params.page);
     }
-    
+    if (params.part) {
+      console.log('params', params)
+      setCurrentPart(params.part);
+    }
+  }, [params, navigate]);
+
     const styles = {
       ul: {
         justifyContent:'space-between',
       }
   };
+
    return (
        <div>
-          <h3>Раздел {Number(props.part)+1} </h3>
+          <h3>Раздел {Number(params.part)+1} </h3>
           <Stack spacing={2}>
-              <Pagination  sx={styles} boundaryCount={4} siblingCount={2} count={30} variant="outlined" shape="rounded" onClick={(event)=>(setPageNumber(checkPage(event)))}/>
+              <Pagination  
+                  sx={styles} 
+                  boundaryCount={4} 
+                  siblingCount={2} 
+                  page={(params.page && parseInt(params.page, 10)) || 1}
+                  count={30} 
+                  variant="outlined" 
+                  shape="rounded" 
+                  onChange={(event: React.ChangeEvent<unknown>, value: number) => {
+                    navigate(`${APP_ROUTES.TEXTBOOK}/${params.part}/${value}`);
+                  }}
+              />
           </Stack>
-          <Link to={`${APP_ROUTES.MAIN}${APP_ROUTES.TEXTBOOK}/part=${props.part}/page=${pageNumber}`}>
-              <WordsContainer page={pageNumber} part={props.part}/>
-          </Link>
-          
-
+          <WordsContainer page={pageNumber} part={params.part}/>
        </div>
    )
 } 
-
