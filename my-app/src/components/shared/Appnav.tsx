@@ -60,6 +60,8 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 
 
 export function PersistentDrawerRight() {
+  console.log(window.localStorage)
+  
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
 

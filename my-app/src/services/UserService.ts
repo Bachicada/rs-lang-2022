@@ -12,13 +12,10 @@ import {NewUser} from '../types';
       body: JSON.stringify(user)
     })
       .then((response) => {
-         console.log(response.status);
          if (response.status===417) {
-         alert('ll')
          throw new Error("Пользователь с такими данными уже существует");
                }
           else if (response.status ===200){
-            console.log(response);
            return response;
                }
         })
@@ -37,8 +34,20 @@ import {NewUser} from '../types';
           'Content-Type': 'application/json'
         },
         body: JSON.stringify(user)
-      });
-      const content = await rawResponse.json();
-    
-      return content;
-    };
+      })
+      .then((response)=>{
+      if (response.status===404) {
+        throw new Error("Пользователя с таким адресом нет");
+              }
+      else if(response.status===403){
+        throw new Error("Введен неверный пароль");
+      }
+      else if(response.status===200){
+         return response;
+      }
+    })
+      .catch((error)=>
+        console.log(error));
+
+    return rawResponse;
+      }
