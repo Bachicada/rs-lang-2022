@@ -83,7 +83,7 @@ export default function RegForm() {
 
   return (
     <ThemeProvider theme={theme}>
-      <Container component="main" maxWidth="xs">
+      <Container component="main" maxWidth="xs" >
         <CssBaseline />
         <Box
           sx={{
@@ -91,7 +91,7 @@ export default function RegForm() {
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-            padding: 0
+            padding: 0,
           }}
         >
           <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
