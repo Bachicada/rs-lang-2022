@@ -1,11 +1,10 @@
 import { Container } from '@mui/material'
-import React, { Dispatch, SetStateAction } from 'react'
+import { Dispatch, SetStateAction } from 'react'
 import { API_URL } from '../../utils/Constants'
-import Utils from '../../utils/Utils'
-import { GameAnswers, IWords } from '../sprint/Sprint'
+import { GameAnswers } from '../sprint/Sprint'
 import { AudioWords } from './Audiocall'
 
-interface SprintGameProps {
+interface AudioGameProps {
   words: AudioWords[];
   wordsId: number;
   setWordsId: Dispatch<SetStateAction<number>>;
@@ -14,7 +13,7 @@ interface SprintGameProps {
   gameAnswers: GameAnswers[];
 }
 
-const AudioGame = (props: SprintGameProps) => {
+const AudioGame = (props: AudioGameProps) => {
   if (!props.isGameReady) {
     return <div>LOADING!!!!!!!!!!!!!!!</div>
   }
@@ -24,9 +23,6 @@ const AudioGame = (props: SprintGameProps) => {
   const obj = props.words[props.wordsId];
   const item = obj.item;
   const audio = new Audio(`${API_URL}/${item.audio}`);
-  // const answerButtons = [...obj.incorrect];
-  // const rightId = Utils.random(0,3);
-  // answerButtons[rightId] = item.wordTranslate;
   
   return (
     <Container maxWidth="md" style={{ background: 'yellow' }}>

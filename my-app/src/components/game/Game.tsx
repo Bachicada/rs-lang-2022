@@ -3,13 +3,13 @@ import React, { useEffect, useState } from 'react'
 import { getPartOfTextbook } from '../../services/WordService';
 import { GAME_TYPE } from '../../utils/Constants';
 import Utils from '../../utils/Utils';
-import LevelModal from '../sprint/LevelModal';
+import LevelModal from './LevelModal';
 import { GameAnswers, IWords } from '../sprint/Sprint';
 import SprintGame from '../sprint/SprintGame';
-import SprintResults from '../sprint/SprintResults';
-import Timer from '../sprint/Timer';
-import { AudioWords } from './Audiocall';
-import AudioGame from './AudioGame';
+import GameResult from './GameResult';
+import Timer from './Timer';
+import { AudioWords } from '../audiocall/Audiocall';
+import AudioGame from '../audiocall/AudioGame';
 
 interface GameProps {
   level?: number;
@@ -79,7 +79,7 @@ const Game = (props: GameProps) => {
     {props.type === GAME_TYPE.SPRINT ? <SprintGame words={words as IWords[]} wordsId={wordsId} setWordsId={setWordsId} 
           isGameReady={isGameReady} setIsGameFinished={setIsGameFinished}
           gameAnswers={gameAnswers}></SprintGame> : ''}
-    <SprintResults isGameFinished={isGameFinished} gameAnswers={gameAnswers}></SprintResults>
+    <GameResult isGameFinished={isGameFinished} gameAnswers={gameAnswers} type={props.type}></GameResult>
   </Box>
   )
 }

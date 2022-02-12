@@ -1,14 +1,7 @@
-import { Box } from '@mui/material';
-import React, { FC, useEffect } from 'react';
-import { getPartOfTextbook } from '../../services/WordService';
+import { FC } from 'react';
 import { WordItem } from '../../types';
 import { GAME_TYPE } from '../../utils/Constants';
-import Utils from '../../utils/Utils';
-import Game from '../audiocall/Game';
-import LevelModal from './LevelModal';
-import SprintGame from './SprintGame';
-import SprintResults from './SprintResults';
-import Timer from './Timer';
+import Game from '../game/Game';
 
 export interface SprintProps {
   level?: number;
@@ -24,8 +17,6 @@ export interface IWords {
   correct: boolean;
   incorrect: string;
 }
-
-let gameAnswers: GameAnswers[] = [];
 
 const Sprint: FC<SprintProps> = (props) => {
   

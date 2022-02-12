@@ -1,5 +1,5 @@
 import { Container } from '@mui/material'
-import React, { Dispatch, SetStateAction } from 'react'
+import { Dispatch, SetStateAction } from 'react'
 import { API_URL } from '../../utils/Constants'
 import { GameAnswers, IWords } from './Sprint'
 

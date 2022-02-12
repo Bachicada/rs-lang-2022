@@ -4,12 +4,12 @@ import { getPartOfTextbook } from '../../services/WordService';
 import { WordItem } from '../../types';
 import { GAME_TYPE } from '../../utils/Constants';
 import Utils from '../../utils/Utils';
-import LevelModal from '../sprint/LevelModal';
+import LevelModal from '../game/LevelModal';
 import { GameAnswers } from '../sprint/Sprint';
-import SprintResults from '../sprint/SprintResults';
-import Timer from '../sprint/Timer';
+import SprintResults from '../game/GameResult';
+import Timer from '../game/Timer';
 import AudioGame from './AudioGame';
-import Game from './Game';
+import Game from '../game/Game';
 
 interface AudiocallProps {
   level?: number;

@@ -1,5 +1,5 @@
-import { Box, Container } from '@mui/material';
-import React, { Dispatch, SetStateAction } from 'react';
+import { Container } from '@mui/material';
+import { Dispatch, SetStateAction } from 'react';
 import LevelButton from './LevelButton';
 
 export interface ModalProps {
