@@ -14,23 +14,59 @@ import { APP_ROUTES } from '../../utils/Constants';
 import { loginUser } from '../../services/UserService';
 import { CurUser, NewUser } from '../../types';
 import { Link , useNavigate} from 'react-router-dom';
-import {useLocalStorage} from '../../services/HookLocalStorage'
 import styles from './Autorisation.module.css';
 
 const theme = createTheme();
 
 export default function SignInForm() { 
-
+  const [validUser, setValidUser] = useState(true);
   const navigate = useNavigate();
+
+  const [email, setEmail] = useState('');
+  const [emailError, setEmailError] = useState(false);
+  const [emailErrorText, setEmailErrorText] =  useState('');
+
+  const [password, setPassword] = useState('');
+  const [passError, setPassError] = useState(false);
+  const [passErrorText, setPassErrorText] =  useState('');
+
+  function emailValidation(inputEmail: string){
+    const regEm = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    if (regEm.test(inputEmail)){
+      setEmailError(false);
+      setEmailErrorText('');
+  } else {
+    setEmailError(true);
+    setEmailErrorText('Введите корректный адрес почты');
+  }
+  }
+
+  const emailHandler = (event: React.SyntheticEvent) =>{
+    const inputEmail= (event.target as HTMLInputElement).value;
+    setEmail(inputEmail);
+    emailValidation(inputEmail);
+  }
+
+  function passValidation(inputPass: string){
+    if (inputPass && inputPass.length>7){
+      setPassError(false);
+      setPassErrorText('');
+    }
+    else{
+      setPassError(true);
+      setPassErrorText('Пароль должен содержать минимум 8 символов');
+    }
+  }
+  
+  const passHandler = (event: React.SyntheticEvent) =>{
+    const inputPass = (event.target as HTMLInputElement).value;
+    setPassword(inputPass);
+    passValidation(inputPass);
+  }
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
       event.preventDefault();
       const data = new FormData(event.currentTarget);
-      // eslint-disable-next-line no-console
-      console.log({
-        email: data.get('email'),
-        password: data.get('password'),
-      });
      
       const curUser: NewUser = {
         email: data.get('email') as string,
@@ -38,19 +74,24 @@ export default function SignInForm() {
       }
       
       const dataUser = await loginUser(curUser);
-  
       const userInfo: CurUser = {};
-  
-      if (dataUser){
-          userInfo.userId = dataUser.userId;
-          userInfo.token = dataUser.token;
-          userInfo.name = dataUser.name;
-          localStorage.setItem('CurrentUser', JSON.stringify(userInfo));
-          console.log(userInfo);
-          navigate(`${APP_ROUTES.MAIN}`);
+
+      if(dataUser){
+        const currentUser = await dataUser.json();
+        userInfo.userId = currentUser.userId;
+        userInfo.token = currentUser.token;
+        userInfo.name = currentUser.name;
+        console.log(currentUser)
+        localStorage.setItem('CurrentUser', JSON.stringify(userInfo));
+        setValidUser(true);
+        navigate(-1);
       }
-    };
-    
+       else {
+        setValidUser(false);
+       }
+      
+    }
+  
     return (
       <ThemeProvider theme={theme}>
         <Container component="main" maxWidth="xs">
@@ -72,21 +113,29 @@ export default function SignInForm() {
             </Typography>
             <Box component="form" onSubmit={handleSubmit} noValidate >
               <TextField
+                error={emailError}
+                helperText={emailErrorText}
+                onChange={emailHandler}
+                value={email}
                 margin="normal"
                 required
                 fullWidth
                 id="email"
-                label="Email Address"
+                label="Эл.почта"
                 name="email"
                 autoComplete="email"
                 autoFocus
               />
               <TextField
+                error={passError}
+                helperText={passErrorText}
+                onChange={passHandler}
+                value={password}
                 margin="normal"
                 required
                 fullWidth
                 name="password"
-                label="Password"
+                label="Пароль"
                 type="password"
                 id="password"
                 autoComplete="current-password"
@@ -96,6 +145,7 @@ export default function SignInForm() {
                 fullWidth
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
+                disabled={passError || emailError}
               >
                 Войти
               </Button>
@@ -107,6 +157,7 @@ export default function SignInForm() {
                   </Link>
                 </Grid>
               </Grid>
+              { validUser ? '' : <div className={styles.errorBox}>Неверный логин/пароль</div> }
             </Box>
           </Box>
         </Container>

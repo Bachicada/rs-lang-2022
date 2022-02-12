@@ -25,3 +25,12 @@
     margin-left: 10px;
     color:blue;
 }    
+.errorBox {
+    margin-top: 15px;
+    background-color: #eca48c;
+    color: rgba(0, 0, 0, 0.582);
+    font-size: 1.3em;
+    border-radius: 10px;
+    border:2px solid #ec5a2a;
+    text-align: center;
+}
