@@ -71,22 +71,17 @@ export function PersistentDrawerRight() {
     setOpen(false);
   };
 
-  const [userName, setUserName] = useState(() => {
-    const userObj = localStorage.getItem(JSON.stringify('CurrentUser'));
-    if(userObj){
-    const user = JSON.parse(userObj);
-    return user.name;
-  }  else {
-    return 'Гость'
-  }});
-  
-  
-  const [LSValue, setLSValue]=useState(localStorage.getItem(JSON.stringify('CurrentUser')));
-  
+
+  const [userName, setUserName] = useState('Гость');
+  const [LSValue, setLSValue] = useState(window.localStorage);
+ 
   useEffect(()=>{
-    console.log(localStorage.getItem(JSON.stringify('CurrentUser')))
-     }, []
-  )
+      const user = JSON.parse(localStorage.getItem('CurrentUser')|| '{}');
+      if (user.name){
+        setUserName(user.name)
+        setLSValue(window.localStorage)
+      }
+    }, [LSValue])
 
   return (
     <div>

@@ -21,8 +21,6 @@ const theme = createTheme();
 export default function SignInForm() {  
   const [validUser, setValidUser] = useState(true);
   const userInfo: CurUser = {};
-  const [LSValue, setLSValue]=useState(window.localStorage.getItem(JSON.stringify('CurrentUser')));
-
 
   const navigate = useNavigate();
 
@@ -88,7 +86,6 @@ export default function SignInForm() {
         userInfo.refreshToken = currentUser.refreshToken;
         userInfo.name = currentUser.name;
         localStorage.setItem('CurrentUser', JSON.stringify(userInfo));
-        setLSValue(window.localStorage.getItem(JSON.stringify('CurrentUser')))
   
         setValidUser(true);
         navigate(-1);
