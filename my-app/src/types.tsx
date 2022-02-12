@@ -6,6 +6,7 @@ export interface NewUser {
 }
 
 export interface CurUser {
+  message?: string,
   name?: string,
   token?: string,
   refreshToken?: string,

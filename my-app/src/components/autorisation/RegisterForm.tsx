@@ -107,6 +107,7 @@ export default function RegForm() {
 
     if (newData){
       const newInfo = await newData.json();
+        console.log(newInfo)
         user.userId = newInfo.id;
         user.name = newInfo.name;
         user.email = newInfo.email;
