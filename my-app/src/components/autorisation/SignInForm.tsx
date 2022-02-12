@@ -78,10 +78,11 @@ export default function SignInForm() {
 
       if(dataUser){
         const currentUser = await dataUser.json();
+        userInfo.message = currentUser.message;
         userInfo.userId = currentUser.userId;
         userInfo.token = currentUser.token;
+        userInfo.refreshToken = currentUser.refreshToken;
         userInfo.name = currentUser.name;
-        console.log(currentUser)
         localStorage.setItem('CurrentUser', JSON.stringify(userInfo));
         setValidUser(true);
         navigate(-1);
