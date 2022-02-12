@@ -2,7 +2,7 @@ import { Container } from '@mui/material'
 import React, { Dispatch, SetStateAction } from 'react'
 import { API_URL } from '../../utils/Constants'
 import Utils from '../../utils/Utils'
-import { GameAnswers } from '../sprint/Sprint'
+import { GameAnswers, IWords } from '../sprint/Sprint'
 import { AudioWords } from './Audiocall'
 
 interface SprintGameProps {

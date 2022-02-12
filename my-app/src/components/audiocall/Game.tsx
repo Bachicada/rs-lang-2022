@@ -1,11 +1,11 @@
 import { Box } from '@mui/material';
 import React, { useEffect, useState } from 'react'
 import { getPartOfTextbook } from '../../services/WordService';
-import { WordItem } from '../../types';
 import { GAME_TYPE } from '../../utils/Constants';
 import Utils from '../../utils/Utils';
 import LevelModal from '../sprint/LevelModal';
 import { GameAnswers, IWords } from '../sprint/Sprint';
+import SprintGame from '../sprint/SprintGame';
 import SprintResults from '../sprint/SprintResults';
 import Timer from '../sprint/Timer';
 import { AudioWords } from './Audiocall';
@@ -73,9 +73,12 @@ const Game = (props: GameProps) => {
   >
     <LevelModal active={modalOpen} setActive={setModalOpen} setLevel={setLevel}></LevelModal>
     <Timer time={seconds} setTimerActive={setTimerActive} isGameReady={isGameReady}></Timer>
-    <AudioGame words={words} wordsId={wordsId} setWordsId={setWordsId} 
+    {props.type === GAME_TYPE.AUDIOCALL ? <AudioGame words={words as AudioWords[]} wordsId={wordsId} setWordsId={setWordsId} 
           isGameReady={isGameReady} setIsGameFinished={setIsGameFinished}
-          gameAnswers={gameAnswers}></AudioGame>
+          gameAnswers={gameAnswers}></AudioGame> : ''}
+    {props.type === GAME_TYPE.SPRINT ? <SprintGame words={words as IWords[]} wordsId={wordsId} setWordsId={setWordsId} 
+          isGameReady={isGameReady} setIsGameFinished={setIsGameFinished}
+          gameAnswers={gameAnswers}></SprintGame> : ''}
     <SprintResults isGameFinished={isGameFinished} gameAnswers={gameAnswers}></SprintResults>
   </Box>
   )

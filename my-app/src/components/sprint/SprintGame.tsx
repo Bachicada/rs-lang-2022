@@ -33,14 +33,12 @@ const SprintGame = (props: SprintGameProps) => {
       <p>{obj.correct ? item.wordTranslate : obj.incorrect}</p>
       <div>
         <button onClick={() => {
-          // obj.correct ? alert('wrong') : alert('right!');
           props.gameAnswers.push(
             obj.correct ? {item: item, answer: false} : {item: item, answer: true}
           );
           props.setWordsId(props.wordsId + 1);
         }}>Неверно</button>
         <button onClick={() => {
-          // obj.correct ? alert('right!') : alert('wrong');
           props.gameAnswers.push(
             obj.correct ? {item: item, answer: true} : {item: item, answer: false}
           );
