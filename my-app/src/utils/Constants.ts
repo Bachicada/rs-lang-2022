@@ -23,3 +23,8 @@ export const ENDPOINTS = {
     GROUP:'group=',
     SIGNIN: '/signin'
 };
+
+export enum GAME_TYPE {
+  AUDIOCALL,
+  SPRINT,
+}
