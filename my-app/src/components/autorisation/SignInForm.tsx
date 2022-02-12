@@ -18,8 +18,12 @@ import styles from './Autorisation.module.css';
 
 const theme = createTheme();
 
-export default function SignInForm() { 
+export default function SignInForm() {  
   const [validUser, setValidUser] = useState(true);
+  const userInfo: CurUser = {};
+  const [LSValue, setLSValue]=useState(window.localStorage.getItem(JSON.stringify('CurrentUser')));
+
+
   const navigate = useNavigate();
 
   const [email, setEmail] = useState('');
@@ -74,21 +78,24 @@ export default function SignInForm() {
       }
       
       const dataUser = await loginUser(curUser);
-      const userInfo: CurUser = {};
-
+    
       if(dataUser){
         const currentUser = await dataUser.json();
+       
         userInfo.message = currentUser.message;
         userInfo.userId = currentUser.userId;
         userInfo.token = currentUser.token;
         userInfo.refreshToken = currentUser.refreshToken;
         userInfo.name = currentUser.name;
         localStorage.setItem('CurrentUser', JSON.stringify(userInfo));
+        setLSValue(window.localStorage.getItem(JSON.stringify('CurrentUser')))
+  
         setValidUser(true);
         navigate(-1);
       }
        else {
         setValidUser(false);
+      
        }
       
     }

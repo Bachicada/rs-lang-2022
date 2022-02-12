@@ -18,7 +18,7 @@ export default function BurgerMenu() {
                     <Link to={APP_ROUTES.MAIN}>RS Lang</Link>
                 </li>
                 <li className='menuItem'>
-                    <Link to={APP_ROUTES.TEXTBOOK}>Учебник</Link>
+                    <Link to={`${APP_ROUTES.TEXTBOOK}/0`}>Учебник</Link>
                 </li>
                    <ul className='menuBook' 
                    onClick={(event)=> checkNavigation(event)}>

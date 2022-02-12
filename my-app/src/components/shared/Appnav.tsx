@@ -60,8 +60,6 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 
 
 export function PersistentDrawerRight() {
-  console.log(window.localStorage)
-  
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
 
@@ -73,20 +71,32 @@ export function PersistentDrawerRight() {
     setOpen(false);
   };
 
-  const [userName, setUserName] = useState('Гость');
+  const [userName, setUserName] = useState(() => {
+    const userObj = localStorage.getItem(JSON.stringify('CurrentUser'));
+    if(userObj){
+    const user = JSON.parse(userObj);
+    return user.name;
+  }  else {
+    return 'Гость'
+  }});
   
-    useEffect(()=>{
-      if (localStorage.getItem('CurrentUser')){
-        const userObj = localStorage.getItem('CurrentUser');
-        const user = JSON.parse(userObj || '{}');
-        setUserName(user.name);
-    }}, [localStorage.getItem('CurrentUser')]);
+  
+  const [LSValue, setLSValue]=useState(localStorage.getItem(JSON.stringify('CurrentUser')));
+  
+  useEffect(()=>{
+    console.log(localStorage.getItem(JSON.stringify('CurrentUser')))
+     }, []
+  )
 
   return (
     <div>
        <AppBar sx={style} position="fixed" open={open}>
         <Toolbar>
+        <LogOutBtn /> 
+        <SignInBtn/>
+          {/*
           { localStorage.getItem('CurrentUser') ? <LogOutBtn /> : <SignInBtn/> }
+          */}
           <Typography variant="h6" noWrap sx={{ flexGrow: 2 }} component="div">
             Здравствуй, {userName}
           </Typography>

@@ -20,20 +20,39 @@ export default function Textbook(){
     }
   }, [params, navigate]);
 
+  function checkNav(event: React.SyntheticEvent){
+    navigate(`${APP_ROUTES.TEXTBOOK}/${(event.target as HTMLElement).dataset.part}/${params.page}`)
+  }  
+
   return (
     <div> 
       <GamesMenu/>
       <h3> Учебник </h3>
-      <ul className={styles.partList} 
-          onClick={(event)=>
-         navigate(`${APP_ROUTES.TEXTBOOK}/${(event.target as HTMLElement).dataset.part}/${params.page}`)} 
-         >
-          <li className={styles.partItem1} data-part='0' > Раздел 1</li>
-          <li className={styles.partItem2} data-part='1' > Раздел 2</li>
-          <li className={styles.partItem3} data-part='2' > Раздел 3</li>
-          <li className={styles.partItem4} data-part='3' > Раздел 4 </li>
-          <li className={styles.partItem5} data-part='4' > Раздел 5 </li>
-          <li className={styles.partItem6} data-part='5' > Раздел 6 </li>
+      <ul className={styles.partList}>
+          <li className={styles.partItem1} data-part='0'  
+             onClick={(event)=>checkNav(event)} > 
+             Раздел 1
+          </li>
+          <li className={styles.partItem2} data-part='1'  
+             onClick={(event)=>checkNav(event)} > 
+             Раздел 2
+          </li>
+          <li className={styles.partItem3} data-part='2'  
+             onClick={(event)=>checkNav(event)} > 
+             Раздел 3
+          </li>
+          <li className={styles.partItem3} data-part='3'  
+             onClick={(event)=>checkNav(event)} > 
+             Раздел 4
+          </li>
+          <li className={styles.partItem4} data-part='4'  
+             onClick={(event)=>checkNav(event)} > 
+             Раздел 5
+          </li>
+          <li className={styles.partItem5} data-part='5'  
+             onClick={(event)=>checkNav(event)} > 
+             Раздел 6
+          </li>
         </ul>
         <PartOfTextBook />
     </div>
