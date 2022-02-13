@@ -17,6 +17,7 @@ import BurgerMenu from './Burger-menu';
 import { useState, useEffect } from 'react';
 import LogOutBtn from '../autorisation/LogOutBtn';
 import { SignInBtn } from '../autorisation/SignInBtn';
+import { USERSTATE } from '../../utils/Constants';
 
 const drawerWidth = 240;
 
@@ -53,7 +54,6 @@ const DrawerHeader = styled('div')(({ theme }) => ({
   alignItems: 'center',
   padding: theme.spacing(0, 1),
 
-  // necessary for content to be below app bar
   ...theme.mixins.toolbar,
   justifyContent: 'flex-start',
 }));
@@ -71,18 +71,6 @@ export function PersistentDrawerRight() {
     setOpen(false);
   };
 
-
-  const [userName, setUserName] = useState('Гость');
-  const [LSValue, setLSValue] = useState(window.localStorage);
- 
-  useEffect(()=>{
-      const user = JSON.parse(localStorage.getItem('CurrentUser')|| '{}');
-      if (user.name){
-        setUserName(user.name)
-        setLSValue(window.localStorage)
-      }
-    }, [LSValue])
-
   return (
     <div>
        <AppBar sx={style} position="fixed" open={open}>
@@ -93,7 +81,7 @@ export function PersistentDrawerRight() {
           { localStorage.getItem('CurrentUser') ? <LogOutBtn /> : <SignInBtn/> }
           */}
           <Typography variant="h6" noWrap sx={{ flexGrow: 2 }} component="div">
-            Здравствуй, {userName}
+            Здравствуй, 
           </Typography>
           <Typography variant="h6" noWrap sx={{ flexGrow: 1 }} component="div">
             Меню
