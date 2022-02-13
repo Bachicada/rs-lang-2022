@@ -25,10 +25,26 @@ export default function WordCard (props: WordCardProp) {
     return bg;
   }
 
+  function playSound(word: WordItem, event: React.SyntheticEvent){
+    const audioList = [
+      new Audio(`${API_URL}/${word.audio}`),
+      new Audio(`${API_URL}/${word.audioMeaning}`),
+      new Audio(`${API_URL}/${word.audioExample}`)
+    ]
+    if ((event.target as HTMLElement).closest('button')){
+       audioList[0].play();
+       audioList[0].addEventListener('ended', ()=>audioList[1].play());
+       audioList[1].addEventListener('ended', ()=>audioList[2].play());
+    }
+     else {
+      audioList.forEach(item=>item.pause())
+     }
+  }
+ 
 
   return (
     <Card sx={{ maxWidth: 345, backgroundColor: `${checkBg(word)}`}} >
-      <CardActionArea>
+      <div onClick={(event)=>{playSound(word, event)}}>
         <CardMedia
           component="img"
           height="140"
@@ -36,6 +52,8 @@ export default function WordCard (props: WordCardProp) {
           alt="green iguana"
         />
         <CardContent>
+          
+          <button>Play</button>
           <Typography gutterBottom variant="h5" component="div" color="whitesmoke">
             {word.word}
           </Typography>
@@ -48,7 +66,7 @@ export default function WordCard (props: WordCardProp) {
           <Typography  dangerouslySetInnerHTML={createMarkup()} variant="body2" color="whitesmoke" >
           </Typography>
         </CardContent>
-      </CardActionArea>
+      </div>
       <CardActions>
         <Button size="small" color="primary">
           Сложное 
