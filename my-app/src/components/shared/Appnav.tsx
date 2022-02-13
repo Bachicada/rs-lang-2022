@@ -71,6 +71,27 @@ export function PersistentDrawerRight() {
     setOpen(false);
   };
 
+  const [userName, setUserName] = useState('Гость');
+  const [logState, setLogState] = useState(USERSTATE.ISLOGED);
+
+  useEffect (()=>{
+    const userData = localStorage.getItem('CurrentUser');
+    if (userData!=null){
+      const userInfo = JSON.parse(localStorage.getItem('CurrentUser') || '{}');
+      setUserName(userInfo.name)
+    }
+    else {setUserName('Гость')}
+  }, [USERSTATE.ISLOGED])
+
+useEffect(()=>{
+  if (typeof window !== "undefined") {
+    const saved = localStorage.getItem('CurrentUser');
+    const initial = saved !== null ? JSON.parse(saved) : 'nnfnf';
+    console.log(initial)
+    return initial;
+  }
+}, [window.localStorage])
+
   return (
     <div>
        <AppBar sx={style} position="fixed" open={open}>
@@ -81,7 +102,7 @@ export function PersistentDrawerRight() {
           { localStorage.getItem('CurrentUser') ? <LogOutBtn /> : <SignInBtn/> }
           */}
           <Typography variant="h6" noWrap sx={{ flexGrow: 2 }} component="div">
-            Здравствуй, 
+            Здравствуй, {userName}
           </Typography>
           <Typography variant="h6" noWrap sx={{ flexGrow: 1 }} component="div">
             Меню
