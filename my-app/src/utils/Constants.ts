@@ -28,3 +28,6 @@ export enum GAME_TYPE {
   AUDIOCALL,
   SPRINT,
 }
+export const USERSTATE: {ISLOGED:boolean} = {
+    ISLOGED: false
+}
