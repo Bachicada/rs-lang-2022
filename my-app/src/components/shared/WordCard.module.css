@@ -1,0 +1,37 @@
+.soundBtn {
+    width: 35px;
+    height: 35px;
+    margin-right: 10px;
+    border-radius: 5px;
+    background-color: rgba(175, 197, 190, 0.548);
+    background-image: url('../../assets/sound.svg');
+    background-size: 70%;
+    background-repeat: no-repeat;
+    background-position: center;
+    cursor: pointer;
+}
+.wordTitle {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+    padding-left: 10px;
+}
+.wordName {
+    margin-top: 0px;
+    margin-bottom: 5px;
+    font-size: 1.5rem;
+    text-transform: capitalize;
+}
+.wordsMain {
+    margin-top: 0px;
+    margin-bottom: 5px;
+    font-size: 1rem;
+    font-weight: 500;
+}
+.h5{
+    margin-top: 0px;
+    margin-bottom: 0px;
+    font-size: 1.2rem;
+    font-weight: 500;
+    font-style: italic;
+}
