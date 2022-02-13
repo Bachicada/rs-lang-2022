@@ -1,10 +1,11 @@
 import { Container } from '@mui/material'
 import { Dispatch, SetStateAction } from 'react'
 import { API_URL } from '../../utils/Constants'
-import { GameAnswers, IWords } from './Sprint'
+import { GameAnswers } from '../sprint/Sprint'
+import { AudioWords } from './Audiocall'
 
-interface SprintGameProps {
-  words: IWords[];
+interface AudioGameProps {
+  words: AudioWords[];
   wordsId: number;
   setWordsId: Dispatch<SetStateAction<number>>;
   isGameReady: boolean;
@@ -12,7 +13,7 @@ interface SprintGameProps {
   gameAnswers: GameAnswers[];
 }
 
-const SprintGame = (props: SprintGameProps) => {
+const AudioGame = (props: AudioGameProps) => {
   if (!props.isGameReady) {
     return <div>LOADING!!!!!!!!!!!!!!!</div>
   }
@@ -22,7 +23,7 @@ const SprintGame = (props: SprintGameProps) => {
   const obj = props.words[props.wordsId];
   const item = obj.item;
   const audio = new Audio(`${API_URL}/${item.audio}`);
-
+  
   return (
     <Container maxWidth="md" style={{ background: 'yellow' }}>
       <div>* * *</div>
@@ -30,23 +31,18 @@ const SprintGame = (props: SprintGameProps) => {
         audio.play();
       }}>Play word</button>
       <p>{item ? item.word : ''}</p>
-      <p>{obj.correct ? item.wordTranslate : obj.incorrect}</p>
       <div>
-        <button onClick={() => {
-          props.gameAnswers.push(
-            obj.correct ? {item: item, answer: false} : {item: item, answer: true}
-          );
-          props.setWordsId(props.wordsId + 1);
-        }}>Неверно</button>
-        <button onClick={() => {
-          props.gameAnswers.push(
-            obj.correct ? {item: item, answer: true} : {item: item, answer: false}
-          );
-          props.setWordsId(props.wordsId + 1);
-        }}>Верно</button>
+        {obj.incorrect.map((word, id) => {
+          return <button key={props.words[id].item.id} onClick={() => {
+            props.gameAnswers.push(
+              word === item.wordTranslate ? {item: item, answer: true} : {item: item, answer: false}
+            )
+            props.setWordsId(props.wordsId + 1);  
+          }}>{word}</button>
+        })}
       </div>
     </Container>
   )
 }
 
-export default SprintGame
+export default AudioGame
