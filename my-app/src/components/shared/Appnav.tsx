@@ -76,6 +76,7 @@ export function PersistentDrawerRight() {
   const userContext = useContext<{ user: CurUser; dispatchUserEvent: (actionType: string, payload: CurUser) => void; }>(
     UserContext
   );
+
   useEffect(() => {
     setUserName(userContext.user.name || "Гость");
   }, [userContext]);
@@ -84,11 +85,8 @@ export function PersistentDrawerRight() {
     <div>
        <AppBar sx={style} position="fixed" open={open}>
         <Toolbar>
-        <LogOutBtn /> 
-        <SignInBtn/>
-          {/*
-          { localStorage.getItem('CurrentUser') ? <LogOutBtn /> : <SignInBtn/> }
-          */}
+          { userContext.user.name ? <LogOutBtn /> : <SignInBtn/> }
+          
           <Typography variant="h6" noWrap sx={{ flexGrow: 2 }} component="div">
             Здравствуй, {userName}
           </Typography>
