@@ -14,21 +14,15 @@ import { APP_ROUTES } from '../../utils/Constants';
 import { loginUser } from '../../services/UserService';
 import { CurUser, NewUser } from '../../types';
 import { Link , useNavigate} from 'react-router-dom';
-import { USERSTATE } from '../../utils/Constants';
+
 import styles from './Autorisation.module.css';
+import { UserContext } from '../../App';
 
 const theme = createTheme();
 
 export default function SignInForm() {  
   const [validUser, setValidUser] = useState(true);
-  const [loged, setLoged] = useState<boolean>(false);
 
-  useEffect(()=>{
-    USERSTATE.ISLOGED=loged;
-    console.log(USERSTATE)
-  }, [loged])
-  
- 
   const userInfo: CurUser = {};
 
   const navigate = useNavigate();
@@ -75,6 +69,11 @@ export default function SignInForm() {
     passValidation(inputPass);
   }
 
+  const { dispatchUserEvent } = React.useContext<{
+    user: CurUser;
+    dispatchUserEvent: (actionType: string, payload: CurUser) => void;
+  }>(UserContext);
+  
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
       event.preventDefault();
       const data = new FormData(event.currentTarget);
@@ -95,13 +94,12 @@ export default function SignInForm() {
         userInfo.refreshToken = currentUser.refreshToken;
         userInfo.name = currentUser.name;
         localStorage.setItem('CurrentUser', JSON.stringify(userInfo));
-        setLoged(true)
+        dispatchUserEvent("UPDATE_USER", userInfo);
         setValidUser(true); 
         navigate(-1);
       }
        else {
         setValidUser(false);
-        setLoged(false)
        }
       
     }

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import { PersistentDrawerRight } from './components/shared/Appnav';
@@ -14,10 +14,45 @@ import WordsContainer from './components/textbook/WordsContainer';
 import PartOfTextBook from './components/textbook/PartOfTextbook';
 import SignInForm from './components/autorisation/SignInForm';
 import RegForm from './components/autorisation/RegisterForm';
+import { createContext } from "react";
+import { CurUser } from './types';
+
+export const UserContext = createContext({
+    user: {},
+    dispatchUserEvent: (actionType: string, payload: CurUser) => {}
+  });
+  
+
+
 
 function App() {
+  const [user, setUser] = useState<CurUser>({});
+
+useEffect(() => {
+  dispatchUserEvent(
+    "UPDATE_USER",
+    JSON.parse(localStorage.getItem("CurrentUser") || "{}")
+  );
+}, []);
+
+const dispatchUserEvent = (actionType: string, payload: CurUser) => {
+  switch (actionType) {
+    case "UPDATE_USER":
+      setUser((prev: CurUser) => ({
+        ...prev,
+        ...(payload || {})
+      }));
+      return;
+    case "CLEAR_USER":
+      setUser({});
+      return;
+    default:
+      return;
+  }
+};
   return (
     <BrowserRouter>
+      <UserContext.Provider value={{ user, dispatchUserEvent }}>
         <div className="App">
           <PersistentDrawerRight />
           <div id="mainContainer">
@@ -37,7 +72,8 @@ function App() {
              </Routes>   
           </div>
          <Footer />
-      </div>
+        </div>
+      </UserContext.Provider>
     </BrowserRouter>
   );
 }

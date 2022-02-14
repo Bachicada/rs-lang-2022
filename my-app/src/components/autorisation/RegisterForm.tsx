@@ -11,11 +11,12 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import {createUser} from '../../services/UserService';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import {Link, useNavigate} from 'react-router-dom'
-import { NewUser } from '../../types';
+import { CurUser, NewUser } from '../../types';
 import { APP_ROUTES } from '../../utils/Constants';
 import styles from './Autorisation.module.css';
+import { UserContext } from "../../App";
 
 
 const theme = createTheme();
@@ -93,6 +94,12 @@ export default function RegForm() {
 
   const [alreadyRegError, setAlreadyRegError] = useState(false);
 
+  const userContext = useContext<{
+    user: CurUser;
+    dispatchUserEvent: any;
+  }>(UserContext);
+
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -112,6 +119,7 @@ export default function RegForm() {
         user.name = newInfo.name;
         user.email = newInfo.email;
         localStorage.setItem('CurrentUser', JSON.stringify(user));
+        userContext.dispatchUserEvent("UPDATE_USER", user);
         console.log(newInfo)
         setAlreadyRegError(false);
         setSuccess(true);
