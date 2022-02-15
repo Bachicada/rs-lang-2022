@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { PageProps, WordItem } from '../../types';
 import styles from './textbook.module.css'
 import { getPartOfTextbook } from '../../services/WordService';
-import WordCard from '../shared/WordCard';
+import WordCard from '../wordCard/WordCard';
 import { LoadingIcon } from '../shared/LoadingIcon';
 
 

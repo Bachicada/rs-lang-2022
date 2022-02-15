@@ -35,3 +35,29 @@
     font-weight: 500;
     font-style: italic;
 }
+.label{
+    cursor: pointer;
+	user-select: none;
+}
+.spanBtn {
+    position: relative;
+    border: 1px solid #d4d4d4;
+    border-radius: 10px;
+    transition: 0.4s;
+    padding: 5px;
+    color: #414141;
+    text-align: center;
+    margin-left: 5px;
+}
+.inputBtn {
+    pointer-events: none;
+	display: none;
+}
+.hardBtn:checked + span {
+    border-color: #f33d3d;
+    color: #f33d3d;
+}
+.learnedBtn:checked + span {
+    border-color: #0b6e3d;
+    color: #0b6e3d;
+}
