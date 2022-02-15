@@ -1,66 +1,62 @@
-import * as React from 'react';
-import { useTheme } from '@mui/material/styles';
-import { LineChart, Line, XAxis, YAxis, Label, ResponsiveContainer } from 'recharts';
-import ChartTitle from './ChartTitle';
+import React from 'react';
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend,
+} from 'chart.js';
+import { Line } from 'react-chartjs-2';
 
 
-// Generate Sales Data
-function createData(time: string, amount?: number) {
-  return { time, amount };
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend
+);
+
+interface ChartProps {
+  title: string;
+  labels: string[];
+  lineTitle: string;
+  data: number[];
 }
 
-const data = [
-  createData('14/02/22', 0),
-  createData('15/02/22', 300),
-  createData('16/02/22', undefined),
-];
-
-export default function Chart() {
-  const theme = useTheme();
-
-  return (
-    <React.Fragment>
-      <ChartTitle>Words stat</ChartTitle>
-      <ResponsiveContainer>
-        <LineChart
-          data={data}
-          margin={{
-            top: 16,
-            right: 16,
-            bottom: 0,
-            left: 24,
-          }}
-        >
-          <XAxis
-            dataKey="time"
-            stroke={theme.palette.text.secondary}
-            style={theme.typography.body2}
-          />
-          <YAxis
-            stroke={theme.palette.text.secondary}
-            style={theme.typography.body2}
-          >
-            <Label
-              angle={270}
-              position="left"
-              style={{
-                textAnchor: 'middle',
-                fill: theme.palette.text.primary,
-                ...theme.typography.body1,
-              }}
-            >
-              Изученные слова
-            </Label>
-          </YAxis>
-          <Line
-            isAnimationActive={false}
-            type="monotone"
-            dataKey="amount"
-            stroke={theme.palette.primary.main}
-            dot={false}
-          />
-        </LineChart>
-      </ResponsiveContainer>
-    </React.Fragment>
-  );
+const Chart = (props: ChartProps) => {
+  const options = {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: 'top' as const,
+      },
+      title: {
+        display: true,
+        text: props.title,
+      },
+    },
+  };
+  
+  const labels = props.labels;
+  
+  const data = {
+    labels,
+    datasets: [
+      {
+        label: props.lineTitle,
+        data: props.data,
+        borderColor: 'rgb(53, 162, 235)',
+        backgroundColor: 'rgba(53, 162, 235, 0.5)',
+      },
+    ],
+  };
+  return <Line options={options} data={data} />;
 }
+
+export default Chart;
