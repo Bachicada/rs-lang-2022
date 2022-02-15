@@ -53,6 +53,7 @@
   },
   "devDependencies": {
     "@types/styled-components": "^5.1.22",
-    "gh-pages": "^3.2.3"
+    "gh-pages": "^3.2.3",
+    "recharts": "^2.1.9"
   }
 }
