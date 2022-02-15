@@ -14,10 +14,11 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 
 import BurgerMenu from './Burger-menu';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import LogOutBtn from '../autorisation/LogOutBtn';
 import { SignInBtn } from '../autorisation/SignInBtn';
-import { USERSTATE } from '../../utils/Constants';
+import { UserContext } from '../../App';
+import { CurUser } from '../../types';
 
 const drawerWidth = 240;
 
@@ -72,35 +73,20 @@ export function PersistentDrawerRight() {
   };
 
   const [userName, setUserName] = useState('Гость');
-  const [logState, setLogState] = useState(USERSTATE.ISLOGED);
+  const userContext = useContext<{ user: CurUser; dispatchUserEvent: (actionType: string, payload: CurUser) => void; }>(
+    UserContext
+  );
 
-  useEffect (()=>{
-    const userData = localStorage.getItem('CurrentUser');
-    if (userData!=null){
-      const userInfo = JSON.parse(localStorage.getItem('CurrentUser') || '{}');
-      setUserName(userInfo.name)
-    }
-    else {setUserName('Гость')}
-  }, [USERSTATE.ISLOGED])
-
-useEffect(()=>{
-  if (typeof window !== "undefined") {
-    const saved = localStorage.getItem('CurrentUser');
-    const initial = saved !== null ? JSON.parse(saved) : 'nnfnf';
-    console.log(initial)
-    return initial;
-  }
-}, [window.localStorage])
+  useEffect(() => {
+    setUserName(userContext.user.name || "Гость");
+  }, [userContext]);
 
   return (
     <div>
        <AppBar sx={style} position="fixed" open={open}>
         <Toolbar>
-        <LogOutBtn /> 
-        <SignInBtn/>
-          {/*
-          { localStorage.getItem('CurrentUser') ? <LogOutBtn /> : <SignInBtn/> }
-          */}
+          { userContext.user.name ? <LogOutBtn /> : <SignInBtn/> }
+          
           <Typography variant="h6" noWrap sx={{ flexGrow: 2 }} component="div">
             Здравствуй, {userName}
           </Typography>

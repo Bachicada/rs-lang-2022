@@ -1,0 +1,67 @@
+.wrapper {
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+}
+.cont {
+    margin-top: 10px;
+    padding-left: 25%;
+}
+.title {
+    color: #1463D8;
+}
+/*Style for circle*/
+.circle{
+    stroke: none;
+    fill-opacity:1;
+}
+/* First blue circle */
+.blue{
+    fill: #1463D8;
+}
+/* First Red circle */
+.red{
+    fill:#F1764E;
+}
+/* Set animation for first (red) circle */
+.one{
+    animation: one 2s linear infinite;
+}
+/* Set animation for second (blue) circle */
+.two{
+    animation: two 2s linear infinite;
+}
+
+/* keyframes used to move first circle and set it's opacity to none when it reaches the far right. */
+@keyframes one{
+    0%{ transform: translate(0,0);  }
+    50%{ transform: translate(100px,0);  }
+    100%{ transform: translate(0,0); fill:none;}
+}
+/* keyframes used to move second circle and set it's opacity to none when it reaches the far left. */
+@keyframes two{
+    0%{ transform: translate(0,0);   }
+    50%{ transform: translate(-100px,0); }
+    100%{ transform: translate(0,0);fill:none;}
+}
+/* Set animation for first (red) circle */
+.three{
+    animation: three 2s linear infinite;
+}
+.four{
+    animation: four 2s linear infinite;
+}
+.clear{
+    fill:none;
+}
+@keyframes three{
+    0%{ transform: translate(0,0);  }
+    50%{ transform: translate(100px,0);  }
+    100%{ transform: translate(0,0); fill:#F1764E;}
+}
+@keyframes four{
+    0%{ transform: translate(0,0);   }
+    50%{ transform: translate(-100px,0); }
+    100%{ transform: translate(0,0);fill:#1463D8;}
+}
+
