@@ -14,6 +14,7 @@ import { APP_ROUTES } from '../../utils/Constants';
 import { loginUser } from '../../services/UserService';
 import { CurUser, NewUser } from '../../types';
 import { Link , useNavigate} from 'react-router-dom';
+import {LoadingIcon} from '../shared/LoadingIcon'
 
 import styles from './Autorisation.module.css';
 import { UserContext } from '../../App';
@@ -74,6 +75,9 @@ export default function SignInForm() {
     dispatchUserEvent: (actionType: string, payload: CurUser) => void;
   }>(UserContext);
   
+  const [loadingState, setLoadingState] = useState(false);
+
+
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
       event.preventDefault();
       const data = new FormData(event.currentTarget);
@@ -84,10 +88,11 @@ export default function SignInForm() {
       }
       
       const dataUser = await loginUser(curUser);
-    
+      
+
       if(dataUser){
         const currentUser = await dataUser.json();
-       
+        
         userInfo.message = currentUser.message;
         userInfo.userId = currentUser.userId;
         userInfo.token = currentUser.token;
@@ -96,6 +101,7 @@ export default function SignInForm() {
         localStorage.setItem('CurrentUser', JSON.stringify(userInfo));
         dispatchUserEvent("UPDATE_USER", userInfo);
         setValidUser(true); 
+        setLoadingState(true);
         navigate(-1);
       }
        else {
@@ -170,6 +176,7 @@ export default function SignInForm() {
                 </Grid>
               </Grid>
               { validUser ? '' : <div className={styles.errorBox}>Неверный логин/пароль</div> }
+              { loadingState ? <LoadingIcon /> : ''}
             </Box>
           </Box>
         </Container>

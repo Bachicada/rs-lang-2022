@@ -17,6 +17,7 @@ import { CurUser, NewUser } from '../../types';
 import { APP_ROUTES } from '../../utils/Constants';
 import styles from './Autorisation.module.css';
 import { UserContext } from "../../App";
+import { LoadingIcon } from '../shared/LoadingIcon';
 
 
 const theme = createTheme();
@@ -99,6 +100,7 @@ export default function RegForm() {
     dispatchUserEvent: any;
   }>(UserContext);
 
+  const [loadingState, setLoadingState] = useState(false);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -111,6 +113,7 @@ export default function RegForm() {
     }
     const user: NewUser = {};
     const newData: void | Response| undefined = await createUser(newUser);
+    setLoadingState(true);
 
     if (newData){
       const newInfo = await newData.json();
@@ -123,10 +126,11 @@ export default function RegForm() {
         console.log(newInfo)
         setAlreadyRegError(false);
         setSuccess(true);
-
+        setLoadingState(false);
         setTimeout(checkLocation, 1500)
     }
     else {
+      setLoadingState(false);
       setAlreadyRegError(true);
       console.log('Aккаунт уже существует. Попробуйте войти')
     }
@@ -222,6 +226,7 @@ export default function RegForm() {
               </Grid>
             </Grid>
            { alreadyRegError ? <div className={styles.errorBox}>Aккаунт уже существует. Попробуйте войти</div> : ''}
+           { loadingState ? <LoadingIcon /> : ''}
           </Box>
         </Box>
       </Container>
