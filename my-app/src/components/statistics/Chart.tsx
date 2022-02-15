@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useTheme } from '@mui/material/styles';
 import { LineChart, Line, XAxis, YAxis, Label, ResponsiveContainer } from 'recharts';
-import Title from './test2';
+import ChartTitle from './ChartTitle';
 
 
 // Generate Sales Data
@@ -20,7 +20,7 @@ export default function Chart() {
 
   return (
     <React.Fragment>
-      <Title>Words stat</Title>
+      <ChartTitle>Words stat</ChartTitle>
       <ResponsiveContainer>
         <LineChart
           data={data}
@@ -49,7 +49,7 @@ export default function Chart() {
                 ...theme.typography.body1,
               }}
             >
-              Sales ($)
+              Изученные слова
             </Label>
           </YAxis>
           <Line

@@ -1,7 +1,7 @@
 import { Box } from '@mui/material';
 import * as React from 'react';
 import styles from './stat.module.css'
-import Chart from './test';
+import Chart from './Chart';
 
 export default class Stat extends React.Component {
     render(){
