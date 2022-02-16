@@ -10,7 +10,7 @@ import {
   Legend,
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
-import { createUserWord, deleteUserWord, getUserWord, getUserWords } from '../../services/UserWordService';
+import { createUserWord, deleteUserWord, getUserAggrWords, getUserWord, getUserWords } from '../../services/UserWordService';
 import { createUserStatistics, getUserStatistics } from '../../services/UserStatisticsService';
 
 
@@ -48,6 +48,7 @@ interface ChartProps {
 // createUserStatistics({learnedWords: 30, optional: {audiocall: '[rightAnswers:20, wrongAnswers:10] 123'}});
 // createUserStatistics({learnedWords: 333, optional: {}});
 getUserStatistics().then((res) => console.log(res));
+// getUserAggrWords().then((res) => console.log(res));
 
 const Chart = (props: ChartProps) => {
 
