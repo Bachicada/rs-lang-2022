@@ -21,10 +21,16 @@ export const ENDPOINTS = {
     USERS: '/users',
     PAGE:'page=',
     GROUP:'group=',
-    SIGNIN: '/signin'
+    SIGNIN: '/signin',
+    TOKENS:'/tokens'
 };
 
 export enum GAME_TYPE {
   AUDIOCALL,
   SPRINT,
+}
+
+export enum WORD_STATUS {
+  HARD = 'hard',
+  LEARNED = 'learned'
 }

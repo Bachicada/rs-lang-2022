@@ -120,7 +120,7 @@ export default function WordCard(props: WordCardProp) {
        </div>  
       <CardActions disableSpacing>
         
-      { userContext.user.name ? <OprionalBtns /> : '' }
+      { userContext.user.name ? <OprionalBtns {...word} /> : '' }
         <ExpandMore
           expand={expanded}
           onClick={handleExpandClick}
