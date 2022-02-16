@@ -11,6 +11,7 @@ import {
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
 import { createUserWord, deleteUserWord, getUserWord, getUserWords } from '../../services/UserWordService';
+import { createUserStatistics, getUserStatistics } from '../../services/UserStatisticsService';
 
 
 
@@ -39,7 +40,14 @@ interface ChartProps {
 //     wordId: "5e9f5ee35eb9e72bc21af718",
 //     word: { difficulty: "hard", optional: {testFieldString: 'tessssst', testFieldBoolean: true} }
 //   });
-
+// interface UserStatistics {
+//   learnedWords: number;
+//   optional: UserStatisticsOptional;
+// }
+// createUserStatistics({learnedWords: 30, optional: {sprint: '[rightAnswers:30, wrongAnswers:0] 123'}});
+// createUserStatistics({learnedWords: 30, optional: {audiocall: '[rightAnswers:20, wrongAnswers:10] 123'}});
+// createUserStatistics({learnedWords: 333, optional: {}});
+getUserStatistics().then((res) => console.log(res));
 
 const Chart = (props: ChartProps) => {
 

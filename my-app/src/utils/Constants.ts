@@ -22,7 +22,8 @@ export const ENDPOINTS = {
     PAGE:'page=',
     GROUP:'group=',
     SIGNIN: '/signin',
-    TOKENS:'/tokens'
+    TOKENS:'/tokens',
+    STATISTICS: '/statistics',
 };
 
 export enum GAME_TYPE {
