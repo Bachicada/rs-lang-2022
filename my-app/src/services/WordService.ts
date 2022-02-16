@@ -1,4 +1,5 @@
 
+import { RawOff, RawOffRounded } from "@mui/icons-material";
 import { useContext } from "react";
 import { UserContext } from "../App";
 import { CurUser, PartProps, WordItem } from "../types";
@@ -52,18 +53,10 @@ export const getNewToken = async () => {
     method: 'GET',
     headers: {
       'Authorization': `Bearer ${refreshToken}`,
-}})
-   const answ = await res.json();
-   return answ;
+}});
+
+   return res;
 }
-
- interface BodyReq{
-  "difficulty": string,
-  "optional": { 
-'group':string,
-'page':string }
- }
-
 
  export const createHardWord = async ({ userId, wordId, word, wordStatus }:{userId: string, wordId: string, word: WordItem, wordStatus: string }) => {
     const token = getUserToken();
@@ -84,8 +77,10 @@ export const getNewToken = async () => {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
       },
+      
       body:  bodyReq
     })    
+    /*
       .then(async(response) =>{
           if ((response.status===401)||(response.status===422)){
             const newToken = await getNewToken();
@@ -98,7 +93,7 @@ export const getNewToken = async () => {
                 newDataUser.token = JSON.parse(newToken).token;
                 newDataUser.refreshToken = JSON.parse(newToken).refreshToken;
             }
-           // localStorage.setItem('CurrentUser', JSON.stringify(newDataUser));
+           localStorage.setItem('CurrentUser', JSON.stringify(newDataUser));
            // userContext.dispatchUserEvent("UPDATE_USER", newDataUser);
 
             const newRes = await fetch(`${API_URL}${ENDPOINTS.USERS}/${userId}/words/${wordId}`, {
@@ -121,9 +116,8 @@ export const getNewToken = async () => {
      .catch((error) => {
       console.log(error)
         });
-
-        console.log(rawResponse)
-      return rawResponse;
+*/
+    return rawResponse;
   };
 
   
