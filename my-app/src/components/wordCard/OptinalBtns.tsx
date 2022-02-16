@@ -119,6 +119,7 @@ export default function OprionalBtns(props:WordItem){
        
         <div>
              { expireStatus ? <div> нужно зайти опять </div> : '' }
+             
            	<label className={styles.label}>
 		      <input id='hardWordBtn' className={styles.inputBtn+' '+styles.hardBtn} type="checkbox"
                      onChange={(event)=>{setHardWord(event, word)}}

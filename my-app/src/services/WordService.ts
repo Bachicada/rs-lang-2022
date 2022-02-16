@@ -133,3 +133,18 @@ export const getNewToken = async () => {
     })    
     return rawResponse
   }
+
+  export const getHardWords = async (userId: string, token: string) =>{ 
+     const hardFilter = `{"userWord.difficulty": "hard"}`
+    // const smth = '{"$or":[{"userWord.difficulty":"hard"},{"group": 5}]}'
+     const data = await fetch(`${API_URL}${ENDPOINTS.USERS}/${userId}/aggregatedWords?filer=${hardFilter}`, {
+       method: 'GET',
+       headers: {
+         'Authorization': `Bearer ${token}`,
+         'Accept': 'application/json',
+       }
+     });
+
+     console.log(data)
+     return data;
+   }

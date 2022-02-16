@@ -4,6 +4,7 @@ import { APP_ROUTES } from '../../utils/Constants';
 import { Link, useNavigate } from 'react-router-dom';
 import { CurUser } from '../../types';
 import { UserContext } from '../../App';
+import { TramTwoTone } from '@mui/icons-material';
 
 export default function BurgerMenu() {
     const navigate= useNavigate();
@@ -14,10 +15,12 @@ export default function BurgerMenu() {
 
     function checkNavigation(event: SyntheticEvent){
         const target = (event.target as HTMLElement).dataset.part;
-        const partNumber = (Number(target) - 1).toString();
-        navigate(`${APP_ROUTES.TEXTBOOK}/${partNumber}/0`)
+        if (target !=='hardWords'){
+            const partNumber = (Number(target) - 1).toString();
+            navigate(`${APP_ROUTES.TEXTBOOK}/${partNumber}/0`)
+        }
+        
     }
-
         return (
             <ul className='menuList'>
                 <li className='menuItem'>
@@ -46,20 +49,15 @@ export default function BurgerMenu() {
                       <li className='bookItem' data-part='6'>
                          Раздел 6
                       </li>
-                      {userContext.user.name ? 
-                      <li className='bookItem' data-part='7'>
-                         Сложные слова
-                      </li> :
+                
+                   </ul>
+                
+                   {userContext.user.name ? 
+                      <li className='menuItem' data-part='hardWords'>
+                      <Link to={APP_ROUTES.HARDWORDS}>Сложные слова</Link>
+                       </li>:
                       ''
                       }
-                      {userContext.user.name ? 
-                      <li className='bookItem' data-part='8'>
-                         Изученные слова
-                      </li> :
-                      ''
-                    }
-                   </ul>
-                   
                 <li className='menuItem'>
                     <Link to={APP_ROUTES.SPRINT}>Спринт</Link>
                 </li>
