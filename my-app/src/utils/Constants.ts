@@ -32,11 +32,7 @@ export enum GAME_TYPE {
 }
 
 export enum WORD_STATUS {
-  HARD = 'hard',
-  LEARNED = 'learned'
-}
-export enum WORDS_TYPE {
   NEW = 'new',
   HARD = 'hard',
-  LEARNED = 'learned',
+  LEARNED = 'learned'
 }

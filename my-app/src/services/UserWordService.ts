@@ -1,5 +1,5 @@
 import { StringLiteralLike } from "typescript";
-import { API_URL, ENDPOINTS } from "../utils/Constants";
+import { API_URL, ENDPOINTS, WORD_STATUS } from "../utils/Constants";
 
 interface UserWordOptional {
   failCounter: number;
@@ -7,7 +7,7 @@ interface UserWordOptional {
 }
 
 interface UserWord {
-  difficulty: string;
+  difficulty: WORD_STATUS;
   optional: UserWordOptional;
 }
 
