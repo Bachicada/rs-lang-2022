@@ -10,6 +10,8 @@ const Stat = () => {
     return <p>Войдите в аккаунт, чтобы посмотреть статистику</p>
   }
 
+
+
   return (
     <Box
       sx={{
@@ -20,8 +22,10 @@ const Stat = () => {
       }}
     >
       <div style={{width: '400px', height: '200px'}}>
-        <ChartTitle>Title</ChartTitle>
-        <Chart title='Все слова' labels={['15/02/22', '16/02/22', '17/02/22']} lineTitle={'слова'} data={[220, 60, 30]}/>
+        <Chart title='Изученные слова за каждый день' labels={['15/02/22', '16/02/22', '17/02/22']} lineTitle={'Кол-во слов'} data={[220, 60, 30]}/>
+      </div>
+      <div style={{width: '400px', height: '200px'}}>
+        <Chart title='Всего изучено слов' labels={['15/02/22', '16/02/22', '17/02/22']} lineTitle={'Кол-во слов'} data={[220, 60, 30]}/>
       </div>
       
     </Box>
@@ -30,7 +34,3 @@ const Stat = () => {
 
 
 export default Stat;
-// title: string;
-// verticalTitle: string;
-// data: ChartData;
-// dataKey: string;

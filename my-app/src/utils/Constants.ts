@@ -34,3 +34,8 @@ export enum WORD_STATUS {
   HARD = 'hard',
   LEARNED = 'learned'
 }
+export enum WORDS_TYPE {
+  NEW = 'new',
+  HARD = 'hard',
+  LEARNED = 'learned',
+}

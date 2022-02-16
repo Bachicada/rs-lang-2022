@@ -10,6 +10,8 @@ import {
   Legend,
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
+import { createUserWord, deleteUserWord, getUserWord, getUserWords } from '../../services/UserWordService';
+
 
 
 ChartJS.register(
@@ -29,7 +31,18 @@ interface ChartProps {
   data: number[];
 }
 
+// const userWords = getUserWords();
+//   userWords.then((result) => console.log(result));
+  // deleteUserWord('5e9f5ee35eb9e72bc21af718');
+//   getUserWord('5e9f5ee35eb9e72bc21af718').then((res) => console.log(res ? res : 'not found'));
+//   createUserWord({
+//     wordId: "5e9f5ee35eb9e72bc21af718",
+//     word: { difficulty: "hard", optional: {testFieldString: 'tessssst', testFieldBoolean: true} }
+//   });
+
+
 const Chart = (props: ChartProps) => {
+
   const options = {
     responsive: true,
     plugins: {
