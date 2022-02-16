@@ -2,8 +2,8 @@ import { StringLiteralLike } from "typescript";
 import { API_URL, ENDPOINTS } from "../utils/Constants";
 
 interface UserWordOptional {
-  testFieldString: string;
-  testFieldBoolean: boolean;
+  failCounter: number;
+  successCounter: number;
 }
 
 interface UserWord {
@@ -15,7 +15,6 @@ interface ICreateUserWord {
   wordId: string;
   word: UserWord;
 }
-// { "difficulty": "weak", "optional": {testFieldString: 'test', testFieldBoolean: true} }
 
 export const getUserWords = async() => {
   const userJSON = localStorage.getItem('CurrentUser');
@@ -77,7 +76,7 @@ export const createUserWord = async ({ wordId, word }: ICreateUserWord) => {
 
   const content = await rawResponse.json();
 
-  console.log('word is ', content);
+  console.log('created word is ', content);
 };
 
 export const deleteUserWord = async(wordId: string) => {
