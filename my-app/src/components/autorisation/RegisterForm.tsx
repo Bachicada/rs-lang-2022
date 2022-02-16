@@ -10,7 +10,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import {createUser} from '../../services/UserService';
+import {createUser, loginUser} from '../../services/UserService';
 import { useContext, useState } from 'react';
 import {Link, useNavigate} from 'react-router-dom'
 import { CurUser, NewUser } from '../../types';
@@ -94,13 +94,13 @@ export default function RegForm() {
   }
 
   const [alreadyRegError, setAlreadyRegError] = useState(false);
+  const [loadingState, setLoadingState] = useState(false)
 
   const userContext = useContext<{
     user: CurUser;
     dispatchUserEvent: any;
   }>(UserContext);
 
-  const [loadingState, setLoadingState] = useState(false);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -111,26 +111,32 @@ export default function RegForm() {
       email: data.get('email') as string,
       password: data.get('password') as string
     }
-    const user: NewUser = {};
+    const user: CurUser = {};
+    
     const newData: void | Response| undefined = await createUser(newUser);
     setLoadingState(true);
 
     if (newData){
-      const newInfo = await newData.json();
-        console.log(newInfo)
-        user.userId = newInfo.id;
-        user.name = newInfo.name;
-        user.email = newInfo.email;
-        localStorage.setItem('CurrentUser', JSON.stringify(user));
-        userContext.dispatchUserEvent("UPDATE_USER", user);
-        console.log(newInfo)
+        const dataUser = await loginUser(newUser);
+
+        if(dataUser){
+          const currentUser = await dataUser.json();
+          console.log("newUser", currentUser);
+          user.message = currentUser.message;
+          user.userId = currentUser.userId;
+          user.token = currentUser.token;
+          user.refreshToken = currentUser.refreshToken;
+          user.name = currentUser.name;
+          localStorage.setItem('CurrentUser', JSON.stringify(user));
+          userContext.dispatchUserEvent("UPDATE_USER", user);
+        }  
         setAlreadyRegError(false);
         setSuccess(true);
-        setLoadingState(false);
-        setTimeout(checkLocation, 1500)
+        setLoadingState(true);
+        setTimeout(checkLocation, 1500);
     }
     else {
-      setLoadingState(false);
+      setLoadingState(true)
       setAlreadyRegError(true);
       console.log('Aккаунт уже существует. Попробуйте войти')
     }
@@ -226,10 +232,14 @@ export default function RegForm() {
               </Grid>
             </Grid>
            { alreadyRegError ? <div className={styles.errorBox}>Aккаунт уже существует. Попробуйте войти</div> : ''}
-           { loadingState ? <LoadingIcon /> : ''}
+           {loadingState ? <LoadingIcon /> :""}
           </Box>
         </Box>
       </Container>
     </ThemeProvider>
   );
 }
+function currentUser(arg0: string, currentUser: any) {
+  throw new Error('Function not implemented.');
+}
+

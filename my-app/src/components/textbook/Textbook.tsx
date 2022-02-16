@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useEffect, useState} from "react";
-import WordCard from '../shared/WordCard';
+import WordCard from '../wordCard/WordCard';
 import styles from "./textbook.module.css";
 import GamesMenu from './GamesMenu';
 import { APP_ROUTES } from "../../utils/Constants";

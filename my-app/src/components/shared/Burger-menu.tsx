@@ -1,10 +1,16 @@
-import React, { SyntheticEvent } from 'react';
+import React, { SyntheticEvent, useContext } from 'react';
 import './../general.css'
 import { APP_ROUTES } from '../../utils/Constants';
 import { Link, useNavigate } from 'react-router-dom';
+import { CurUser } from '../../types';
+import { UserContext } from '../../App';
 
 export default function BurgerMenu() {
     const navigate= useNavigate();
+    
+    const userContext = useContext<{ user: CurUser; dispatchUserEvent: (actionType: string, payload: CurUser) => void; }>(
+        UserContext
+      );
 
     function checkNavigation(event: SyntheticEvent){
         const target = (event.target as HTMLElement).dataset.part;
@@ -40,7 +46,20 @@ export default function BurgerMenu() {
                       <li className='bookItem' data-part='6'>
                          Раздел 6
                       </li>
+                      {userContext.user.name ? 
+                      <li className='bookItem' data-part='7'>
+                         Сложные слова
+                      </li> :
+                      ''
+                      }
+                      {userContext.user.name ? 
+                      <li className='bookItem' data-part='8'>
+                         Изученные слова
+                      </li> :
+                      ''
+                    }
                    </ul>
+                   
                 <li className='menuItem'>
                     <Link to={APP_ROUTES.SPRINT}>Спринт</Link>
                 </li>
@@ -50,6 +69,7 @@ export default function BurgerMenu() {
                 <li className='menuItem'>
                     <Link to={APP_ROUTES.STATISTICS}>Статистика</Link>
                 </li>
+
             </ul>
         )
     

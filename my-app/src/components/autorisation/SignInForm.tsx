@@ -92,7 +92,7 @@ export default function SignInForm() {
 
       if(dataUser){
         const currentUser = await dataUser.json();
-        
+        console.log("currentUser", currentUser)
         userInfo.message = currentUser.message;
         userInfo.userId = currentUser.userId;
         userInfo.token = currentUser.token;
