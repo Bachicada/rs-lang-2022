@@ -6,6 +6,7 @@ export const APP_ROUTES = {
     SPRINT: '/sprint',
     STATISTICS: '/statistics',
     AUDIOCALL: '/audiocall',
+    HARDWORDS:'/hardwords',
     PART1: '/part1',
     PART2: '/part2',
     PART3: '/part3',

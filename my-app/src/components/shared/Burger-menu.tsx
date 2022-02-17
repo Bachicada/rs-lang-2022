@@ -4,6 +4,7 @@ import { APP_ROUTES } from '../../utils/Constants';
 import { Link, useNavigate } from 'react-router-dom';
 import { CurUser } from '../../types';
 import { UserContext } from '../../App';
+import { TramTwoTone } from '@mui/icons-material';
 
 export default function BurgerMenu() {
     const navigate= useNavigate();
@@ -14,10 +15,15 @@ export default function BurgerMenu() {
 
     function checkNavigation(event: SyntheticEvent){
         const target = (event.target as HTMLElement).dataset.part;
-        const partNumber = (Number(target) - 1).toString();
-        navigate(`${APP_ROUTES.TEXTBOOK}/${partNumber}/0`)
+        if (target !=='hardWords'){
+            const partNumber = (Number(target) - 1).toString();
+            navigate(`${APP_ROUTES.TEXTBOOK}/${partNumber}/0`)
+        }
+        else{
+            navigate(`${APP_ROUTES.TEXTBOOK}/hardwords/0`)
+        }
+        
     }
-
         return (
             <ul className='menuList'>
                 <li className='menuItem'>
@@ -47,19 +53,15 @@ export default function BurgerMenu() {
                          Раздел 6
                       </li>
                       {userContext.user.name ? 
-                      <li className='bookItem' data-part='7'>
-                         Сложные слова
-                      </li> :
+                      <li className='bookItem' data-part='hardWords'>
+                        Сложные слова
+                       </li>:
                       ''
                       }
-                      {userContext.user.name ? 
-                      <li className='bookItem' data-part='8'>
-                         Изученные слова
-                      </li> :
-                      ''
-                    }
+                
                    </ul>
-                   
+                
+               
                 <li className='menuItem'>
                     <Link to={APP_ROUTES.SPRINT}>Спринт</Link>
                 </li>

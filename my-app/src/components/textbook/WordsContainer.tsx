@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useState, useEffect } from 'react';
 import { PageProps, WordItem } from '../../types';
 import styles from './textbook.module.css'
-import { getPartOfTextbook } from '../../services/WordService';
+import { getHardWords, getPartOfTextbook, getUserId, getUserToken } from '../../services/WordService';
 import WordCard from '../wordCard/WordCard';
 import { LoadingIcon } from '../shared/LoadingIcon';
 
@@ -10,15 +10,34 @@ import { LoadingIcon } from '../shared/LoadingIcon';
 export default function WordsContainer(props: PageProps){
   const [pageWords, setWords] = useState ([]);
   const [loadingState, setLoadingState] = useState(true);
+  
+  const userId = getUserId();
+  const token = getUserToken();
+
+  const [words, setHardWords] = useState ([]);
+ 
 
   useEffect(() => {
-    
-    getPartOfTextbook(props.page, props.part).then((pageWords)=>{
-      console.log(pageWords);
-      setWords(pageWords);
-      setLoadingState(false)
+    let displayWords:Array<WordItem> = [];
+    if (props.part !=='hardwords'){
+      getPartOfTextbook(props.page, props.part).then((pageWords)=>{
+        console.log("pagewords",pageWords);
+
+        setWords(pageWords);
+        setLoadingState(false);
+        displayWords = pageWords;
+      })
+    }
+    else {
+      getHardWords(userId, token).then(async (response)=>{
+        console.log(response);
+            const words = response[0].paginatedResults;
+            console.log("hardwords", words)
+            setWords(words)
+            setLoadingState(false)
+            displayWords = words;
     })
-  }, [props.page, props.part])
+  }}, [props.page, props.part])
 
   return (
       <div>

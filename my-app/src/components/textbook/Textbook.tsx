@@ -1,27 +1,39 @@
 import * as React from "react";
-import { useEffect, useState} from "react";
+import { useContext, useEffect, useState} from "react";
 import WordCard from '../wordCard/WordCard';
 import styles from "./textbook.module.css";
 import GamesMenu from './GamesMenu';
 import { APP_ROUTES } from "../../utils/Constants";
 import {Link, useParams, useNavigate} from 'react-router-dom';
 import PartOfTextBook from "./PartOfTextbook";
+import { UserContext } from "../../App";
+import { CurUser } from "../../types";
 
 
 export default function Textbook(){
+  const userContext = useContext<{ user: CurUser; dispatchUserEvent: (actionType: string, payload: CurUser) => void; }>(
+    UserContext
+  );
+
   const [partNumber, setPartNumber] = useState<string | undefined>("0");
   const params = useParams< string >();
   const navigate = useNavigate();
 
   console.log(params)
+
   useEffect(() => {
-    if (!params.part) {
+    if ((!params.part) && (params.part !=="hardWords")){
       navigate(`${APP_ROUTES.TEXTBOOK}/1`);
     }
   }, [params, navigate]);
 
   function checkNav(event: React.SyntheticEvent){
-    navigate(`${APP_ROUTES.TEXTBOOK}/${(event.target as HTMLElement).dataset.part}/${params.page}`)
+    if ((event.target as HTMLElement).dataset.part!=="hardWords"){
+      navigate(`${APP_ROUTES.TEXTBOOK}/${(event.target as HTMLElement).dataset.part}/${params.page}`)
+    }
+    else {
+      navigate(`${APP_ROUTES.TEXTBOOK}/hardwords`)
+    }
   }  
 
   return (
@@ -53,6 +65,13 @@ export default function Textbook(){
              onClick={(event)=>checkNav(event)} > 
              Раздел 6
           </li>
+          {userContext.user.name ? 
+            <li className={styles.partItem5} data-part='hardWords'
+             onClick={(event)=>checkNav(event)} >
+              Сложные
+             </li>:
+              ''
+            }
         </ul>
         <PartOfTextBook />
     </div>

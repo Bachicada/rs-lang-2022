@@ -239,6 +239,7 @@ export default function RegForm() {
     </ThemeProvider>
   );
 }
+
 function currentUser(arg0: string, currentUser: any) {
   throw new Error('Function not implemented.');
 }
