@@ -69,6 +69,7 @@ const Game = (props: GameProps) => {
       height: 'calc(100vh - 64px - 25px - 48px)',
       display: 'flex',
       alignItems: 'center',
+      position: 'relative',
     }}
   >
     <LevelModal active={modalOpen} setActive={setModalOpen} setLevel={setLevel}></LevelModal>

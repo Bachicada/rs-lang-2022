@@ -1,6 +1,7 @@
 import { Container } from '@mui/material'
 import { Dispatch, SetStateAction } from 'react'
 import { API_URL } from '../../utils/Constants'
+import { LoadingIcon } from '../shared/LoadingIcon'
 import { GameAnswers, IWords } from './Sprint'
 
 interface SprintGameProps {
@@ -14,7 +15,7 @@ interface SprintGameProps {
 
 const SprintGame = (props: SprintGameProps) => {
   if (!props.isGameReady) {
-    return <div>LOADING!!!!!!!!!!!!!!!</div>
+    return <LoadingIcon />
   }
   if (props.wordsId >= 60) {
     return (<p>THATS ALL</p>)
