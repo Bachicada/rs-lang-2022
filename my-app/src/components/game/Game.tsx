@@ -41,7 +41,6 @@ const Game = (props: GameProps) => {
   useEffect(() => {
     if (wordsId >= 60 || seconds === 0) {
       setIsGameFinished(true);
-      gameAnswers = [];
     }
   }, [ wordsId, seconds ]);
 
