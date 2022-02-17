@@ -10,6 +10,8 @@ export interface SprintProps {
 export interface GameAnswers {
   item: WordItem;
   answer: boolean;
+  failCounter?: number;
+  successCounter?: number;
 }
 
 export interface IWords {

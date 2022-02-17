@@ -1,6 +1,7 @@
 import { Container } from '@mui/material'
 import { Dispatch, SetStateAction } from 'react'
 import { createUserWord, updateUserWord } from '../../services/UserWordService'
+import { WordItem } from '../../types'
 import { API_URL, WORD_STATUS } from '../../utils/Constants'
 import { LoadingIcon } from '../shared/LoadingIcon'
 import { GameAnswers, IWords } from './Sprint'
@@ -13,6 +14,13 @@ interface SprintGameProps {
   setIsGameFinished: Dispatch<SetStateAction<boolean>>;
   gameAnswers: GameAnswers[];
   isGameFinished: boolean;
+}
+
+interface Answer {
+  item: WordItem;
+  answer: boolean;
+  failCounter?: number;
+  successCounter?: number;
 }
 
 const SprintGame = (props: SprintGameProps) => {
@@ -42,13 +50,16 @@ const SprintGame = (props: SprintGameProps) => {
       <p>{obj.correct ? item.wordTranslate : obj.incorrect}</p>
       <div>
         <button onClick={() => {
-          props.gameAnswers.push(
-            obj.correct ? {item: item, answer: false} : {item: item, answer: true}
-          );
-          updateUserWord({ wordId: `${item.id}`, word: { difficulty: WORD_STATUS.NEW, optional: { 
+          const answer: Answer = obj.correct ? {item: item, answer: false} : {item: item, answer: true}; 
+          const content = updateUserWord({ wordId: `${item.id}`, word: { difficulty: WORD_STATUS.NEW, optional: { 
             failCounter: obj.correct ? 1 : 0,
             successCounter: obj.correct ? 0 : 1
-           }}})
+           }}});
+          content.then((item) => {
+            answer.failCounter = item.optional.failCounter; 
+            answer.successCounter = item.optional.successCounter;
+          });
+          props.gameAnswers.push(answer);
           props.setWordsId(props.wordsId + 1);
         }}>Неверно</button>
         <button onClick={() => {
