@@ -41,6 +41,7 @@ const Game = (props: GameProps) => {
   useEffect(() => {
     if (wordsId >= 60 || seconds === 0) {
       setIsGameFinished(true);
+      gameAnswers = [];
     }
   }, [ wordsId, seconds ]);
 
@@ -74,7 +75,7 @@ const Game = (props: GameProps) => {
     }}
   >
     <LevelModal active={modalOpen} setActive={setModalOpen} setLevel={setLevel}></LevelModal>
-    <div style={{width: '700px', height: '400px', display: 'flex', position: 'relative'}}>
+    <div style={{width: '700px', height: 'auto', display: 'flex', justifyContent: 'center', position: 'relative'}}>
       <Timer time={seconds} setTimerActive={setTimerActive} isGameReady={isGameReady}></Timer>
       {props.type === GAME_TYPE.AUDIOCALL ? <AudioGame words={words as AudioWords[]} wordsId={wordsId} setWordsId={setWordsId} 
             isGameReady={isGameReady} setIsGameFinished={setIsGameFinished}
