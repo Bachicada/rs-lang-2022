@@ -1,10 +1,14 @@
 import * as React from 'react';
-import { useState, useEffect } from 'react';
-import { PageProps, WordItem } from '../../types';
+import { useState, useEffect, useContext } from 'react';
+import { CurUser, PageProps, WordItem } from '../../types';
 import styles from './textbook.module.css'
-import { getHardWords, getPartOfTextbook, getUserId, getUserToken } from '../../services/WordService';
+import { getHardWords, getNewToken, getPartOfTextbook, getUserId, getUserToken } from '../../services/WordService';
 import WordCard from '../wordCard/WordCard';
 import { LoadingIcon } from '../shared/LoadingIcon';
+import { UserContext } from '../../App';
+import { useNavigate } from 'react-router-dom';
+import { APP_ROUTES } from '../../utils/Constants';
+import ModalExpire from '../shared/ModalExpire';
 
 
 export default function WordsContainer(props: PageProps){
@@ -13,8 +17,22 @@ export default function WordsContainer(props: PageProps){
   
   const userId = getUserId();
   const token = getUserToken();
+  
 
-  const [words, setHardWords] = useState ([]);
+  const userContext = useContext<{
+    user: CurUser;
+    dispatchUserEvent:  (actionType: string, payload: CurUser) => void;
+  }>(UserContext);
+  
+ 
+  const [expireStatus, setExpireStatus]  = useState(false);
+
+  const navigate = useNavigate();
+  const checkSignIn = ()=>{
+    localStorage.clear();
+    userContext.dispatchUserEvent("CLEAR_USER", {});
+    navigate(`${APP_ROUTES.SIGNIN}`);
+}
  
 
   useEffect(() => {
@@ -31,16 +49,44 @@ export default function WordsContainer(props: PageProps){
     else {
       getHardWords(userId, token).then(async (response)=>{
         console.log(response);
-            const words = response[0].paginatedResults;
+        if (response.status===200){
+          const data = await response.json();
+          const words = data[0].paginatedResults;
             console.log("hardwords", words)
             setWords(words)
             setLoadingState(false)
             displayWords = words;
-    })
+        }
+        else if (response.status===401){
+          const newTokenRes = await getNewToken();
+          console.log('второй ответ', newTokenRes )
+
+          const LS = localStorage.getItem('CurrentUser'||'{}');
+         
+         if(LS && (newTokenRes.status !==401)){
+              const newToken = await newTokenRes.json();
+              console.log ('this new token', newToken)
+              
+              const newDataUser: CurUser = {};
+              newDataUser.message = JSON.parse(LS).message;
+              newDataUser.userId = JSON.parse(LS).userId;
+              newDataUser.name = JSON.parse(LS).name;
+              newDataUser.token = JSON.parse(newToken).token;
+              newDataUser.refreshToken = JSON.parse(newToken).refreshToken;
+              localStorage.setItem('CurrentUser', JSON.stringify(newDataUser));
+              userContext.dispatchUserEvent("UPDATE_USER", newDataUser);
+          }
+          else if(LS && (newTokenRes.status === 401)){
+              console.log ('все истекло', newTokenRes)
+              setExpireStatus(true);
+              setTimeout(checkSignIn, 1000);
+          }
+    }})
   }}, [props.page, props.part])
 
   return (
       <div>
+         < ModalExpire open = {expireStatus}/>
          <h4>Слова</h4>
          <div className={styles.wordsCont}>
             { loadingState ? <LoadingIcon /> : ''}

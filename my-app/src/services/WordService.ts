@@ -63,12 +63,11 @@ export const getNewToken = async () => {
     console.log(token)
     const bodyReq: BodyInit = JSON.stringify({
       "difficulty": `${wordStatus}`,
-       "optional": {
+      "optional": {
             'group':`${word.group}`,
              'page':`${word.page}` 
                }
-    })
-   
+    })  
     const rawResponse = await fetch(`${API_URL}${ENDPOINTS.USERS}/${userId}/words/${wordId}`, {
       method: 'POST',
       //withCredentials: true,
@@ -135,29 +134,27 @@ export const getNewToken = async () => {
   }
 
   export const getHardWords = async (userId: string, token: string) =>{ 
-     const hardFilter ='{"$and":[{"userWord.difficulty":"hard"}]}' /*, {"page":${page}*/
-     const data = await fetch(`${API_URL}${ENDPOINTS.USERS}/${userId}/aggregatedwords?wordsPerPage=3600&filter=${hardFilter}`, {
-       method: 'GET',
-       headers: {
-         'Authorization': `Bearer ${token}`,
-         'Accept': 'application/json',
-         'Content-Type': 'application/json'
-       }
-     });
-
-     return await data.json();
-   }
-
-   
-  export const getAllUserWords = async (userId: string, token: string) =>{ 
-  
-    const data = await fetch(`${API_URL}${ENDPOINTS.USERS}/${userId}${ENDPOINTS.WORDS}`, {
+    const hardFilter ='{"$and":[{"userWord.difficulty":"hard"}]}' /*, {"page":${page}*/
+    const data = await fetch(`${API_URL}${ENDPOINTS.USERS}/${userId}/aggregatedwords?wordsPerPage=3600&filter=${hardFilter}`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${token}`,
         'Accept': 'application/json',
-      }})
-
-    return await data.json();
+        'Content-Type': 'application/json'
+      }
+    })
+    return data;
   }
- 
+
+
+ export const getAllUserWords = async (userId: string, token: string) =>{ 
+
+   const data = await fetch(`${API_URL}${ENDPOINTS.USERS}/${userId}${ENDPOINTS.WORDS}`, {
+     method: 'GET',
+     headers: {
+       'Authorization': `Bearer ${token}`,
+       'Accept': 'application/json',
+     }})
+
+   return await data.json();
+ }

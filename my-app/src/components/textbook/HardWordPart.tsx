@@ -14,10 +14,12 @@ export default function HardWordsPart(){
    
     useEffect(() => {
        getHardWords(userId, token).then(async (response)=>{
+         console.log(response)
+         /*
          const words = response[0].paginatedResults;
          console.log(words)
          setHardWords(words)
-         setLoadingState(false)
+         setLoadingState(false)*/
           }
     )},[])
     
