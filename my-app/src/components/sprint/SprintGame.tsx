@@ -11,13 +11,19 @@ interface SprintGameProps {
   isGameReady: boolean;
   setIsGameFinished: Dispatch<SetStateAction<boolean>>;
   gameAnswers: GameAnswers[];
+  isGameFinished: boolean;
 }
 
 const SprintGame = (props: SprintGameProps) => {
   if (!props.isGameReady) {
-    return <LoadingIcon />
+    return (
+    <div style={{position: 'absolute', zIndex: '50', width: 'auto', height: 'auto', 
+        left: '50%', top: '50%', transform: 'translate(-50%, -50%)'}}>
+      <LoadingIcon />
+    </div>
+    )
   }
-  if (props.wordsId >= 60) {
+  if (props.wordsId >= 60 || props.isGameFinished) {
     return (<p>THATS ALL</p>)
   }
   const obj = props.words[props.wordsId];
@@ -25,7 +31,7 @@ const SprintGame = (props: SprintGameProps) => {
   const audio = new Audio(`${API_URL}/${item.audio}`);
 
   return (
-    <Container maxWidth="md" style={{ background: 'yellow' }}>
+    <Container maxWidth="md" style={{ background: 'rgb(153, 207, 51)', borderRadius: '5px' }}>
       <div>* * *</div>
       <button onClick={() => {
         audio.play();

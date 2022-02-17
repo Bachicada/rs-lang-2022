@@ -69,18 +69,21 @@ const Game = (props: GameProps) => {
       height: 'calc(100vh - 64px - 25px - 48px)',
       display: 'flex',
       alignItems: 'center',
+      justifyContent: 'center',
       position: 'relative',
     }}
   >
     <LevelModal active={modalOpen} setActive={setModalOpen} setLevel={setLevel}></LevelModal>
-    <Timer time={seconds} setTimerActive={setTimerActive} isGameReady={isGameReady}></Timer>
-    {props.type === GAME_TYPE.AUDIOCALL ? <AudioGame words={words as AudioWords[]} wordsId={wordsId} setWordsId={setWordsId} 
-          isGameReady={isGameReady} setIsGameFinished={setIsGameFinished}
-          gameAnswers={gameAnswers}></AudioGame> : ''}
-    {props.type === GAME_TYPE.SPRINT ? <SprintGame words={words as IWords[]} wordsId={wordsId} setWordsId={setWordsId} 
-          isGameReady={isGameReady} setIsGameFinished={setIsGameFinished}
-          gameAnswers={gameAnswers}></SprintGame> : ''}
-    <GameResult isGameFinished={isGameFinished} gameAnswers={gameAnswers} type={props.type}></GameResult>
+    <div style={{width: '700px', height: '400px', display: 'flex', position: 'relative'}}>
+      <Timer time={seconds} setTimerActive={setTimerActive} isGameReady={isGameReady}></Timer>
+      {props.type === GAME_TYPE.AUDIOCALL ? <AudioGame words={words as AudioWords[]} wordsId={wordsId} setWordsId={setWordsId} 
+            isGameReady={isGameReady} setIsGameFinished={setIsGameFinished}
+            gameAnswers={gameAnswers}></AudioGame> : ''}
+      {props.type === GAME_TYPE.SPRINT ? <SprintGame words={words as IWords[]} wordsId={wordsId} setWordsId={setWordsId} 
+            isGameReady={isGameReady} setIsGameFinished={setIsGameFinished} isGameFinished={isGameFinished}
+            gameAnswers={gameAnswers}></SprintGame> : ''}
+      <GameResult isGameFinished={isGameFinished} gameAnswers={gameAnswers} type={props.type}></GameResult>
+    </div>
   </Box>
   )
 }
