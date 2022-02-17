@@ -20,8 +20,9 @@ export default function Textbook(){
   const navigate = useNavigate();
 
   console.log(params)
+
   useEffect(() => {
-    if (!params.part) {
+    if ((!params.part) && (params.part !=="hardWords")){
       navigate(`${APP_ROUTES.TEXTBOOK}/1`);
     }
   }, [params, navigate]);
@@ -29,6 +30,9 @@ export default function Textbook(){
   function checkNav(event: React.SyntheticEvent){
     if ((event.target as HTMLElement).dataset.part!=="hardWords"){
       navigate(`${APP_ROUTES.TEXTBOOK}/${(event.target as HTMLElement).dataset.part}/${params.page}`)
+    }
+    else {
+      navigate(`${APP_ROUTES.TEXTBOOK}/hardwords`)
     }
   }  
 
@@ -61,6 +65,13 @@ export default function Textbook(){
              onClick={(event)=>checkNav(event)} > 
              Раздел 6
           </li>
+          {userContext.user.name ? 
+            <li className={styles.partItem5} data-part='hardWords'
+             onClick={(event)=>checkNav(event)} >
+              Сложные
+             </li>:
+              ''
+            }
         </ul>
         <PartOfTextBook />
     </div>

@@ -19,6 +19,9 @@ export default function BurgerMenu() {
             const partNumber = (Number(target) - 1).toString();
             navigate(`${APP_ROUTES.TEXTBOOK}/${partNumber}/0`)
         }
+        else{
+            navigate(`${APP_ROUTES.TEXTBOOK}/hardwords/0`)
+        }
         
     }
         return (
@@ -49,15 +52,16 @@ export default function BurgerMenu() {
                       <li className='bookItem' data-part='6'>
                          Раздел 6
                       </li>
-                
-                   </ul>
-                
-                   {userContext.user.name ? 
-                      <li className='menuItem' data-part='hardWords'>
-                      <Link to={APP_ROUTES.HARDWORDS}>Сложные слова</Link>
+                      {userContext.user.name ? 
+                      <li className='bookItem' data-part='hardWords'>
+                        Сложные слова
                        </li>:
                       ''
                       }
+                
+                   </ul>
+                
+               
                 <li className='menuItem'>
                     <Link to={APP_ROUTES.SPRINT}>Спринт</Link>
                 </li>

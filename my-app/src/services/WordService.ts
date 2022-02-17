@@ -63,7 +63,7 @@ export const getNewToken = async () => {
     console.log(token)
     const bodyReq: BodyInit = JSON.stringify({
       "difficulty": `${wordStatus}`,
-      "optional": {
+       "optional": {
             'group':`${word.group}`,
              'page':`${word.page}` 
                }
@@ -135,16 +135,29 @@ export const getNewToken = async () => {
   }
 
   export const getHardWords = async (userId: string, token: string) =>{ 
-     const hardFilter = `{"userWord.difficulty": "hard"}`
-    // const smth = '{"$or":[{"userWord.difficulty":"hard"},{"group": 5}]}'
-     const data = await fetch(`${API_URL}${ENDPOINTS.USERS}/${userId}/aggregatedWords?filer=${hardFilter}`, {
+     const hardFilter ='{"$and":[{"userWord.difficulty":"hard"}]}' /*, {"page":${page}*/
+     const data = await fetch(`${API_URL}${ENDPOINTS.USERS}/${userId}/aggregatedwords?wordsPerPage=3600&filter=${hardFilter}`, {
        method: 'GET',
        headers: {
          'Authorization': `Bearer ${token}`,
          'Accept': 'application/json',
+         'Content-Type': 'application/json'
        }
      });
 
-     console.log(data)
-     return data;
+     return await data.json();
    }
+
+   
+  export const getAllUserWords = async (userId: string, token: string) =>{ 
+  
+    const data = await fetch(`${API_URL}${ENDPOINTS.USERS}/${userId}${ENDPOINTS.WORDS}`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Accept': 'application/json',
+      }})
+
+    return await data.json();
+  }
+ 

@@ -20,7 +20,7 @@ export default function PartOfTextBook() {
   useEffect(() => {
     if (!params.page) {
       navigate(`${APP_ROUTES.TEXTBOOK}/${params.part}/0`);
-    } else {
+    } else if(params.page !=='hardwords') {
       setPageNumber(params.page);
     }
     if (params.part) {
@@ -37,7 +37,10 @@ export default function PartOfTextBook() {
 
    return (
        <div>
-          <h3>Раздел {Number(params.part)+1} </h3>
+          <h3>Раздел  
+            {params.part !== 'hardwords' ?  <span>  {Number(params.part)+1} </span>: <span> Сложные слова </span> }
+            </h3>
+            {params.part !== 'hardwords' ?
           <Stack spacing={2}>
               <Pagination  
                   sx={styles} 
@@ -51,7 +54,9 @@ export default function PartOfTextBook() {
                     navigate(`${APP_ROUTES.TEXTBOOK}/${params.part}/${value}`);
                   }}
               />
-          </Stack>
+          </Stack> :
+          ''}
+
           <WordsContainer page={pageNumber} part={params.part}/>
        </div>
    )
