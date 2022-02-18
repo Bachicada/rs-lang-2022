@@ -26,24 +26,29 @@ export default function WordsContainer(props: PageProps){
   
  
   const [expireStatus, setExpireStatus]  = useState(false);
+  const [hardWords, setHardWords] =  useState<WordItem[]>([]);
+  const [allWords, setAllWords] =  useState<WordItem[]>([]);
 
   const navigate = useNavigate();
+
   const checkSignIn = ()=>{
     localStorage.clear();
     userContext.dispatchUserEvent("CLEAR_USER", {});
     navigate(`${APP_ROUTES.SIGNIN}`);
 }
  
+const [bg, setBg] = useState('#fff');
+const [hardChecked, setHardChecked] = useState(false);
 
   useEffect(() => {
-    let displayWords:Array<WordItem> = [];
+
     if (props.part !=='hardwords'){
       getPartOfTextbook(props.page, props.part).then((pageWords)=>{
         console.log("pagewords",pageWords);
-
         setWords(pageWords);
+        setBg('#fff');
+        setHardChecked(false);
         setLoadingState(false);
-        displayWords = pageWords;
       })
     }
     else {
@@ -52,10 +57,11 @@ export default function WordsContainer(props: PageProps){
         if (response.status===200){
           const data = await response.json();
           const words = data[0].paginatedResults;
-            console.log("hardwords", words)
-            setWords(words)
-            setLoadingState(false)
-            displayWords = words;
+          console.log("hardWords", words);
+            setWords(words);
+            setBg('pink');
+            //setHardChecked(true);
+            setLoadingState(false);
         }
         else if (response.status===401){
           const newTokenRes = await getNewToken();
@@ -90,7 +96,7 @@ export default function WordsContainer(props: PageProps){
          <h4>Слова</h4>
          <div className={styles.wordsCont}>
             { loadingState ? <LoadingIcon /> : ''}
-            {pageWords.length > 0 && pageWords.map((item,i) => <WordCard key={i} word={item} />)}
+            {pageWords.length > 0 && pageWords.map((item,i) => <WordCard key={i} word={item} bgColor={bg} /*hardChecked={hardChecked}*/ />)}
          </div>
         </div>
   )

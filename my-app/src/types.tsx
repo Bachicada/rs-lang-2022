@@ -22,6 +22,7 @@ export interface PageProps extends PartProps{
 }
 
 export interface WordItem {
+  _id?:string;
   id: string,
   group:number,
   page: string,
@@ -39,8 +40,15 @@ export interface WordItem {
  
 }
 export interface WordCardProp {
-  word: WordItem;
-  style?: Function
+  word: WordItem,
+  style?: Function,
+  bgColor?: string,
+  hardChecked?: boolean
+
+}
+export interface OptionBtnsProp {
+  word: WordItem,
+  hardChecked?: boolean
 }
 
 export interface FormProps {

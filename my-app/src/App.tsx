@@ -15,17 +15,19 @@ import PartOfTextBook from './components/textbook/PartOfTextbook';
 import SignInForm from './components/autorisation/SignInForm';
 import RegForm from './components/autorisation/RegisterForm';
 import { createContext } from "react";
-import { CurUser } from './types';
-import HardWordsPart from './components/textbook/HardWordPart';
+import { CurUser, WordItem } from './types';
+import { StringLiteralLike } from 'typescript';
 
 export const UserContext = createContext({
     user: {},
     dispatchUserEvent: (actionType: string, payload: CurUser) => {}
   });
+
+  export const HardBtnContext = createContext({
+    isChecked: false,
+    dispatchUserEvent: (actionType: string, payload: CurUser) => {}
+  });
   
-
-
-
 function App() {
   const [user, setUser] = useState<CurUser>({});
 
@@ -51,6 +53,8 @@ const dispatchUserEvent = (actionType: string, payload: CurUser) => {
       return;
   }
 };
+
+
   return (
     <BrowserRouter>
       <UserContext.Provider value={{ user, dispatchUserEvent }}>
@@ -63,7 +67,6 @@ const dispatchUserEvent = (actionType: string, payload: CurUser) => {
                 <Route path={APP_ROUTES.SIGNIN} element={<SignInForm/>}/>
                 <Route path={APP_ROUTES.REGFORM} element={<RegForm/>}/>
                 <Route path={APP_ROUTES.TEXTBOOK} element={<Textbook/>}/>
-                <Route path={APP_ROUTES.HARDWORDS} element={<HardWordsPart/>}/>
                 
                 <Route path={`${APP_ROUTES.TEXTBOOK}/:part`} element={<Textbook />} />
                 <Route path={`${APP_ROUTES.TEXTBOOK}/:part/:page`} element={<Textbook />}/>

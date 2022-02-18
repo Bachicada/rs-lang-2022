@@ -35,13 +35,17 @@
     font-weight: 500;
     font-style: italic;
 }
+.btnsCont {
+    display: flex;
+}
 .label{
     cursor: pointer;
 	user-select: none;
 }
 .spanBtn {
     position: relative;
-    border: 1px solid #d4d4d4;
+    border: 2px solid #050505;
+    background-color: #d4d4d4;
     border-radius: 10px;
     transition: 0.4s;
     padding: 5px;
@@ -54,10 +58,10 @@
 	display: none;
 }
 .hardBtn:checked + span {
-    border-color: #f33d3d;
-    color: #f33d3d;
+    background-color: #f33d3d;
+    color: whitesmoke;
 }
 .learnedBtn:checked + span {
-    border-color: #0b6e3d;
-    color: #0b6e3d;
+    background-color: #0b6e3d;
+    color:  whitesmoke;
 }

@@ -46,8 +46,7 @@ export default function WordStat(){
         <Collapse in={expanded} timeout="auto" unmountOnExit>
           <CardContent>
              <div>
-              <p>Угадано в "Аудиовызов": <span>0</span>/<span>0</span></p>
-              <p>Угадано в "Спринт": <span>0</span>/<span>0</span></p>
+              <p>Угадано: <span>0</span>/<span>0</span></p>
              </div>
           </CardContent>
         </Collapse>
