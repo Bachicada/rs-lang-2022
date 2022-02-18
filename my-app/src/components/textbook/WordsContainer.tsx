@@ -47,7 +47,7 @@ const [hardChecked, setHardChecked] = useState(false);
         console.log("pagewords",pageWords);
         setWords(pageWords);
         setBg('#fff');
-        setHardChecked(false);
+        //setHardChecked(false);
         setLoadingState(false);
       })
     }
