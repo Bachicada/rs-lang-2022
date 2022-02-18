@@ -4,7 +4,7 @@ import { getPartOfTextbook } from '../../services/WordService';
 import { GAME_TYPE } from '../../utils/Constants';
 import Utils from '../../utils/Utils';
 import LevelModal from './LevelModal';
-import { GameAnswers, IWords } from '../sprint/Sprint';
+import { GameAnswers, InitialState, IWords } from '../sprint/Sprint';
 import SprintGame from '../sprint/SprintGame';
 import GameResult from './GameResult';
 import Timer from './Timer';
@@ -14,11 +14,13 @@ import AudioGame from '../audiocall/AudioGame';
 interface GameProps {
   level?: number;
   type: GAME_TYPE;
+  state?: InitialState;
 }
 
 let gameAnswers: GameAnswers[] = [];
 
 const Game = (props: GameProps) => {
+  console.log('GAME', props.state);
   const [level, setLevel] = useState(props.level || null);
   const [words, setWords] = React.useState<AudioWords[] | IWords[]>([]);
   const [wordsId, setWordsId] = React.useState(0);
@@ -73,7 +75,8 @@ const Game = (props: GameProps) => {
       position: 'relative',
     }}
   >
-    <LevelModal active={modalOpen} setActive={setModalOpen} setLevel={setLevel}></LevelModal>
+    {props.level === null ? '' : <LevelModal active={modalOpen} setActive={setModalOpen} setLevel={setLevel}></LevelModal>}
+    {isGameReady && 
     <div style={{width: '700px', height: 'auto', display: 'flex', justifyContent: 'center', position: 'relative'}}>
       <Timer time={seconds} setTimerActive={setTimerActive} isGameReady={isGameReady}></Timer>
       {props.type === GAME_TYPE.AUDIOCALL ? <AudioGame words={words as AudioWords[]} wordsId={wordsId} setWordsId={setWordsId} 
@@ -83,7 +86,7 @@ const Game = (props: GameProps) => {
             isGameReady={isGameReady} setIsGameFinished={setIsGameFinished} isGameFinished={isGameFinished}
             gameAnswers={gameAnswers}></SprintGame> : ''}
       <GameResult isGameFinished={isGameFinished} gameAnswers={gameAnswers} type={props.type}></GameResult>
-    </div>
+    </div>}
   </Box>
   )
 }
