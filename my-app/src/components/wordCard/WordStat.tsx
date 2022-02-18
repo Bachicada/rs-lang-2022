@@ -7,6 +7,7 @@ import CardContent from '@mui/material/CardContent';
 import CardActions from '@mui/material/CardActions';
 import Collapse from '@mui/material/Collapse';
 import IconButton, { IconButtonProps } from '@mui/material/IconButton';
+import { WordItem, WordStatProp } from '../../types';
 
 interface ExpandMoreProps extends IconButtonProps {
     expand: boolean;
@@ -23,7 +24,9 @@ interface ExpandMoreProps extends IconButtonProps {
     }),
   }));
 
-export default function WordStat(){
+export default function WordStat(props:WordStatProp){
+
+    const word = props.word;
     const [expanded, setExpanded] = React.useState(false);
 
     const handleExpandClick = () => {

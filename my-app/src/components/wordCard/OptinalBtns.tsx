@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { UserContext } from '../../App';
 import { createWord, deleteWord, getNewToken, getUserId, getUserToken } from '../../services/WordService';
@@ -10,11 +10,35 @@ import Snackbar from '@mui/material/Snackbar';
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
 import AddSnackBar from './AddSnackBar';
 
+export const HardBtnContext = createContext({
+    isChecked: false,
+    toggleBtnEvent: () => {},
+  })
 
   
 export default function OprionalBtns(props:OptionBtnsProp){
     const word = props.word;
-    //const hardChecked = props.hardChecked;
+    
+    const [btnChecked, setBtnChecked] = useState(false)
+
+    const toggleBtnEvent = (actionType: string, payload: boolean) => {
+        switch (actionType) {
+          case "UPDATE_HARD":
+            setBtnChecked(payload)
+            ;
+            return;
+          default:
+            return;
+        }
+      };
+      
+      useEffect(() => {
+        toggleBtnEvent(
+          "UPDATE_HARD",
+          btnChecked
+        );
+      }, []);
+      
 
     const userContext = useContext<{
         user: CurUser;
@@ -30,9 +54,6 @@ export default function OprionalBtns(props:OptionBtnsProp){
     }
       
     const [expireStatus, setExpireStatus]  = useState(false);
-    const [showDelStatus, setShowDelStatus]  = useState(false);
-    const [showAddtatus, setShowAddStatus]  = useState(false);
-
 
     const token = getUserToken();
   
@@ -64,7 +85,6 @@ export default function OprionalBtns(props:OptionBtnsProp){
 
         if (target.checked){
             console.log('checkedHard');
-
             const wordSet =  await fetch(`${API_URL}${ENDPOINTS.USERS}/${userId}/words/${wordId}`, {
                 method: 'POST',
                 headers: {
@@ -76,12 +96,7 @@ export default function OprionalBtns(props:OptionBtnsProp){
               })    
            .then(async(response)=>{
             console.log('первый ответ',response)
-
-                if(response.status===200){
-                    setShowAddStatus(true);
-                }
-                
-                else if(response.status===417){
+                if(response.status===417){
                     throw new Error('это слово уже в списке сложных')
                 }
                 
@@ -112,17 +127,20 @@ export default function OprionalBtns(props:OptionBtnsProp){
                     }
 
                 const newWordSet = await createWord({userId, wordId, word, wordStatus} )
+                console.log(newWordSet)
                 return newWordSet;
                 }
-            
             })
+         
+            toggleBtnEvent('UPDATE_HARD', true);
         }
         else {
             console.log('uncheckedHard')
             const wordHardDel = await deleteWord({userId, wordId});
-        
 
             console.log('Удалено по сложной кнопке', wordHardDel );
+           
+            toggleBtnEvent('UPDATE_HARD', false);
         }
     }
 
@@ -139,6 +157,7 @@ export default function OprionalBtns(props:OptionBtnsProp){
 
             const newWordSet = await createWord({userId, wordId, word, wordStatus} )
             console.log('добавлено в изученные', await newWordSet.json())
+        
         }
         else {
             console.log('uncheckedLearned');
@@ -148,14 +167,13 @@ export default function OprionalBtns(props:OptionBtnsProp){
         }
     }
 
-
     return (
        
         <div className={styles.btnsCont}>
              { expireStatus ? <div> нужно зайти опять </div> : '' }
              
            	<label className={styles.label}>
-		      <input id='hardWordBtn' className={styles.inputBtn+' '+styles.hardBtn} type="checkbox" /*checked={hardChecked}*/
+		      <input id='hardWordBtn' className={styles.inputBtn+' '+styles.hardBtn} type="checkbox" 
                      onChange={(event)=>{setHardWord(event, word)}}
                    />
 		      <span className={styles.spanBtn}> Сложное </span>

@@ -50,6 +50,9 @@ export interface OptionBtnsProp {
   word: WordItem,
   hardChecked?: boolean
 }
+export interface WordStatProp {
+  word: WordItem,
+}
 
 export interface FormProps {
   hasAccount: boolean;

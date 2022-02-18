@@ -103,7 +103,7 @@ export default function WordCard(props: WordCardProp) {
  
   return (
     <Card sx={{ maxWidth: 345, backgroundColor:`${bgColor}` }}>
-        { userContext.user.name ? <WordStat /> : '' }
+        { userContext.user.name ? <WordStat word={word} /> : '' }
        <CardMedia
           component="img"
           height="140"
@@ -124,7 +124,7 @@ export default function WordCard(props: WordCardProp) {
        </div>  
       <CardActions disableSpacing>
         
-      { userContext.user.name ? <OprionalBtns /*hardChecked={hardChecked} */ word={word} /> : '' }
+      { userContext.user.name ? <OprionalBtns hardChecked={hardChecked} word={word} /> : '' }
         <ExpandMore
           expand={expanded}
           onClick={handleExpandClick}
