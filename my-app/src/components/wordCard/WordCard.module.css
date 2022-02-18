@@ -38,11 +38,8 @@
 .btnsCont {
     display: flex;
 }
-.label{
-    cursor: pointer;
-	user-select: none;
-}
-.spanBtn {
+.wordBtn {
+    display: block;
     position: relative;
     border: 2px solid #050505;
     background-color: #d4d4d4;
@@ -53,15 +50,11 @@
     text-align: center;
     margin-left: 5px;
 }
-.inputBtn {
-    pointer-events: none;
-	display: none;
-}
-.hardBtn:checked + span {
+.hardBtnActive {
     background-color: #f33d3d;
     color: whitesmoke;
 }
-.learnedBtn:checked + span {
+.learnedBtnActive{
     background-color: #0b6e3d;
     color:  whitesmoke;
 }

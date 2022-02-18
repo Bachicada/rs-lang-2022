@@ -15,7 +15,7 @@ import DoneIcon from '@mui/icons-material/Done';
 import { useContext, useState } from 'react';
 import { UserContext } from '../../App';
 import WordStat from './WordStat';
-import OprionalBtns from './OptinalBtns';
+import OptionalBtns from './OptinalBtns';
 import { getHardWords, getNewToken, getUserId, getUserToken } from '../../services/WordService';
 import { useNavigate } from 'react-router-dom';
 
@@ -34,17 +34,13 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
   }),
 }));
 
-export default function WordCard(props: WordCardProp) {
+export default function WordCard({word,onDataChanged}: WordCardProp) {
   
   const [expanded, setExpanded] = React.useState(false);
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
-
-  const word = props.word;
-  const bgColor = props.bgColor;
-  const hardChecked = props.hardChecked;
 
   function createMarkup(){
     return { __html: word.textMeaning };
@@ -101,8 +97,19 @@ export default function WordCard(props: WordCardProp) {
     UserContext
   );
  
+  const checkBg = () =>{
+    let bg;
+    if(word.isHardWord){
+      bg='#f77e3d8f';
+    }
+    else if(word.isLearnedWord){
+      bg='#36a33854';
+    }
+    return bg;
+  }
+
   return (
-    <Card sx={{ maxWidth: 345, backgroundColor:`${bgColor}` }}>
+    <Card sx={{ maxWidth: 345, backgroundColor: checkBg}} >
         { userContext.user.name ? <WordStat word={word} /> : '' }
        <CardMedia
           component="img"
@@ -123,8 +130,8 @@ export default function WordCard(props: WordCardProp) {
           </div>    
        </div>  
       <CardActions disableSpacing>
-        
-      { userContext.user.name ? <OprionalBtns hardChecked={hardChecked} word={word} /> : '' }
+
+      { userContext.user.name ? <OptionalBtns word={word} onDataChanged={onDataChanged}/> : '' }
         <ExpandMore
           expand={expanded}
           onClick={handleExpandClick}

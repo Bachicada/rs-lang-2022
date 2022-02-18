@@ -10,35 +10,8 @@ import Snackbar from '@mui/material/Snackbar';
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
 import AddSnackBar from './AddSnackBar';
 
-export const HardBtnContext = createContext({
-    isChecked: false,
-    toggleBtnEvent: () => {},
-  })
 
-  
-export default function OprionalBtns(props:OptionBtnsProp){
-    const word = props.word;
-    
-    const [btnChecked, setBtnChecked] = useState(false)
-
-    const toggleBtnEvent = (actionType: string, payload: boolean) => {
-        switch (actionType) {
-          case "UPDATE_HARD":
-            setBtnChecked(payload)
-            ;
-            return;
-          default:
-            return;
-        }
-      };
-      
-      useEffect(() => {
-        toggleBtnEvent(
-          "UPDATE_HARD",
-          btnChecked
-        );
-      }, []);
-      
+export default function OptionalBtns({word,onDataChanged}:OptionBtnsProp){
 
     const userContext = useContext<{
         user: CurUser;
@@ -55,6 +28,8 @@ export default function OprionalBtns(props:OptionBtnsProp){
       
     const [expireStatus, setExpireStatus]  = useState(false);
 
+    const userId = getUserId();
+    const wordId = word.id || word._id as string;
     const token = getUserToken();
   
     const bodyReqHard: BodyInit = JSON.stringify({
@@ -77,15 +52,13 @@ export default function OprionalBtns(props:OptionBtnsProp){
                  }
       })
 
-    async function setHardWord(event: React.SyntheticEvent, word: WordItem){
-        const userId = getUserId();
-        const wordId = word.id || word._id as string;
-        const target = event.target as HTMLInputElement;
+    const setHardWord = async()=>{
+      
         const wordStatus = WORD_STATUS.HARD;
 
-        if (target.checked){
+        if (!word.isHardWord){
             console.log('checkedHard');
-            const wordSet =  await fetch(`${API_URL}${ENDPOINTS.USERS}/${userId}/words/${wordId}`, {
+           await fetch(`${API_URL}${ENDPOINTS.USERS}/${userId}/words/${wordId}`, {
                 method: 'POST',
                 headers: {
                   'Authorization': `Bearer ${token}`,
@@ -99,7 +72,6 @@ export default function OprionalBtns(props:OptionBtnsProp){
                 if(response.status===417){
                     throw new Error('это слово уже в списке сложных')
                 }
-                
                 else if (response.status===401){
                     const newTokenRes = await getNewToken();
 
@@ -125,64 +97,68 @@ export default function OprionalBtns(props:OptionBtnsProp){
                        setExpireStatus(true);
                        setTimeout(checkSignIn, 1500);
                     }
-
                 const newWordSet = await createWord({userId, wordId, word, wordStatus} )
-                console.log(newWordSet)
                 return newWordSet;
                 }
             })
-         
-            toggleBtnEvent('UPDATE_HARD', true);
         }
         else {
-            console.log('uncheckedHard')
-            const wordHardDel = await deleteWord({userId, wordId});
-
-            console.log('Удалено по сложной кнопке', wordHardDel );
-           
-            toggleBtnEvent('UPDATE_HARD', false);
+            await deleteWord({userId, wordId});
         }
     }
 
-    async function setLearnedWord(event: React.SyntheticEvent, word: WordItem){
+    const setLearnedWord = async()=>{
         const userId = getUserId();
         const wordId = word.id || word._id as string;
-        const target = event.target as HTMLInputElement;
         const wordStatus = WORD_STATUS.LEARNED;
 
-        if (target.checked){
+        if (word.isHardWord){
             console.log('checkedLearned');
             const deleteHardSet = await deleteWord({userId, wordId});
             console.log('удалено из сложных', deleteHardSet)
 
             const newWordSet = await createWord({userId, wordId, word, wordStatus} )
             console.log('добавлено в изученные', await newWordSet.json())
-        
+        }
+        else if(word.isLearnedWord){
+            await deleteWord({userId, wordId});
         }
         else {
-            console.log('uncheckedLearned');
-            const deleteLearned = await deleteWord({userId, wordId});
-            
-            console.log(deleteLearned);
+             await createWord({userId, wordId, word, wordStatus})
+            }
+    }
+
+    const onHardBtnClick = async () =>{
+        try{
+            await setHardWord();
+            onDataChanged();
+        }
+        catch (e) {
+            console.error(e)
         }
     }
 
+    const onLearnedBtnClick = async () =>{
+        try{
+            await setLearnedWord();
+            onDataChanged();
+        }
+        catch (e) {
+            console.error(e)
+        }
+    }
     return (
        
         <div className={styles.btnsCont}>
              { expireStatus ? <div> нужно зайти опять </div> : '' }
-             
-           	<label className={styles.label}>
-		      <input id='hardWordBtn' className={styles.inputBtn+' '+styles.hardBtn} type="checkbox" 
-                     onChange={(event)=>{setHardWord(event, word)}}
-                   />
-		      <span className={styles.spanBtn}> Сложное </span>
-	        </label>
-            <label className={styles.label}>
-		      <input id='learnedWordBtn'className={styles.inputBtn+' '+styles.learnedBtn}type="checkbox"
-               onChange={(event)=>{setLearnedWord(event, word)}}/>
-		      <span className={styles.spanBtn}> Изученное </span>
-	        </label>
+             <button className={ [word.isHardWord ? styles.hardBtnActive : '', styles.wordBtn].join(' ') }
+                     onClick={()=>{onHardBtnClick()}}>
+                         Сложное
+            </button>
+            <button className={[word.isLearnedWord ? styles.learnedBtnActive : '', styles.wordBtn].join(' ')} 
+                     onClick={()=>{onLearnedBtnClick()}}>
+                        Изученное
+            </button>
         </div>
     )
 }

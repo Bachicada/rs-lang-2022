@@ -2,14 +2,13 @@ import * as React from 'react';
 import { useState, useEffect, useContext } from 'react';
 import { CurUser, PageProps, WordItem } from '../../types';
 import styles from './textbook.module.css'
-import { getHardWords, getNewToken, getPartOfTextbook, getUserId, getUserToken, getWords } from '../../services/WordService';
+import { getHardWords, getLearnedWords, getNewToken, getPartOfTextbook, getUserId, getUserToken, getWords } from '../../services/WordService';
 import WordCard from '../wordCard/WordCard';
 import { LoadingIcon } from '../shared/LoadingIcon';
 import { UserContext } from '../../App';
 import { useNavigate } from 'react-router-dom';
 import { APP_ROUTES } from '../../utils/Constants';
 import ModalExpire from '../shared/ModalExpire';
-import { HardBtnContext } from '../wordCard/OptinalBtns';
 
 
 export default function WordsContainer(props: PageProps){
@@ -24,12 +23,7 @@ export default function WordsContainer(props: PageProps){
     dispatchUserEvent:  (actionType: string, payload: CurUser) => void;
   }>(UserContext);
   
-  const btnContext = useContext(HardBtnContext);
-
- 
   const [expireStatus, setExpireStatus]  = useState(false);
-  const [hardWords, setHardWords] =  useState<WordItem[]>([]);
-  const [allWords, setAllWords] =  useState<WordItem[]>([]);
 
   const navigate = useNavigate();
 
@@ -38,18 +32,60 @@ export default function WordsContainer(props: PageProps){
     userContext.dispatchUserEvent("CLEAR_USER", {});
     navigate(`${APP_ROUTES.SIGNIN}`);
 }
- 
 
-const [bg, setBg] = useState('#fff');
-const [hardChecked, setHardChecked] = useState(true);
+const [hardWords, setHardWords] =  useState<WordItem[]>([]);
+const [learnedWords, setLearnedWords] = useState<WordItem[]>([]);
+const [allWords, setAllWords] =  useState<WordItem[]>([]);
+const [finalWords, setFinalWords] =  useState<WordItem[]>([]);
 
-const checkHardWords = async () =>{
-  const wordsList = getHardWords(userId, token).then(async (response)=>{
+
+const fetchHardWords = async () =>{
+  getHardWords(userId, token).then(async (response)=>{
+    console.log(response);
+    if (response.status===200){
+      const data = await response.json();
+      const hardWords = data[0].paginatedResults;
+      console.log("hardWords", hardWords);
+        setHardWords(hardWords);
+        setLoadingState(false);
+    }
+    else if (response.status===401){
+      const newTokenRes = await getNewToken();
+      console.log('второй ответ', newTokenRes )
+
+      const LS = localStorage.getItem('CurrentUser'||'{}');
+     
+     if(LS && (newTokenRes.status !==401)){
+          const newToken = await newTokenRes.json();
+          console.log ('this new token', newToken)
+          
+          const newDataUser: CurUser = {};
+          newDataUser.message = JSON.parse(LS).message;
+          newDataUser.userId = JSON.parse(LS).userId;
+          newDataUser.name = JSON.parse(LS).name;
+          newDataUser.token = newToken.token;
+          console.log(newToken.token);
+          newDataUser.refreshToken = JSON.parse(newToken).refreshToken;
+          localStorage.setItem('CurrentUser', JSON.stringify(newDataUser));
+          userContext.dispatchUserEvent("UPDATE_USER", newDataUser);
+      }
+      else if(LS && (newTokenRes.status === 401)){
+          console.log ('все истекло', newTokenRes)
+          setExpireStatus(true);
+          setTimeout(checkSignIn, 1000);
+      }
+}})
+}
+
+const fetchLearnedWords = async () =>{
+  getLearnedWords(userId, token).then(async (response)=>{
   console.log(response);
-
   if (response.status===200){
     const data = await response.json();
-    const hardWords = data[0].paginatedResults;
+    const learnedWords = data[0].paginatedResults;
+    console.log("learnedWords", learnedWords);
+      setLearnedWords(learnedWords);
+      setLoadingState(false);
   }
   else if (response.status===401){
     const newTokenRes = await getNewToken();
@@ -65,7 +101,8 @@ const checkHardWords = async () =>{
         newDataUser.message = JSON.parse(LS).message;
         newDataUser.userId = JSON.parse(LS).userId;
         newDataUser.name = JSON.parse(LS).name;
-        newDataUser.token = JSON.parse(newToken).token;
+        newDataUser.token = newToken.token;
+        console.log(newToken.token);
         newDataUser.refreshToken = JSON.parse(newToken).refreshToken;
         localStorage.setItem('CurrentUser', JSON.stringify(newDataUser));
         userContext.dispatchUserEvent("UPDATE_USER", newDataUser);
@@ -75,83 +112,88 @@ const checkHardWords = async () =>{
         setExpireStatus(true);
         setTimeout(checkSignIn, 1000);
     }
-}}
- )
- return wordsList;
+}})
+console.log("learned",learnedWords)
 }
 
-
-  useEffect(() => {
-    
-    if (props.part !=='hardwords'){
-      getPartOfTextbook(props.page, props.part).then((allWords)=>{
-        console.log("pagewords",allWords);
-        setWords(allWords);
-        setBg('#fff');
-        setHardChecked(false);
-        setLoadingState(false);
-      })
+useEffect(() =>{
+  if (props.part === 'hardwords') {
+    if (hardWords && hardWords.length) {
+      const b = hardWords.map((word) =>({
+        ...word,
+        isHardWord:true
+      }));
+      console.log('1',b)
+      setFinalWords(b)
+    } else {
+      setFinalWords([]);
     }
-    else {
-      getHardWords(userId, token).then(async (response)=>{
-        console.log(response);
-        if (response.status===200){
-          const data = await response.json();
-          const hardWords = data[0].paginatedResults;
-          console.log("hardWords", hardWords);
-            setWords(hardWords);
-            setBg('pink');
-            setHardChecked(true);
-            setLoadingState(false);
+  } else {
+    if (allWords && allWords.length) {
+    if ((hardWords&& hardWords.length) && (learnedWords&& learnedWords.length)) {
+      const a = allWords.map((word) =>{
+        if (hardWords.find((w) => w._id === word.id)) {
+          return{
+            ...word,
+            isHardWord: true
+          }
         }
-        else if (response.status===401){
-          const newTokenRes = await getNewToken();
-          console.log('второй ответ', newTokenRes )
-
-          const LS = localStorage.getItem('CurrentUser'||'{}');
-         
-         if(LS && (newTokenRes.status !==401)){
-              const newToken = await newTokenRes.json();
-              console.log ('this new token', newToken)
-              
-              const newDataUser: CurUser = {};
-              newDataUser.message = JSON.parse(LS).message;
-              newDataUser.userId = JSON.parse(LS).userId;
-              newDataUser.name = JSON.parse(LS).name;
-              newDataUser.token = (JSON.parse(newToken)).token;
-              newDataUser.refreshToken = JSON.parse(newToken).refreshToken;
-              localStorage.setItem('CurrentUser', JSON.stringify(newDataUser));
-              userContext.dispatchUserEvent("UPDATE_USER", newDataUser);
+        else if(learnedWords.find((w) => w._id === word.id)) {
+          return{
+            ...word,
+            isLearnedWord: true
           }
-          else if(LS && (newTokenRes.status === 401)){
-              console.log ('все истекло', newTokenRes)
-              setExpireStatus(true);
-              setTimeout(checkSignIn, 1000);
-          }
-    }})
-  }}, [props.page, props.part])
-/*
-  for (let i=0; i<hardWords.length; i++){
-    for(let j=0; j<allWords.length; j++){
-      if (hardWords[i]._id===allWords[j].id){
-        console.log('дадада')
       }
+      return word;
+    })
+      console.log('2',a)
+      setFinalWords(a)
+    } else {
+      console.log('3',allWords)
+      setFinalWords(allWords);
     }
-    
+    } else {
+      setFinalWords([]);
+    }
   }
-*/
+
+},[allWords,hardWords,learnedWords,props.part])
+
+useEffect(() => {
+  fetchHardWords();
+  fetchLearnedWords();
+  if (props.part !=='hardwords'){
+    getPartOfTextbook(props.page, props.part).then((allWords)=>{
+      
+      setAllWords(allWords);
+      setLoadingState(false);
+    })
+  }}, [props.page, props.part])
+
+const onDataChanged = () =>{
+  console.log('first', props.part)
+  fetchHardWords();
+  fetchLearnedWords();
+  if (props.part !=='hardwords'){
+    getPartOfTextbook(props.page, props.part).then((allWords)=>{
+      setAllWords(allWords);
+      setLoadingState(false);
+    })
+  }
+}
+
   return (
-    /*<HardBtnContext.Provider value={{isChecked,toggleBtnEvent}}>*/
+
       <div>
          < ModalExpire open = {expireStatus}/>
          <h4>Слова</h4>
-         {btnContext ? <p>true</p> :  <p>false</p>}
          <div className={styles.wordsCont}>
             { loadingState ? <LoadingIcon /> : ''}
-            {pageWords.length > 0 && pageWords.map((item,i) => <WordCard key={i} word={item} bgColor={bg} hardChecked={hardChecked} />)}
+
+            {finalWords.length > 0 && finalWords.map((item,i) => <WordCard key={i} word={item} onDataChanged={onDataChanged}/>)}
 
          </div>
         </div>
-      /*  </HardBtnContext.Provider>*/
+
   )
 }

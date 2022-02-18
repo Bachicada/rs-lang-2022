@@ -147,6 +147,18 @@ export const getNewToken = async () => {
     return data;
   }
 
+  export const getLearnedWords = async (userId: string, token: string) =>{ 
+    const hardFilter ='{"$and":[{"userWord.difficulty":"learned"}]}' /*, {"page":${page}*/
+    const data = await fetch(`${API_URL}${ENDPOINTS.USERS}/${userId}/aggregatedwords?wordsPerPage=3600&filter=${hardFilter}`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      }
+    })
+    return data;
+  }
 
  export const getAllUserWords = async (userId: string, token: string) =>{ 
 

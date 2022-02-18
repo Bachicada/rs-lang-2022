@@ -36,19 +36,18 @@ export interface WordItem {
   transcription: string,
   wordTranslate: string,
   textMeaningTranslate: string,
-  textExampleTranslate: string
- 
+  textExampleTranslate: string,
+  isHardWord?: boolean,
+  isLearnedWord?: boolean,
 }
 export interface WordCardProp {
   word: WordItem,
-  style?: Function,
-  bgColor?: string,
-  hardChecked?: boolean
+  onDataChanged:()=>void,
 
 }
 export interface OptionBtnsProp {
   word: WordItem,
-  hardChecked?: boolean
+  onDataChanged:()=>void,
 }
 export interface WordStatProp {
   word: WordItem,

@@ -16,15 +16,10 @@ import SignInForm from './components/autorisation/SignInForm';
 import RegForm from './components/autorisation/RegisterForm';
 import { createContext } from "react";
 import { CurUser, WordItem } from './types';
-import { StringLiteralLike } from 'typescript';
+
 
 export const UserContext = createContext({
     user: {},
-    dispatchUserEvent: (actionType: string, payload: CurUser) => {}
-  });
-
-  export const HardBtnContext = createContext({
-    isChecked: false,
     dispatchUserEvent: (actionType: string, payload: CurUser) => {}
   });
   
