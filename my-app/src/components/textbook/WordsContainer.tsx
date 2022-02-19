@@ -130,7 +130,7 @@ useEffect(() =>{
     }
   } else {
     if (allWords && allWords.length) {
-    if ((hardWords&& hardWords.length) && (learnedWords&& learnedWords.length)) {
+    if ((hardWords&& hardWords.length) || (learnedWords&&learnedWords.length)) {
       const a = allWords.map((word) =>{
         if (hardWords.find((w) => w._id === word.id)) {
           return{
@@ -138,7 +138,7 @@ useEffect(() =>{
             isHardWord: true
           }
         }
-        else if(learnedWords.find((w) => w._id === word.id)) {
+        if(learnedWords.find((w) => w._id === word.id)) {
           return{
             ...word,
             isLearnedWord: true
