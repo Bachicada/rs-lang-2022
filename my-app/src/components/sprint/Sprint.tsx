@@ -26,6 +26,7 @@ export interface IWords {
 export interface InitialState {
   level: number | null;
   questions: any[];
+  answers: any[];
   currentQuestionIndex: number;
   correctAnswersCount: number;
   // currentAnswer: string;
@@ -44,6 +45,7 @@ const initialState: InitialState = {
   // answers: Utils.shuffleAnswers(null),
   level: null,
   questions: [],
+  answers: [],
   currentQuestionIndex: 0,
   correctAnswersCount: 0,
   showModal: true,
@@ -87,6 +89,28 @@ const reducer: Reducer<InitialState, ReducerAction> = (state, action) => {
         isLoading: false,
         isGameReady: true,
         timerActive: true,
+      }
+    }
+    case 'CORRECT_ANSWER': {
+      const answers = [...state.answers, action.payload];
+      const correctAnswersCount = state.correctAnswersCount + 1;
+      const currentQuestionIndex = state.currentQuestionIndex + 1;
+      return {
+        ...state,
+        answers,
+        correctAnswersCount,
+        currentQuestionIndex,
+      }
+    }
+    case 'INCORRECT_ANSWER': {
+      const answers = [...state.answers, action.payload];
+      const correctAnswersCount = 0;
+      const currentQuestionIndex = state.currentQuestionIndex + 1;
+      return {
+        ...state,
+        answers,
+        correctAnswersCount,
+        currentQuestionIndex,
       }
     }
     default:

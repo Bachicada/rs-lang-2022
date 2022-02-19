@@ -89,7 +89,7 @@ const Game = (props: GameProps) => {
       {props.type === GAME_TYPE.AUDIOCALL ? <AudioGame words={words as AudioWords[]} wordsId={wordsId} setWordsId={setWordsId} 
             isGameReady={isGameReady} setIsGameFinished={setIsGameFinished}
             gameAnswers={gameAnswers}></AudioGame> : ''}
-      {props.type === GAME_TYPE.SPRINT ? <SprintGame words={words as IWords[]} wordsId={wordsId} setWordsId={setWordsId} 
+      {props.type === GAME_TYPE.SPRINT ? quizState.isGameReady && <SprintGame words={words as IWords[]} wordsId={wordsId} setWordsId={setWordsId} 
             isGameReady={isGameReady} setIsGameFinished={setIsGameFinished} isGameFinished={isGameFinished}
             gameAnswers={gameAnswers}></SprintGame> : ''}
       <GameResult isGameFinished={isGameFinished} gameAnswers={gameAnswers} type={props.type}></GameResult>
