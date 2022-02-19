@@ -1,4 +1,4 @@
-import React, { Dispatch } from 'react';
+import React, { Dispatch, Reducer } from 'react';
 import { createContext, FC, useReducer } from 'react';
 import { getPartOfTextbook } from '../../services/WordService';
 import { WordItem } from '../../types';
@@ -63,23 +63,37 @@ const initialState: InitialState = {
 
 // const [ seconds, setSeconds ] = React.useState(60);
 // const [ timerActive, setTimerActive ] = React.useState(false);
-
-const reducer = (state: InitialState, action: { type: any; payload: any; }) => {
+type ReducerAction = { type: any; payload: any; }
+// const reducer: Reducer<InitialState, test> = (state: InitialState, action: { type: any; payload: any; }) => {
+const reducer: Reducer<InitialState, ReducerAction> = (state, action) => {
   switch (action.type) {
+    case 'CHANGE_LEVEL': {
+      const lvl = action.payload;
+      const arr = getPartOfTextbook(`${0}`, `${lvl}`);
+      console.log(arr);
+      return {
+        ...state,
+        level: lvl,
+        questions: [1,2,3],
+      }
+    }
     default:
       return state;
   }
 };
 
 // type IQuizContext = [InitialState[], React.Dispatch<React.SetStateAction<InitialState[]>>];
+type IQuizContext = [InitialState, Dispatch<{ type: string; payload: any; }>];
 
-export const QuizContext = createContext<Dispatch<{ type: any; payload: any; }>>(() => null);
+// export const QuizContext = createContext<Dispatch<{ type: any; payload: any; }>>(() => null);
+export const QuizContext = createContext<IQuizContext>([initialState, () => null]);
 
 const Sprint: FC<SprintProps> = (props) => {
-  const [state, dispatch] = useReducer(reducer, initialState);
+  // const [state, dispatch] = useReducer(reducer, initialState);
+  const value = useReducer(reducer, initialState);
   return (
-    <QuizContext.Provider value ={dispatch}>
-      <Game type={GAME_TYPE.SPRINT} state={state}/>
+    <QuizContext.Provider value ={value}>
+      <Game type={GAME_TYPE.SPRINT}/>
     </QuizContext.Provider>
   );
 }

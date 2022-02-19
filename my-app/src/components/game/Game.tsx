@@ -1,10 +1,10 @@
 import { Box } from '@mui/material';
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { getPartOfTextbook } from '../../services/WordService';
 import { GAME_TYPE } from '../../utils/Constants';
 import Utils from '../../utils/Utils';
 import LevelModal from './LevelModal';
-import { GameAnswers, InitialState, IWords } from '../sprint/Sprint';
+import { GameAnswers, InitialState, IWords, QuizContext } from '../sprint/Sprint';
 import SprintGame from '../sprint/SprintGame';
 import GameResult from './GameResult';
 import Timer from './Timer';
@@ -20,7 +20,9 @@ interface GameProps {
 let gameAnswers: GameAnswers[] = [];
 
 const Game = (props: GameProps) => {
-  console.log('GAME', props.state);
+  const [quizState, dispatch] = useContext(QuizContext);
+  console.log(quizState);
+  // const currentQuestion = quizState.questions[quizState.currentQuestionIndex];
   const [level, setLevel] = useState(props.level || null);
   const [words, setWords] = React.useState<AudioWords[] | IWords[]>([]);
   const [wordsId, setWordsId] = React.useState(0);
