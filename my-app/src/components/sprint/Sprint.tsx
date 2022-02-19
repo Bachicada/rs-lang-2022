@@ -34,6 +34,7 @@ export interface InitialState {
   showResults: boolean,
   isGameReady: boolean,
   isGameFinished: boolean,
+  isLoading: boolean,
   seconds: number,
   timerActive: boolean,
 }
@@ -49,9 +50,9 @@ const initialState: InitialState = {
   showResults: false,
   isGameReady: false,
   isGameFinished: false,
+  isLoading: false,
   seconds: 60,
   timerActive: false,
-
 };
 // const [level, setLevel] = useState(props.level || null);
 // const [words, setWords] = React.useState<AudioWords[] | IWords[]>([]);
@@ -63,18 +64,29 @@ const initialState: InitialState = {
 
 // const [ seconds, setSeconds ] = React.useState(60);
 // const [ timerActive, setTimerActive ] = React.useState(false);
-type ReducerAction = { type: any; payload: any; }
+// type ReducerAction = { type: any; payload?: any; }
+interface ReducerAction {
+  type: any;
+  payload?: any;
+}
 // const reducer: Reducer<InitialState, test> = (state: InitialState, action: { type: any; payload: any; }) => {
 const reducer: Reducer<InitialState, ReducerAction> = (state, action) => {
   switch (action.type) {
-    case 'CHANGE_LEVEL': {
-      const lvl = action.payload;
-      const arr = getPartOfTextbook(`${0}`, `${lvl}`);
-      console.log(arr);
+    case 'LOADING': {
       return {
         ...state,
-        level: lvl,
-        questions: [1,2,3],
+        isLoading: true,
+      }
+    }
+    case 'CHANGE_LEVEL': {
+      const { level, result } = action.payload;
+      return {
+        ...state,
+        level: level,
+        questions: result,
+        isLoading: false,
+        isGameReady: true,
+        timerActive: true,
       }
     }
     default:
@@ -83,7 +95,7 @@ const reducer: Reducer<InitialState, ReducerAction> = (state, action) => {
 };
 
 // type IQuizContext = [InitialState[], React.Dispatch<React.SetStateAction<InitialState[]>>];
-type IQuizContext = [InitialState, Dispatch<{ type: string; payload: any; }>];
+type IQuizContext = [InitialState, Dispatch<{ type: string; payload?: any; }>];
 
 // export const QuizContext = createContext<Dispatch<{ type: any; payload: any; }>>(() => null);
 export const QuizContext = createContext<IQuizContext>([initialState, () => null]);

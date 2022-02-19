@@ -19,9 +19,10 @@ const Utils = {
       }
     }
     //Get an arr of words by idx 
-    const piece = idxArr.map((id) => {
-      return arr[id]
-    }).flat();
+    // const piece = idxArr.map((id) => {
+    //   return arr[id]
+    // }).flat();
+    const piece = [...arr].flat();
     
     const result = piece.map((item) => {
       return {

@@ -10,6 +10,7 @@ import GameResult from './GameResult';
 import Timer from './Timer';
 import { AudioWords } from '../audiocall/Audiocall';
 import AudioGame from '../audiocall/AudioGame';
+import { LoadingIcon } from '../shared/LoadingIcon';
 
 interface GameProps {
   level?: number;
@@ -35,12 +36,12 @@ const Game = (props: GameProps) => {
   const [ timerActive, setTimerActive ] = React.useState(false);
 
   useEffect(() => {
-    if (seconds > 0 && timerActive && !isGameFinished) {
+    if (seconds > 0 && quizState.timerActive && !quizState.isGameFinished) {
       setTimeout(setSeconds, 1000, seconds - 1);
     } else {
       setTimerActive(false);
     }
-  }, [ seconds, timerActive, isGameFinished ]);
+  }, [ quizState.timerActive ,seconds, quizState.isGameFinished ]);
 
   useEffect(() => {
     if (wordsId >= 60 || seconds === 0) {
@@ -48,23 +49,23 @@ const Game = (props: GameProps) => {
     }
   }, [ wordsId, seconds ]);
 
-  useEffect(() => {
-    if (level !== null) {
-      const fetchArr = []
+  // useEffect(() => {
+  //   if (level !== null) {
+  //     const fetchArr = []
 
-      for (let i = 0; i < 30; i++) {
-        fetchArr.push(getPartOfTextbook(`${i}`, `${level}`));
-      }
+  //     for (let i = 0; i < 30; i++) {
+  //       fetchArr.push(getPartOfTextbook(`${i}`, `${level}`));
+  //     }
     
-      Promise.all(fetchArr)
-          .then((result) => {
-            if (props.type === GAME_TYPE.AUDIOCALL) setWords(Utils.getAudioWords(result));
-            else if (props.type === GAME_TYPE.SPRINT) setWords(Utils.getRandomWords(result));
-            setIsGameReady(true);
-            setTimerActive(true);
-          });
-    }
-  }, [level]);
+  //     Promise.all(fetchArr)
+  //         .then((result) => {
+  //           if (props.type === GAME_TYPE.AUDIOCALL) setWords(Utils.getAudioWords(result));
+  //           else if (props.type === GAME_TYPE.SPRINT) setWords(Utils.getRandomWords(result));
+  //           setIsGameReady(true);
+  //           setTimerActive(true);
+  //         });
+  //   }
+  // }, [level]);
 
   return (
     <Box
@@ -77,8 +78,12 @@ const Game = (props: GameProps) => {
       position: 'relative',
     }}
   >
-    {props.level === null ? '' : <LevelModal active={modalOpen} setActive={setModalOpen} setLevel={setLevel}></LevelModal>}
-    {isGameReady && 
+    {quizState.level !== null ? null : <LevelModal active={modalOpen} setActive={setModalOpen} setLevel={setLevel}></LevelModal>}
+    {quizState.isLoading && <div style={{position: 'absolute', zIndex: '1150', width: 'auto', height: 'auto', 
+        left: '50%', top: '50%', transform: 'translate(-50%, -50%)'}}>
+      <LoadingIcon />
+    </div>}
+    {quizState.isGameReady && 
     <div style={{width: '700px', height: 'auto', display: 'flex', justifyContent: 'center', position: 'relative'}}>
       <Timer time={seconds} setTimerActive={setTimerActive} isGameReady={isGameReady}></Timer>
       {props.type === GAME_TYPE.AUDIOCALL ? <AudioGame words={words as AudioWords[]} wordsId={wordsId} setWordsId={setWordsId} 

@@ -1,4 +1,5 @@
-import { Dispatch, SetStateAction } from 'react'
+import { Dispatch, SetStateAction, useContext } from 'react'
+import { QuizContext } from '../sprint/Sprint';
 import styles from './Game.module.css'
 
 interface TimerProps {
@@ -8,7 +9,8 @@ interface TimerProps {
 }
 
 const Timer = (props: TimerProps) => {
-  if(!props.isGameReady) {
+  const [quizState, dispatch] = useContext(QuizContext);
+  if(!quizState.isGameReady && quizState.isGameFinished) {
     return <div className={styles.timer}>60</div>
   } else {
     return (
