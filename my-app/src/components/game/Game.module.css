@@ -10,3 +10,21 @@
   border-radius: 5px;
   background: rgb(32, 155, 255);
 }
+
+.game {
+  position: relative;
+  display: flex;
+  width: 700px; 
+  height: auto;
+  justify-content: center;
+}
+
+.gameLoadingIcon {
+  position: absolute;
+  z-index: 1150;
+  width: auto;
+  height: auto;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}

@@ -1,12 +1,10 @@
-import React from 'react'
-
 interface SprintStarsProps {
   count: number;
 }
 
 const SprintStars = (props: SprintStarsProps) => {
   const starsArr = [];
-  for (let i = 0; i < props.count; i++) {
+  for (let i = 0; i <= props.count; i++) {
     starsArr.push('*');
   }
   return (

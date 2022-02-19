@@ -1,11 +1,9 @@
-import { Dispatch, SetStateAction, useContext } from 'react'
+import { useContext } from 'react'
 import { QuizContext } from '../sprint/Sprint';
 import styles from './Game.module.css'
 
 interface TimerProps {
   time: number;
-  setTimerActive: Dispatch<SetStateAction<boolean>>;
-  isGameReady: boolean;
 }
 
 const Timer = (props: TimerProps) => {
