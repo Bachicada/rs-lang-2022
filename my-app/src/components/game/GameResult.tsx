@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 import { GAME_TYPE } from '../../utils/Constants';
-import { GameAnswers, QuizContext } from '../sprint/Sprint';
+import { QuizContext } from '../sprint/Sprint';
 
 interface GameResultProps {
   type: GAME_TYPE;

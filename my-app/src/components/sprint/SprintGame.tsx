@@ -1,29 +1,10 @@
 import { Container } from '@mui/material'
-import { Dispatch, SetStateAction, useContext, useEffect, useRef, useState } from 'react'
-import { createUserWord, updateUserWord } from '../../services/UserWordService'
-import { WordItem } from '../../types'
+import { useContext, useEffect, useState } from 'react'
+import { updateUserWord } from '../../services/UserWordService'
 import { API_URL, WORD_STATUS } from '../../utils/Constants'
-import { LoadingIcon } from '../shared/LoadingIcon'
-import { GameAnswers, IWords, QuizContext } from './Sprint'
-import SprintAnswerButtons from './SprintAnswerButtons'
+import { QuizContext } from './Sprint'
 import SprintStars from './SprintStars'
 
-export interface SprintGameProps {
-  words: IWords[];
-  wordsId: number;
-  setWordsId: Dispatch<SetStateAction<number>>;
-  isGameReady: boolean;
-  setIsGameFinished: Dispatch<SetStateAction<boolean>>;
-  gameAnswers: GameAnswers[];
-  isGameFinished: boolean;
-}
-
-export interface Answer {
-  item: WordItem;
-  answer: boolean;
-  failCounter?: number;
-  successCounter?: number;
-}
 
 const SprintGame = () => {
   const [quizState, dispatch] = useContext(QuizContext);
@@ -48,7 +29,6 @@ const SprintGame = () => {
             }
           }
         });
-        console.log('ITEMMMMMMMMMM', content);
         const answer = {
           item,
           answer: isAnswerCorrect,
@@ -88,7 +68,6 @@ const SprintGame = () => {
           Неверно
         </button>
         <button onClick={() => {
-          console.log('TRUEEEE');
           setClickedButton('Верно');
           setIsAnswerCorrect(obj.correct)
           setIsAnswered(true);

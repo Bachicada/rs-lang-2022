@@ -2,7 +2,7 @@ import { Box } from '@mui/material';
 import React, { useContext, useEffect } from 'react'
 import { GAME_TYPE } from '../../utils/Constants';
 import LevelModal from './LevelModal';
-import { InitialState, IWords, QuizContext } from '../sprint/Sprint';
+import { QuizContext } from '../sprint/Sprint';
 import SprintGame from '../sprint/SprintGame';
 import GameResult from './GameResult';
 import Timer from './Timer';
@@ -10,9 +10,7 @@ import { LoadingIcon } from '../shared/LoadingIcon';
 import styles from './Game.module.css'
 
 interface GameProps {
-  level?: number;
   type: GAME_TYPE;
-  state?: InitialState;
 }
 
 const Game = (props: GameProps) => {
