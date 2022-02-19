@@ -58,17 +58,18 @@ export const getNewToken = async () => {
    return res;
 }
 
- export const createHardWord = async ({ userId, wordId, word, wordStatus }:{userId: string, wordId: string, word: WordItem, wordStatus: string }) => {
+ export const createWord = async ({ userId, wordId, word, wordStatus }:{userId: string, wordId: string, word: WordItem, wordStatus: string }) => {
     const token = getUserToken();
     console.log(token)
     const bodyReq: BodyInit = JSON.stringify({
       "difficulty": `${wordStatus}`,
-       "optional": {
-            'group':`${word.group}`,
-             'page':`${word.page}` 
-               }
-    })
-   
+      "optional": {
+        'group':`${word.group}`,
+         'page':`${word.page}`,
+         'failCounter':0,
+         'successCounter':0
+           }
+})
     const rawResponse = await fetch(`${API_URL}${ENDPOINTS.USERS}/${userId}/words/${wordId}`, {
       method: 'POST',
       //withCredentials: true,
@@ -120,8 +121,7 @@ export const getNewToken = async () => {
     return rawResponse;
   };
 
-  
-  export const deleteHardWord = async ({ userId, wordId}:{userId: string, wordId: string}) => {
+  export const deleteWord = async ({ userId, wordId}:{userId: string, wordId: string}) => {
     const token = getUserToken();
     const rawResponse = await fetch(`${API_URL}${ENDPOINTS.USERS}/${userId}/words/${wordId}`, {
       method: 'DELETE',
@@ -131,33 +131,45 @@ export const getNewToken = async () => {
         'Content-Type': 'application/json'
       }
     })    
-    return rawResponse
+    return rawResponse;
   }
 
   export const getHardWords = async (userId: string, token: string) =>{ 
-     const hardFilter ='{"$and":[{"userWord.difficulty":"hard"}]}' /*, {"page":${page}*/
-     const data = await fetch(`${API_URL}${ENDPOINTS.USERS}/${userId}/aggregatedwords?wordsPerPage=3600&filter=${hardFilter}`, {
-       method: 'GET',
-       headers: {
-         'Authorization': `Bearer ${token}`,
-         'Accept': 'application/json',
-         'Content-Type': 'application/json'
-       }
-     });
-
-     return await data.json();
-   }
-
-   
-  export const getAllUserWords = async (userId: string, token: string) =>{ 
-  
-    const data = await fetch(`${API_URL}${ENDPOINTS.USERS}/${userId}${ENDPOINTS.WORDS}`, {
+    const hardFilter ='{"$and":[{"userWord.difficulty":"hard"}]}' /*, {"page":${page}*/
+    const data = await fetch(`${API_URL}${ENDPOINTS.USERS}/${userId}/aggregatedwords?wordsPerPage=3600&filter=${hardFilter}`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${token}`,
         'Accept': 'application/json',
-      }})
-
-    return await data.json();
+        'Content-Type': 'application/json'
+      }
+    })
+    return data;
   }
+
+  export const getLearnedWords = async (userId: string, token: string) =>{ 
+    const hardFilter ='{"$and":[{"userWord.difficulty":"learned"}]}' /*, {"page":${page}*/
+    const data = await fetch(`${API_URL}${ENDPOINTS.USERS}/${userId}/aggregatedwords?wordsPerPage=3600&filter=${hardFilter}`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      }
+    })
+    return data;
+  }
+
+ export const getAllUserWords = async (userId: string, token: string) =>{ 
+
+   const data = await fetch(`${API_URL}${ENDPOINTS.USERS}/${userId}${ENDPOINTS.WORDS}`, {
+     method: 'GET',
+     headers: {
+       'Authorization': `Bearer ${token}`,
+       'Accept': 'application/json',
+     }})
+
+   return await data.json();
+ }
+
  

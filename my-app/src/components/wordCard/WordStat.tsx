@@ -7,6 +7,7 @@ import CardContent from '@mui/material/CardContent';
 import CardActions from '@mui/material/CardActions';
 import Collapse from '@mui/material/Collapse';
 import IconButton, { IconButtonProps } from '@mui/material/IconButton';
+import { WordItem, WordStatProp } from '../../types';
 
 interface ExpandMoreProps extends IconButtonProps {
     expand: boolean;
@@ -23,7 +24,9 @@ interface ExpandMoreProps extends IconButtonProps {
     }),
   }));
 
-export default function WordStat(){
+export default function WordStat(props:WordStatProp){
+
+    const word = props.word;
     const [expanded, setExpanded] = React.useState(false);
 
     const handleExpandClick = () => {
@@ -46,8 +49,7 @@ export default function WordStat(){
         <Collapse in={expanded} timeout="auto" unmountOnExit>
           <CardContent>
              <div>
-              <p>Угадано в "Аудиовызов": <span>0</span>/<span>0</span></p>
-              <p>Угадано в "Спринт": <span>0</span>/<span>0</span></p>
+              <p>Угадано: <span>0</span>/<span>0</span></p>
              </div>
           </CardContent>
         </Collapse>

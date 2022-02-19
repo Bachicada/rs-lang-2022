@@ -61,7 +61,6 @@ export default function BurgerMenu() {
                 
                    </ul>
                 
-               
                 <li className='menuItem'>
                     <Link to={APP_ROUTES.SPRINT}>Спринт</Link>
                 </li>

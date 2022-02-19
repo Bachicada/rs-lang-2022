@@ -8,14 +8,16 @@ import Collapse from '@mui/material/Collapse';
 import IconButton, { IconButtonProps } from '@mui/material/IconButton';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { CurUser, WordCardProp, WordItem } from '../../types';
-import { API_URL } from '../../utils/Constants';
+import { API_URL, APP_ROUTES } from '../../utils/Constants';
 import styles from './WordCard.module.css'
 import { Chip } from '@mui/material';
 import DoneIcon from '@mui/icons-material/Done';
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { UserContext } from '../../App';
 import WordStat from './WordStat';
-import OprionalBtns from './OptinalBtns';
+import OptionalBtns from './OptinalBtns';
+import { getHardWords, getNewToken, getUserId, getUserToken } from '../../services/WordService';
+import { useNavigate } from 'react-router-dom';
 
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
@@ -32,7 +34,7 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
   }),
 }));
 
-export default function WordCard(props: WordCardProp) {
+export default function WordCard({word,onDataChanged}: WordCardProp) {
   
   const [expanded, setExpanded] = React.useState(false);
 
@@ -40,15 +42,13 @@ export default function WordCard(props: WordCardProp) {
     setExpanded(!expanded);
   };
 
-  const word = props.word;
-
   function createMarkup(){
     return { __html: word.textMeaning };
   }
   function createExample(){
     return { __html: word.textExample};
   }
-  function checkBg(word: WordItem){
+  function checkBorder(word: WordItem){
     let bg; 
     switch (word.group) {
       case 0:
@@ -96,31 +96,42 @@ export default function WordCard(props: WordCardProp) {
   const userContext = useContext<{ user: CurUser; dispatchUserEvent: (actionType: string, payload: CurUser) => void; }>(
     UserContext
   );
+ 
+  const checkBg = () =>{
+    let bg;
+    if(word.isHardWord){
+      bg='#f77e3d8f';
+    }
+    else if(word.isLearnedWord){
+      bg='#36a33854';
+    }
+    return bg;
+  }
 
   return (
-    <Card sx={{ maxWidth: 345 }}>
-        { userContext.user.name ? <WordStat /> : '' }
+    <Card sx={{ maxWidth: 345, backgroundColor: checkBg}} >
+        { userContext.user.name ? <WordStat word={word} /> : '' }
        <CardMedia
           component="img"
           height="140"
           image={`${API_URL}/${word.image}`}
           alt={word.word}/>
        <div className={styles.cardContent}>
-          <div className={styles.wordTitle} style={{borderLeft: `8px solid ${checkBg(word)}`}}> 
+          <div className={styles.wordTitle} style={{borderLeft: `8px solid ${checkBorder(word)}`}}> 
              <div>
                 <h4 className={styles.wordName}> {word.word} </h4>
                 <p className={styles.wordsMain}>{word.transcription}</p>
                 <p className={styles.wordsMain}>{word.wordTranslate}</p>
              </div>
-             <button className={styles.soundBtn} style={{border: `3px solid ${checkBg(word)}`}}
+             <button className={styles.soundBtn} style={{border: `3px solid ${checkBorder(word)}`}}
                      onClick={() => { togglePlay(word) } }
              >
             </button>
           </div>    
        </div>  
       <CardActions disableSpacing>
-        
-      { userContext.user.name ? <OprionalBtns {...word} /> : '' }
+
+      { userContext.user.name ? <OptionalBtns word={word} onDataChanged={onDataChanged}/> : '' }
         <ExpandMore
           expand={expanded}
           onClick={handleExpandClick}
