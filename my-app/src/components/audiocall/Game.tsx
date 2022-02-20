@@ -1,5 +1,5 @@
 import { Box } from '@mui/material';
-import React, { useContext, useEffect } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { APP_ROUTES, GAME_TYPE } from '../../utils/Constants';
 import LevelModal from './LevelModal';
 import { QuizContext } from '../sprint/Sprint';
@@ -20,13 +20,19 @@ interface GameProps {
 
 const Game = (props: GameProps) => {
   const [quizState, dispatch] = useContext(AudioContext);
-  const [ seconds, setSeconds ] = React.useState(quizState.seconds);
+  const [ seconds, setSeconds ] = useState(quizState.seconds);
+  const [timeId, setTimeId] = useState<number>();
   const navigate = useNavigate();
 
   useEffect(() => {
     let cleanupFunction = false;
     if (!cleanupFunction && seconds > 0 && quizState.timerActive && !quizState.isGameFinished) {
-      setTimeout(setSeconds, 1000, seconds - 1);
+      // setTimeout(setSeconds, 1000, seconds - 1);
+      const a = window.setTimeout(() => {
+        console.log('TIMEOUT', seconds);
+        setSeconds(seconds - 1);
+      }, 1000);
+      setTimeId(a);
     } 
     else if (!cleanupFunction && seconds <= 0) {
       dispatch({ type: 'OUT_OF_TIME' });
@@ -34,6 +40,15 @@ const Game = (props: GameProps) => {
     }
     return () => {cleanupFunction = true};
   }, [dispatch, quizState.isGameFinished, quizState.timerActive, seconds]);
+
+  useEffect(() => {
+    if(timeId) {
+      window.clearTimeout(timeId);
+      console.log('CLEAR TIMEOUT!');
+    }
+    setSeconds(12);
+    console.log('CHANGE IDX', seconds);
+  }, [quizState.currentQuestionIndex]);
 
   return (
     <Box
