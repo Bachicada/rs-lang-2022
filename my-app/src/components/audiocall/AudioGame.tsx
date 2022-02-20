@@ -1,45 +1,43 @@
 import { Container } from '@mui/material'
-import { Dispatch, SetStateAction } from 'react'
+import { Dispatch, SetStateAction, useContext, useState } from 'react'
 import { API_URL } from '../../utils/Constants'
 import { GameAnswers } from '../sprint/Sprint'
-import { AudioWords } from './Audiocall'
+import SprintStars from '../sprint/SprintStars'
+import { AudioWords, AudioContext } from './Audiocall'
 
-interface AudioGameProps {
-  words: AudioWords[];
-  wordsId: number;
-  setWordsId: Dispatch<SetStateAction<number>>;
-  isGameReady: boolean;
-  setIsGameFinished: Dispatch<SetStateAction<boolean>>;
-  gameAnswers: GameAnswers[];
-}
+const AudioGame = () => {
+  const [quizState, dispatch] = useContext(AudioContext);
+  const [isAnswered, setIsAnswered] = useState(false);
+  const [isAnswerCorrect, setIsAnswerCorrect] = useState<boolean>(false);
+  const [clickedButton, setClickedButton] = useState('');
 
-const AudioGame = (props: AudioGameProps) => {
-  if (!props.isGameReady) {
-    return <div>LOADING!!!!!!!!!!!!!!!</div>
-  }
-  if (props.wordsId >= 60) {
-    return (<p>THATS ALL</p>)
-  }
-  const obj = props.words[props.wordsId];
-  const item = obj.item;
+
+  const obj = quizState.questions[quizState.currentQuestionIndex];
+  const { item } = obj;
   const audio = new Audio(`${API_URL}/${item.audio}`);
-  
+  audio.play();
   return (
-    <Container maxWidth="md" style={{ background: 'yellow' }}>
-      <div>* * *</div>
+    <Container maxWidth="md" style={{ background: 'rgb(153, 207, 51)', borderRadius: '5px', display: 'flex', 
+    alignItems: 'center', flexDirection: 'column' }}>
+      <SprintStars count={quizState.correctAnswersCount} />
       <button onClick={() => {
         audio.play();
-      }}>Play word</button>
-      <p>{item ? item.word : ''}</p>
+      }}>
+        Play word
+      </button>
+      <p>{item.word}</p>
       <div>
-        {obj.incorrect.map((word, id) => {
+        {
+
+        }
+        {/* {obj.incorrect.map((word, id) => {
           return <button key={props.words[id].item.id} onClick={() => {
             props.gameAnswers.push(
               word === item.wordTranslate ? {item: item, answer: true} : {item: item, answer: false}
             )
             props.setWordsId(props.wordsId + 1);  
           }}>{word}</button>
-        })}
+        })} */}
       </div>
     </Container>
   )

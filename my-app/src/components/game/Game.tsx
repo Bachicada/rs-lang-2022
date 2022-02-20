@@ -11,6 +11,7 @@ import GameTableResult from './GameTableResult';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import CloseIcon from '@mui/icons-material/Close';
 import { useNavigate } from 'react-router';
+import AudioGame from '../audiocall/AudioGame';
 
 interface GameProps {
   type: GAME_TYPE;
@@ -18,6 +19,7 @@ interface GameProps {
 
 const Game = (props: GameProps) => {
   const [quizState, dispatch] = useContext(QuizContext);
+  console.log(props.type, quizState);
   const [ seconds, setSeconds ] = React.useState(60);
   const navigate = useNavigate();
 
@@ -53,9 +55,9 @@ const Game = (props: GameProps) => {
         <div className={styles.game}>
           {!quizState.isGameFinished && 
               <Timer time={seconds} />}
-          {/* {props.type === GAME_TYPE.AUDIOCALL ? <AudioGame words={words as AudioWords[]} wordsId={wordsId} setWordsId={setWordsId} 
-                isGameReady={isGameReady} setIsGameFinished={setIsGameFinished}
-                gameAnswers={gameAnswers}></AudioGame> : ''} */}
+          {props.type === GAME_TYPE.AUDIOCALL 
+              ? <AudioGame /> 
+              : null}
           {props.type === GAME_TYPE.SPRINT 
               ? quizState.isGameReady && !quizState.isGameFinished &&
                   <SprintGame /> 
