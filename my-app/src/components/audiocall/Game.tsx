@@ -12,13 +12,14 @@ import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import CloseIcon from '@mui/icons-material/Close';
 import { useNavigate } from 'react-router';
 import AudioGame from '../audiocall/AudioGame';
+import { AudioContext } from './Audiocall';
 
 interface GameProps {
   type: GAME_TYPE;
 }
 
 const Game = (props: GameProps) => {
-  const [quizState, dispatch] = useContext(QuizContext);
+  const [quizState, dispatch] = useContext(AudioContext);
   const [ seconds, setSeconds ] = React.useState(60);
   const navigate = useNavigate();
 
@@ -59,7 +60,7 @@ const Game = (props: GameProps) => {
               : null}
           {props.type === GAME_TYPE.SPRINT 
               ? quizState.isGameReady && !quizState.isGameFinished &&
-                  <SprintGame /> 
+                  <AudioGame /> 
               : null}
           {quizState.isGameFinished && 
               <GameTableResult />}

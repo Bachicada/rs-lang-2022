@@ -2,7 +2,7 @@ import { Dispatch, Reducer } from 'react';
 import { createContext, FC, useReducer } from 'react';
 import { WordItem } from '../../types';
 import { GAME_TYPE } from '../../utils/Constants';
-import Game from '../game/Game';
+import Game from './Game';
 
 export interface GameAnswers {
   item: WordItem;
