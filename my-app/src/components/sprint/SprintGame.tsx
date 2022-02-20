@@ -1,49 +1,103 @@
 import { Container } from '@mui/material'
-import { Dispatch, SetStateAction } from 'react'
-import { API_URL } from '../../utils/Constants'
-import { GameAnswers, IWords } from './Sprint'
+import { useContext, useEffect, useState } from 'react'
+import { updateUserWord } from '../../services/UserWordService'
+import { API_URL, WORD_STATUS } from '../../utils/Constants'
+import { QuizContext } from './Sprint'
+import SprintStars from './SprintStars'
 
-interface SprintGameProps {
-  words: IWords[];
-  wordsId: number;
-  setWordsId: Dispatch<SetStateAction<number>>;
-  isGameReady: boolean;
-  setIsGameFinished: Dispatch<SetStateAction<boolean>>;
-  gameAnswers: GameAnswers[];
-}
 
-const SprintGame = (props: SprintGameProps) => {
-  if (!props.isGameReady) {
-    return <div>LOADING!!!!!!!!!!!!!!!</div>
-  }
-  if (props.wordsId >= 60) {
-    return (<p>THATS ALL</p>)
-  }
-  const obj = props.words[props.wordsId];
-  const item = obj.item;
+const SprintGame = () => {
+  const [quizState, dispatch] = useContext(QuizContext);
+  const [isAnswered, setIsAnswered] = useState(false);
+  const [isAnswerCorrect, setIsAnswerCorrect] = useState<boolean>(false);
+  const [clickedButton, setClickedButton] = useState('');
+
+  useEffect(() => {
+    if (isAnswered) {
+      const updAnswer = async () => {
+        const item = quizState.questions[quizState.currentQuestionIndex].item;
+        const [failCounter, successCounter] = clickedButton === 'Неверно' 
+            ? [+isAnswerCorrect, +!isAnswerCorrect]
+            : [+!isAnswerCorrect, +isAnswerCorrect];
+        const content = await updateUserWord({
+          wordId: `${item.id}`, 
+          word: { 
+            difficulty: WORD_STATUS.NEW, 
+            optional: {
+              failCounter,
+              successCounter,
+            }
+          }
+        });
+        const answer = {
+          item,
+          answer: isAnswerCorrect,
+          failCounter: content.optional?.failCounter || 0,
+          successCounter: content.optional?.successCounter || 0,
+        }
+
+        dispatch({ type: isAnswerCorrect ? 'CORRECT_ANSWER' : 'INCORRECT_ANSWER', payload: answer });
+        setIsAnswered(false);        
+      }
+      updAnswer();
+    }
+  }, [isAnswered]);
+  
+  const obj = quizState.questions[quizState.currentQuestionIndex];
+  const { item } = obj;
   const audio = new Audio(`${API_URL}/${item.audio}`);
 
+  let setAnswer = (bool: boolean) => {
+    const obj = quizState.questions[quizState.currentQuestionIndex];
+    if (bool) {
+      setClickedButton('Верно');
+      setIsAnswerCorrect(obj.correct)
+      setIsAnswered(true);
+    }
+    else {
+      setClickedButton('Неверно');
+      setIsAnswerCorrect(!obj.correct)
+      setIsAnswered(true);
+    }
+  }
+
+  useEffect(() => {
+    document.addEventListener('keydown', (ev) => {
+      if (ev.key === 'ArrowRight') {
+        setAnswer(true);
+      }
+      if (ev.key === 'ArrowLeft') {
+        setAnswer(false);
+      }
+    })
+  }, []);
+
   return (
-    <Container maxWidth="md" style={{ background: 'yellow' }}>
-      <div>* * *</div>
+    <Container maxWidth="md" style={{ background: 'rgb(153, 207, 51)', borderRadius: '5px', display: 'flex', 
+        alignItems: 'center', flexDirection: 'column' }}>
+      <SprintStars count={quizState.correctAnswersCount} />
       <button onClick={() => {
         audio.play();
-      }}>Play word</button>
-      <p>{item ? item.word : ''}</p>
+      }}>
+        Play word
+      </button>
+      <p>{item.word}</p>
       <p>{obj.correct ? item.wordTranslate : obj.incorrect}</p>
       <div>
         <button onClick={() => {
-          props.gameAnswers.push(
-            obj.correct ? {item: item, answer: false} : {item: item, answer: true}
-          );
-          props.setWordsId(props.wordsId + 1);
-        }}>Неверно</button>
+          setClickedButton('Неверно');
+          setIsAnswerCorrect(!obj.correct)
+          setIsAnswered(true);
+        }}>
+          Неверно
+        </button>
         <button onClick={() => {
-          props.gameAnswers.push(
-            obj.correct ? {item: item, answer: true} : {item: item, answer: false}
-          );
-          props.setWordsId(props.wordsId + 1);
-        }}>Верно</button>
+          setClickedButton('Верно');
+          setIsAnswerCorrect(obj.correct)
+          setIsAnswered(true);
+        }}>
+          Верно
+        </button>
       </div>
     </Container>
   )

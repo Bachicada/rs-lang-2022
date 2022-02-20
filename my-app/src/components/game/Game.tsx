@@ -1,66 +1,35 @@
 import { Box } from '@mui/material';
-import React, { useEffect, useState } from 'react'
-import { getPartOfTextbook } from '../../services/WordService';
-import { GAME_TYPE } from '../../utils/Constants';
-import Utils from '../../utils/Utils';
+import React, { useContext, useEffect } from 'react'
+import { APP_ROUTES, GAME_TYPE } from '../../utils/Constants';
 import LevelModal from './LevelModal';
-import { GameAnswers, IWords } from '../sprint/Sprint';
+import { QuizContext } from '../sprint/Sprint';
 import SprintGame from '../sprint/SprintGame';
-import GameResult from './GameResult';
 import Timer from './Timer';
-import { AudioWords } from '../audiocall/Audiocall';
-import AudioGame from '../audiocall/AudioGame';
+import { LoadingIcon } from '../shared/LoadingIcon';
+import styles from './Game.module.css'
+import GameTableResult from './GameTableResult';
+import RestartAltIcon from '@mui/icons-material/RestartAlt';
+import CloseIcon from '@mui/icons-material/Close';
+import { useNavigate } from 'react-router';
 
 interface GameProps {
-  level?: number;
   type: GAME_TYPE;
 }
 
-let gameAnswers: GameAnswers[] = [];
-
 const Game = (props: GameProps) => {
-  const [level, setLevel] = useState(props.level || null);
-  const [words, setWords] = React.useState<AudioWords[] | IWords[]>([]);
-  const [wordsId, setWordsId] = React.useState(0);
-
-  const [modalOpen, setModalOpen] = useState(props ? true : false);
-  const [isGameReady, setIsGameReady] = React.useState(false);
-  const [ isGameFinished, setIsGameFinished ] = React.useState(false);
-
+  const [quizState, dispatch] = useContext(QuizContext);
   const [ seconds, setSeconds ] = React.useState(60);
-  const [ timerActive, setTimerActive ] = React.useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    if (seconds > 0 && timerActive && !isGameFinished) {
+    if (seconds > 0 && quizState.timerActive && !quizState.isGameFinished) {
       setTimeout(setSeconds, 1000, seconds - 1);
-    } else {
-      setTimerActive(false);
+    } 
+    else if (seconds <= 0) {
+      dispatch({ type: 'FINISH_GAME' });
     }
-  }, [ seconds, timerActive, isGameFinished ]);
-
-  useEffect(() => {
-    if (wordsId >= 60 || seconds === 0) {
-      setIsGameFinished(true);
-    }
-  }, [ wordsId, seconds ]);
-
-  useEffect(() => {
-    if (level !== null) {
-      const fetchArr = []
-
-      for (let i = 0; i < 30; i++) {
-        fetchArr.push(getPartOfTextbook(`${i}`, `${level}`));
-      }
-    
-      Promise.all(fetchArr)
-          .then((result) => {
-            if (props.type === GAME_TYPE.AUDIOCALL) setWords(Utils.getAudioWords(result));
-            else if (props.type === GAME_TYPE.SPRINT) setWords(Utils.getRandomWords(result));
-            setIsGameReady(true);
-            setTimerActive(true);
-          });
-    }
-  }, [level]);
+  }, [dispatch, quizState.isGameFinished, quizState.timerActive, seconds]);
+  // }, [ quizState.timerActive ,seconds, quizState.isGameFinished ]);
 
   return (
     <Box
@@ -69,17 +38,41 @@ const Game = (props: GameProps) => {
       height: 'calc(100vh - 64px - 25px - 48px)',
       display: 'flex',
       alignItems: 'center',
+      justifyContent: 'center',
+      position: 'relative',
     }}
   >
-    <LevelModal active={modalOpen} setActive={setModalOpen} setLevel={setLevel}></LevelModal>
-    <Timer time={seconds} setTimerActive={setTimerActive} isGameReady={isGameReady}></Timer>
-    {props.type === GAME_TYPE.AUDIOCALL ? <AudioGame words={words as AudioWords[]} wordsId={wordsId} setWordsId={setWordsId} 
-          isGameReady={isGameReady} setIsGameFinished={setIsGameFinished}
-          gameAnswers={gameAnswers}></AudioGame> : ''}
-    {props.type === GAME_TYPE.SPRINT ? <SprintGame words={words as IWords[]} wordsId={wordsId} setWordsId={setWordsId} 
-          isGameReady={isGameReady} setIsGameFinished={setIsGameFinished}
-          gameAnswers={gameAnswers}></SprintGame> : ''}
-    <GameResult isGameFinished={isGameFinished} gameAnswers={gameAnswers} type={props.type}></GameResult>
+    {quizState.level !== null 
+        ? null 
+        : <LevelModal />}
+    {quizState.isLoading && 
+        <div className={styles.gameLoadingIcon}>
+          <LoadingIcon />
+        </div>}
+    {quizState.isGameReady &&
+        <div className={styles.game}>
+          {!quizState.isGameFinished && 
+              <Timer time={seconds} />}
+          {/* {props.type === GAME_TYPE.AUDIOCALL ? <AudioGame words={words as AudioWords[]} wordsId={wordsId} setWordsId={setWordsId} 
+                isGameReady={isGameReady} setIsGameFinished={setIsGameFinished}
+                gameAnswers={gameAnswers}></AudioGame> : ''} */}
+          {props.type === GAME_TYPE.SPRINT 
+              ? quizState.isGameReady && !quizState.isGameFinished &&
+                  <SprintGame /> 
+              : null}
+          {quizState.isGameFinished && 
+              <GameTableResult />}
+          {quizState.isGameFinished && 
+              <div style={{display: 'flex', flexDirection: 'column'}}>
+                <CloseIcon onClick={() => {
+                  navigate(`${APP_ROUTES.MAIN}`);
+                }} sx={{fontSize: 80}}/>
+                <RestartAltIcon onClick={() => {
+                  dispatch({ type: 'RESTART' })
+                }} sx={{fontSize: 80}}/>
+              </div>
+          }
+        </div>}
   </Box>
   )
 }

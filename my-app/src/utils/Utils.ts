@@ -19,9 +19,10 @@ const Utils = {
       }
     }
     //Get an arr of words by idx 
-    const piece = idxArr.map((id) => {
-      return arr[id]
-    }).flat();
+    // const piece = idxArr.map((id) => {
+    //   return arr[id]
+    // }).flat();
+    const piece = [...arr].flat();
     
     const result = piece.map((item) => {
       return {
@@ -77,7 +78,19 @@ const Utils = {
     return result;
   },
 
-  
+  shuffleAnswers: (question: any) => {
+    if (!question) {
+      return [];
+    }
+    const unshuffledAnswers = [
+      question.correctAnswer,
+      ...question.incorrectAnswers,
+    ];
+    return unshuffledAnswers
+      .map((a) => ({ sort: Math.random(), value: a }))
+      .sort((a, b) => a.sort - b.sort)
+      .map((a) => a.value);
+  },
 
 }
 
