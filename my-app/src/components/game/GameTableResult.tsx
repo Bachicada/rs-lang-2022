@@ -39,8 +39,8 @@ export default function GameTableResult() {
   const [quizState, dispatch] = React.useContext(QuizContext);
   
   return (
-    <Paper sx={{width: 'calc(100% + 20px)', overflow: 'hidden'}}>
-    <TableContainer sx={{maxHeight: 440, width: '103%'}} component={Paper}>
+    <Paper sx={{width: '100%', overflow: 'hidden'}}>
+    <TableContainer sx={{maxHeight: 440, width: '100%'}} component={Paper}>
       <Table sx={{ minWidth: 400 }} stickyHeader aria-label="sticky customized table">
         <TableHead>
           <TableRow>
