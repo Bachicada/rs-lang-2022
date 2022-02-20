@@ -51,7 +51,7 @@ export default function PartOfTextBook() {
                   variant="outlined" 
                   shape="rounded" 
                   onChange={(event: React.ChangeEvent<unknown>, value: number) => {
-                    navigate(`${APP_ROUTES.TEXTBOOK}/${params.part}/${value}`);
+                    navigate(`${APP_ROUTES.TEXTBOOK}/${params.part}/${value-1}`);
                   }}
               />
           </Stack> :

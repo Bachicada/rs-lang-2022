@@ -22,6 +22,7 @@ export interface PageProps extends PartProps{
 }
 
 export interface WordItem {
+  userWord: any;
   _id?:string;
   id: string,
   group:number,
@@ -39,8 +40,43 @@ export interface WordItem {
   textExampleTranslate: string,
   isHardWord?: boolean,
   isLearnedWord?: boolean,
-  isNewWord?: boolean
+  isNewWord?: boolean,
+  failCounter: number,
+  successCounter: number
+
 }
+
+export interface UserWordItem {
+  userWord: UserWord;
+  _id:string;
+  group:number,
+  page: string,
+  word?: string,
+  image: string,
+  audio: string,
+  audioMeaning: string,
+  audioExample: string,
+  textMeaning: string,
+  textExample: string,
+  transcription: string,
+  wordTranslate: string,
+  textMeaningTranslate: string,
+  textExampleTranslate: string,
+  isHardWord?: boolean,
+  isLearnedWord?: boolean,
+  isNewWord?: boolean
+  failCounter?: number,
+  successCounter?: number
+}
+
+export interface UserWord{
+  difficulty: string,
+  optional:{
+    failCounter: number,
+    successCounter: number
+  }
+}
+
 export interface WordCardProp {
   word: WordItem,
   onDataChanged:()=>void,

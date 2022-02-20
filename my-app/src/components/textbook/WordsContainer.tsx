@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useState, useEffect, useContext } from 'react';
-import { CurUser, PageProps, WordItem } from '../../types';
+import { CurUser, PageProps, UserWordItem, WordItem } from '../../types';
 import styles from './textbook.module.css'
 import { getHardWords, getLearnedWords, getNewToken, getPartOfTextbook, getPlayedWords, getUserId, getUserToken, getWords } from '../../services/WordService';
 import WordCard from '../wordCard/WordCard';
@@ -128,12 +128,10 @@ const fetchPlayedWords = async()=>{
       setPlayedWords(playedList);
     }
 }
-useEffect(()=>{
-  fetchPlayedWords();
-},[])
 
 
 useEffect(() =>{
+
   if (props.part === 'hardwords') {
     if (hardWords && hardWords.length) {
       const b = hardWords.map((word) =>({
@@ -146,8 +144,29 @@ useEffect(() =>{
       setFinalWords([]);
     }
   } else {
-    if (allWords && allWords.length) {      
-    if ((hardWords&& hardWords.length) || (learnedWords&&learnedWords.length)) {
+    if (allWords && allWords.length) {   
+      if (learnedWords.length && hardWords.length) {
+
+        const hl = allWords.map((word) =>{
+           if (hardWords.find((w) => w._id === word.id)) {
+            return{
+              ...word,
+              isHeardWord: true
+            }
+          }
+          else if (learnedWords.find((w) => w._id === word.id)) {
+            return{
+              ...word,
+              isLearnedWord: true
+            }
+          }
+        
+        return word;
+      })
+        console.log('4',hl)
+        setFinalWords(hl);
+      }
+      else if (hardWords.length && !learnedWords.length) {
       const a = allWords.map((word) =>{
         if (hardWords.find((w) => w._id === word.id)) {
           return{
@@ -155,27 +174,39 @@ useEffect(() =>{
             isHardWord: true
           }
         }
-        if(learnedWords.find((w) => w._id === word.id)) {
+      return word;
+    })
+      console.log('2',a)
+      setFinalWords(a)
+    } 
+      else if (learnedWords.length && !hardWords.length) {
+      const l = allWords.map((word) =>{
+        if (learnedWords.find((w) => w._id === word.id)) {
           return{
             ...word,
             isLearnedWord: true
           }
-      }
+        }
       return word;
     })
-    
-      console.log('2',a)
-      setFinalWords(a)
-    } else {
-      console.log('3',allWords)
+      console.log('3',l)
+      setFinalWords(l);
+    }
+      else {
+      console.log('5',allWords)
       setFinalWords(allWords);
     }
     } else {
       setFinalWords([]);
     }
   }
+console.log("learnedWords.length && hardWords", learnedWords && hardWords);
 
-},[allWords,hardWords,learnedWords,props.part])
+console.log("hardWords.length && !learnedWords.length", hardWords.length && !learnedWords.length);
+
+console.log("learnedWords.length && !hardWords.length", learnedWords.length && !hardWords.length);
+
+},[allWords,hardWords,learnedWords,playedWords,props.part,props.page])
 
 useEffect(() => {
   try{
@@ -185,16 +216,26 @@ useEffect(() => {
     if (props.part !=='hardwords'){
       getPartOfTextbook(props.page, props.part).then((allWords)=>{
       
-        if (playedWords&& playedWords.length){
-          const p = playedWords.map((word)=>({
-            ...word,
-            isNewWord:true
-          }))
-
+        if (playedWords && playedWords.length){
+         
+        const wordsPlayedList = allWords.map((word:WordItem)=>{
+          const playedWord = playedWords.find((w) => w._id === word.id)
+          if (playedWord){
+            return{
+              ...word,
+              isNewWord: true,
+              successCounter: playedWords[playedWords.indexOf(playedWord)].userWord.optional.successCounter,
+              failCounter: playedWords[playedWords.indexOf(playedWord)].userWord.optional.failCounter,
+            }
+          }
+          return word;
+        })
+        setAllWords(wordsPlayedList);
         }
-        
-        setAllWords(allWords);
-        setLoadingState(false);
+        else {
+          setAllWords(allWords);
+          setLoadingState(false);
+        }
       })
     }
   }
@@ -207,8 +248,10 @@ const onDataChanged = () =>{
   console.log('first', props.part)
   fetchHardWords();
   fetchLearnedWords();
+  fetchPlayedWords();
   if (props.part !=='hardwords'){
     getPartOfTextbook(props.page, props.part).then((allWords)=>{
+
       setAllWords(allWords);
       setLoadingState(false);
     })
