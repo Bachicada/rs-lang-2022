@@ -48,6 +48,32 @@ const SprintGame = () => {
   const { item } = obj;
   const audio = new Audio(`${API_URL}/${item.audio}`);
 
+  let setAnswer = (bool: boolean) => {
+    const obj = quizState.questions[quizState.currentQuestionIndex];
+    console.log(bool, obj);
+    if (bool) {
+      setClickedButton('Верно');
+      setIsAnswerCorrect(obj.correct)
+      setIsAnswered(true);
+    }
+    else {
+      setClickedButton('Неверно');
+      setIsAnswerCorrect(!obj.correct)
+      setIsAnswered(true);
+    }
+  }
+
+  useEffect(() => {
+    document.addEventListener('keydown', (ev) => {
+      if (ev.key === 'ArrowRight') {
+        setAnswer(true);
+      }
+      if (ev.key === 'ArrowLeft') {
+        setAnswer(false);
+      }
+    })
+  }, []);
+
   return (
     <Container maxWidth="md" style={{ background: 'rgb(153, 207, 51)', borderRadius: '5px', display: 'flex', 
         alignItems: 'center', flexDirection: 'column' }}>

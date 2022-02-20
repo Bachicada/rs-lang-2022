@@ -88,11 +88,13 @@ const reducer: Reducer<InitialState, ReducerAction> = (state, action) => {
       const answers = [...state.answers, action.payload];
       const correctAnswersCount = 0;
       const currentQuestionIndex = state.currentQuestionIndex + 1;
+      const isGameFinished = state.questions.length === currentQuestionIndex ? true : false;
       return {
         ...state,
         answers,
         correctAnswersCount,
         currentQuestionIndex,
+        isGameFinished,
       }
     }
     case 'FINISH_GAME': {

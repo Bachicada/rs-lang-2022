@@ -8,6 +8,7 @@ import GameResult from './GameResult';
 import Timer from './Timer';
 import { LoadingIcon } from '../shared/LoadingIcon';
 import styles from './Game.module.css'
+import GameTableResult from './GameTableResult';
 
 interface GameProps {
   type: GAME_TYPE;
@@ -47,7 +48,8 @@ const Game = (props: GameProps) => {
         </div>}
     {quizState.isGameReady &&
         <div className={styles.game}>
-          <Timer time={seconds} />
+          {!quizState.isGameFinished && 
+              <Timer time={seconds} />}
           {/* {props.type === GAME_TYPE.AUDIOCALL ? <AudioGame words={words as AudioWords[]} wordsId={wordsId} setWordsId={setWordsId} 
                 isGameReady={isGameReady} setIsGameFinished={setIsGameFinished}
                 gameAnswers={gameAnswers}></AudioGame> : ''} */}
@@ -56,7 +58,8 @@ const Game = (props: GameProps) => {
                   <SprintGame /> 
               : null}
           {quizState.isGameFinished && 
-              <GameResult type={props.type} />}
+              <GameTableResult />}
+              {/* {<GameResult type={props.type} />} */}
         </div>}
   </Box>
   )
