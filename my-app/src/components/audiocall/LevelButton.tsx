@@ -17,7 +17,7 @@ const LevelButton = ({item}: LevelButtonProps) => {
         dispatch({ type: 'LOADING' })
         try {
           const data = [await getPartOfTextbook('0', `${level}`), await getPartOfTextbook('2', `${level}`), await getPartOfTextbook('1', `${level}`)];
-          const result = Utils.getRandomWords(data);
+          const result = Utils.getAudioWords(data);
           dispatch({ type: 'CHANGE_LEVEL', payload: {result, level} });
         } catch(err) {
           alert('Oops! Something goes wrong.')

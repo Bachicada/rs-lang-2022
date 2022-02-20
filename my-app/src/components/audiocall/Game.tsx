@@ -20,18 +20,20 @@ interface GameProps {
 
 const Game = (props: GameProps) => {
   const [quizState, dispatch] = useContext(AudioContext);
-  const [ seconds, setSeconds ] = React.useState(60);
+  const [ seconds, setSeconds ] = React.useState(quizState.seconds);
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (seconds > 0 && quizState.timerActive && !quizState.isGameFinished) {
+    let cleanupFunction = false;
+    if (!cleanupFunction && seconds > 0 && quizState.timerActive && !quizState.isGameFinished) {
       setTimeout(setSeconds, 1000, seconds - 1);
     } 
-    else if (seconds <= 0) {
-      dispatch({ type: 'FINISH_GAME' });
+    else if (!cleanupFunction && seconds <= 0) {
+      dispatch({ type: 'OUT_OF_TIME' });
+      setSeconds(quizState.seconds);
     }
+    return () => {cleanupFunction = true};
   }, [dispatch, quizState.isGameFinished, quizState.timerActive, seconds]);
-  // }, [ quizState.timerActive ,seconds, quizState.isGameFinished ]);
 
   return (
     <Box
@@ -53,15 +55,11 @@ const Game = (props: GameProps) => {
         </div>}
     {quizState.isGameReady &&
         <div className={styles.game}>
+          {<p>{quizState.currentLifeIndex}</p>}
           {!quizState.isGameFinished && 
               <Timer time={seconds} />}
-          {props.type === GAME_TYPE.AUDIOCALL 
-              ? <AudioGame /> 
-              : null}
-          {props.type === GAME_TYPE.SPRINT 
-              ? quizState.isGameReady && !quizState.isGameFinished &&
-                  <AudioGame /> 
-              : null}
+          {quizState.isGameReady && !quizState.isGameFinished && 
+              <AudioGame />}
           {quizState.isGameFinished && 
               <GameTableResult />}
           {quizState.isGameFinished && 

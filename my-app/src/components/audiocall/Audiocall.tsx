@@ -31,6 +31,7 @@ export interface InitialState {
   questions: any[];
   answers: any[];
   currentQuestionIndex: number;
+  currentLifeIndex: number;
   correctAnswersCount: number;
   showModal: boolean,
   showResults: boolean,
@@ -46,13 +47,14 @@ const initialState: InitialState = {
   questions: [],
   answers: [],
   currentQuestionIndex: 0,
+  currentLifeIndex: 5,
   correctAnswersCount: 0,
   showModal: true,
   showResults: false,
   isGameReady: false,
   isGameFinished: false,
   isLoading: false,
-  seconds: 60,
+  seconds: 12,
   timerActive: false,
 };
 
@@ -64,7 +66,6 @@ interface ReducerAction {
 const reducer: Reducer<InitialState, ReducerAction> = (state, action) => {
   switch (action.type) {
     case 'LOADING': {
-      console.log('LOADDD');
       return {
         ...state,
         isLoading: true,
@@ -98,19 +99,37 @@ const reducer: Reducer<InitialState, ReducerAction> = (state, action) => {
       const answers = [...state.answers, action.payload];
       const correctAnswersCount = 0;
       const currentQuestionIndex = state.currentQuestionIndex + 1;
-      const isGameFinished = state.questions.length === currentQuestionIndex ? true : false;
+      const currentLifeIndex = state.currentLifeIndex - 1;
+      const isGameFinished = (state.questions.length === currentQuestionIndex || currentLifeIndex === 0) ? true : false;
       return {
         ...state,
         answers,
         correctAnswersCount,
         currentQuestionIndex,
         isGameFinished,
+        currentLifeIndex,
       }
     }
-    case 'FINISH_GAME': {
+    case 'SECOND': {
+      const seconds = state.seconds - 1;
+      return {
+        ...initialState,
+        seconds,
+      }
+    }
+    case 'OUT_OF_TIME': {
+      const currentLifeIndex = state.currentLifeIndex - 1;
+      const currentQuestionIndex = state.currentQuestionIndex + 1;
+      const isGameFinished = (currentLifeIndex === 0 || currentQuestionIndex >= state.questions.length) 
+          ? true 
+          : false;
+      const seconds = currentLifeIndex === 0 ? 0 : 12;
       return {
         ...state,
-        isGameFinished: true,
+        currentLifeIndex,
+        isGameFinished,
+        seconds,
+        currentQuestionIndex,
       }
     }
     case 'RESTART': {

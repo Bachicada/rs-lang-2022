@@ -7,14 +7,9 @@ interface TimerProps {
 }
 
 const Timer = (props: TimerProps) => {
-  const [quizState, dispatch] = useContext(AudioContextq);
-  if(!quizState.isGameReady && quizState.isGameFinished) {
-    return <div className={styles.timer}>60</div>
-  } else {
-    return (
-      <div className={styles.timer}>{props.time}</div>
-    )
-  }
+  return (
+    <div className={styles.timer}>{props.time}</div>
+  )
 }
 
 export default Timer
