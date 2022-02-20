@@ -4,18 +4,175 @@
     background-color: #ffff;
 }
 .section {
-    display:flex;
     position: relative;
     width:100%;
+    margin-bottom: 50px;
 }
 .aboutSection{
+    display:flex;
     justify-content: space-between;
-}
-.imgContainer{
-    width:50%;
 }
 .innerImg {
     width:100%;
     height: auto;
 }
+.rsLogo {
+    width:80%;
+    height: auto;
+}
+.logoCont {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    column-gap: 20px;
+    text-align: right;
+}
+.mainTitle {
+    font-style: italic;
+    font-size: 1.2rem;
+    color:#274E7F;
+}
+.benefitsList {
+    display: flex;
+}
+.h2 {
+  text-align: center;
+  color: #391F20;
+  text-shadow: 0px 0px 20px rgb(0 0 0);
+}
+.olcards,
+.olcards * {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 
+.olcards {
+  position: relative;
+  list-style: none;
+  font-family: sans-serif;
+  display: flex;
+  flex-direction: column;
+  margin-left: 10%; 
+  gap: 1rem;
+  padding-bottom: 1rem;
+  width: 80%;
+}
+.olcards li {
+  counter-increment: cardCount;
+  display: flex;
+  margin-top: 1rem;
+}
+
+.olcards li::before {
+  content: counter(cardCount, decimal-leading-zero);
+  background: #223754;
+  color:#F4825C ;
+  font-size: 2em;
+  font-weight: 700;
+  transform: translateY(calc(-1 * 1rem));
+  margin-right: calc(-1 * 1rem);
+  z-index: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+}
+
+.content {
+  position: relative;
+  width: 90%;
+  background-color: #E9C9A5 ;
+  transition: width 0.8s ease;
+  clip-path: polygon(
+    0 0,
+    calc(100% - 1.5rem) 0,
+    100% 50%,
+    calc(100% - 1.5rem) 100%,
+    calc(100% - 1.5rem) calc(100% + 1rem),
+    0 calc(100% + 1rem)
+  );
+  padding: 10px 20px;
+}
+.content:hover{
+    transition: width 0.8s ease;
+    width: 100%;
+}
+.content::before {
+  content: "";
+  position: absolute;
+  width:1rem;
+  height: 1rem;
+  background: #E9C9A5 ;
+  left: 0;
+  bottom: 0;
+  clip-path: polygon(0 0, 100% 0, 0 100%);
+  filter: brightness(0.75);
+}
+.content::after {
+  content: "";
+  position: absolute;
+  height:1rem;
+  width: 1rem;
+  background: linear-gradient(to right, rgba(0, 0, 0, 0.25), transparent 50%);
+  left: 0;
+  top: 100%;
+}
+.icon {
+  position: relative;
+  align-self: center;
+  width: 70px;
+}
+.innerIcon {
+  width: 100%;
+  height: auto;
+}
+
+.content .title {
+  font-size: 2em;
+  font-weight: 500;
+  color: #223754;
+}
+
+.linkItem {
+  display: flex;
+  gap: 20px;
+  color:#000;
+}
+.profCardsCont {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+.profCard {
+    position: relative;
+    max-width: 350px;
+    padding: 10px;
+    box-shadow: 0px 5px 10px 2px rgba(34, 60, 80, 0.2);
+}
+.gitIcon {
+    height: 80%;
+    width:auto;
+}
+.gitLink {
+    border-radius: 10px;
+    background-color: #C0321A;
+    height: 20px;
+    display: flex;
+    justify-content: center;
+}
+
+.devName {
+    margin-top: 5px;
+    margin-bottom: 5px;
+    font-size: 1.5rem;
+    font-weight: 500;
+}
+.devStatus{
+    margin-top: 5px;
+    margin-bottom: 5px;
+    font-style: italic;
+    color: rgba(19, 2, 2, 0.439);
+}

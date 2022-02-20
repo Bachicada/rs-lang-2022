@@ -133,9 +133,9 @@ export const getNewToken = async () => {
     })    
     return rawResponse;
   }
-
+/*
   export const getHardWords = async (userId: string, token: string) =>{ 
-    const hardFilter ='{"$and":[{"userWord.difficulty":"hard"}]}' /*, {"page":${page}*/
+    const hardFilter ='{"$and":[{"userWord.difficulty":"hard"}]}' /*, {"page":${page}
     const data = await fetch(`${API_URL}${ENDPOINTS.USERS}/${userId}/aggregatedwords?wordsPerPage=3600&filter=${hardFilter}`, {
       method: 'GET',
       headers: {
@@ -146,9 +146,40 @@ export const getNewToken = async () => {
     })
     return data;
   }
+  */
+
+  export const getHardWords = async (userId: string, token: string) =>{ 
+    const hardFilter ='{"$and":[{"userWord.difficulty":"hard"}]}' /*, {"page":${page}*/
+    try{
+      const data = await fetch(`${API_URL}${ENDPOINTS.USERS}/${userId}/aggregatedwords?wordsPerPage=3600&filter=${hardFilter}`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        }
+      })
+      return data;
+    }
+    catch(e) {
+      console.log('error', e);
+    }
+  }
 
   export const getLearnedWords = async (userId: string, token: string) =>{ 
     const hardFilter ='{"$and":[{"userWord.difficulty":"learned"}]}' /*, {"page":${page}*/
+    const data = await fetch(`${API_URL}${ENDPOINTS.USERS}/${userId}/aggregatedwords?wordsPerPage=3600&filter=${hardFilter}`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      }
+    })
+    return data;
+  }
+  export const getPlayedWords = async (userId: string, token: string) =>{ 
+    const hardFilter ='{"$and":[{"userWord.difficulty":"new"}]}' /*, {"page":${page}*/
     const data = await fetch(`${API_URL}${ENDPOINTS.USERS}/${userId}/aggregatedwords?wordsPerPage=3600&filter=${hardFilter}`, {
       method: 'GET',
       headers: {
