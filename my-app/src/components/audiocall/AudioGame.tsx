@@ -28,6 +28,7 @@ const AudioGame = () => {
               }
             }
           });
+          
           const answer = {
             item,
             answer: isAnswerCorrect,

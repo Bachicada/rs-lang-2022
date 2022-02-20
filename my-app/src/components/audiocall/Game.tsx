@@ -28,26 +28,26 @@ const Game = (props: GameProps) => {
     let cleanupFunction = false;
     if (!cleanupFunction && seconds > 0 && quizState.timerActive && !quizState.isGameFinished) {
       // setTimeout(setSeconds, 1000, seconds - 1);
-      const a = window.setTimeout(() => {
-        console.log('TIMEOUT', seconds);
+      const id = window.setTimeout(() => {
         setSeconds(seconds - 1);
       }, 1000);
-      setTimeId(a);
+      setTimeId(id);
     } 
     else if (!cleanupFunction && seconds <= 0) {
       dispatch({ type: 'OUT_OF_TIME' });
       setSeconds(quizState.seconds);
     }
-    return () => {cleanupFunction = true};
+    return () => {
+      if (timeId) window.clearInterval(timeId);
+      cleanupFunction = true
+    };
   }, [dispatch, quizState.isGameFinished, quizState.timerActive, seconds]);
 
   useEffect(() => {
-    if(timeId) {
+    if (timeId) {
       window.clearTimeout(timeId);
-      console.log('CLEAR TIMEOUT!');
     }
     setSeconds(12);
-    console.log('CHANGE IDX', seconds);
   }, [quizState.currentQuestionIndex]);
 
   return (

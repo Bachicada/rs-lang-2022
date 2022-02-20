@@ -12,7 +12,7 @@ const LevelButton = ({item}: LevelButtonProps) => {
   const [level, setLevel] = useState<number>();
 
   useEffect(() => {
-    if (level) {
+    if (level || level === 0) {
       const fetchData = async() => {
         dispatch({ type: 'LOADING' })
         try {
