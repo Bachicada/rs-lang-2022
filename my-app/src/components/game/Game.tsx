@@ -1,14 +1,16 @@
 import { Box } from '@mui/material';
 import React, { useContext, useEffect } from 'react'
-import { GAME_TYPE } from '../../utils/Constants';
+import { APP_ROUTES, GAME_TYPE } from '../../utils/Constants';
 import LevelModal from './LevelModal';
 import { QuizContext } from '../sprint/Sprint';
 import SprintGame from '../sprint/SprintGame';
-import GameResult from './GameResult';
 import Timer from './Timer';
 import { LoadingIcon } from '../shared/LoadingIcon';
 import styles from './Game.module.css'
 import GameTableResult from './GameTableResult';
+import RestartAltIcon from '@mui/icons-material/RestartAlt';
+import CloseIcon from '@mui/icons-material/Close';
+import { useNavigate } from 'react-router';
 
 interface GameProps {
   type: GAME_TYPE;
@@ -17,6 +19,7 @@ interface GameProps {
 const Game = (props: GameProps) => {
   const [quizState, dispatch] = useContext(QuizContext);
   const [ seconds, setSeconds ] = React.useState(60);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (seconds > 0 && quizState.timerActive && !quizState.isGameFinished) {
@@ -59,7 +62,16 @@ const Game = (props: GameProps) => {
               : null}
           {quizState.isGameFinished && 
               <GameTableResult />}
-              {/* {<GameResult type={props.type} />} */}
+          {quizState.isGameFinished && 
+              <div style={{display: 'flex', flexDirection: 'column'}}>
+                <CloseIcon onClick={() => {
+                  navigate(`${APP_ROUTES.MAIN}`);
+                }} sx={{fontSize: 80}}/>
+                <RestartAltIcon onClick={() => {
+                  dispatch({ type: 'RESTART' })
+                }} sx={{fontSize: 80}}/>
+              </div>
+          }
         </div>}
   </Box>
   )

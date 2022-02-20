@@ -103,6 +103,11 @@ const reducer: Reducer<InitialState, ReducerAction> = (state, action) => {
         isGameFinished: true,
       }
     }
+    case 'RESTART': {
+      return {
+        ...initialState
+      }
+    }
     default:
       return state;
   }

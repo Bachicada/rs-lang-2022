@@ -40,7 +40,6 @@ const SprintGame = () => {
         setIsAnswered(false);        
       }
       updAnswer();
-      console.log('ВСЕ!');
     }
   }, [isAnswered]);
   
@@ -50,7 +49,6 @@ const SprintGame = () => {
 
   let setAnswer = (bool: boolean) => {
     const obj = quizState.questions[quizState.currentQuestionIndex];
-    console.log(bool, obj);
     if (bool) {
       setClickedButton('Верно');
       setIsAnswerCorrect(obj.correct)

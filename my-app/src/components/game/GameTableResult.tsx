@@ -41,7 +41,7 @@ export default function GameTableResult() {
   return (
     <Paper sx={{width: 'calc(100% + 20px)', overflow: 'hidden'}}>
     <TableContainer sx={{maxHeight: 440, width: '103%'}} component={Paper}>
-      <Table sx={{ minWidth: 700 }} stickyHeader aria-label="sticky customized table">
+      <Table sx={{ minWidth: 400 }} stickyHeader aria-label="sticky customized table">
         <TableHead>
           <TableRow>
             <StyledTableCell>Слово</StyledTableCell>
