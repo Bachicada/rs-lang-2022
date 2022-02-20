@@ -128,10 +128,12 @@ const fetchPlayedWords = async()=>{
       setPlayedWords(playedList);
     }
 }
+useEffect(()=>{
+  fetchPlayedWords();
+},[])
 
 
 useEffect(() =>{
-
   if (props.part === 'hardwords') {
     if (hardWords && hardWords.length) {
       const b = hardWords.map((word) =>({
