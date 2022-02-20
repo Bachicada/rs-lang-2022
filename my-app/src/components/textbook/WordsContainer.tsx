@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useState, useEffect, useContext } from 'react';
 import { CurUser, PageProps, WordItem } from '../../types';
 import styles from './textbook.module.css'
-import { getHardWords, getLearnedWords, getNewToken, getPartOfTextbook, getUserId, getUserToken, getWords } from '../../services/WordService';
+import { getHardWords, getLearnedWords, getNewToken, getPartOfTextbook, getPlayedWords, getUserId, getUserToken, getWords } from '../../services/WordService';
 import WordCard from '../wordCard/WordCard';
 import { LoadingIcon } from '../shared/LoadingIcon';
 import { UserContext } from '../../App';
@@ -36,6 +36,7 @@ export default function WordsContainer(props: PageProps){
 const [hardWords, setHardWords] =  useState<WordItem[]>([]);
 const [learnedWords, setLearnedWords] = useState<WordItem[]>([]);
 const [allWords, setAllWords] =  useState<WordItem[]>([]);
+const [playedWords, setPlayedWords] =  useState<WordItem[]>([]);
 const [finalWords, setFinalWords] =  useState<WordItem[]>([]);
 
 
@@ -117,8 +118,22 @@ const fetchLearnedWords = async () =>{
 console.log("learned",learnedWords)
 }
 
-useEffect(() =>{
+const fetchPlayedWords = async()=>{
+   
+    const played = await getPlayedWords(userId, token);
+    if (played){
+      const a = await played.json();
+      const playedList = a[0].paginatedResults;
+      console.log('played', playedList)
+      setPlayedWords(playedList);
+    }
+}
+useEffect(()=>{
+  fetchPlayedWords();
+},[])
 
+
+useEffect(() =>{
   if (props.part === 'hardwords') {
     if (hardWords && hardWords.length) {
       const b = hardWords.map((word) =>({
@@ -131,7 +146,7 @@ useEffect(() =>{
       setFinalWords([]);
     }
   } else {
-    if (allWords && allWords.length) {
+    if (allWords && allWords.length) {      
     if ((hardWords&& hardWords.length) || (learnedWords&&learnedWords.length)) {
       const a = allWords.map((word) =>{
         if (hardWords.find((w) => w._id === word.id)) {
@@ -148,6 +163,7 @@ useEffect(() =>{
       }
       return word;
     })
+    
       console.log('2',a)
       setFinalWords(a)
     } else {
@@ -165,8 +181,17 @@ useEffect(() => {
   try{
     fetchHardWords();
     fetchLearnedWords();
+    fetchPlayedWords();
     if (props.part !=='hardwords'){
       getPartOfTextbook(props.page, props.part).then((allWords)=>{
+      
+        if (playedWords&& playedWords.length){
+          const p = playedWords.map((word)=>({
+            ...word,
+            isNewWord:true
+          }))
+
+        }
         
         setAllWords(allWords);
         setLoadingState(false);

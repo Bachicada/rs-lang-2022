@@ -39,6 +39,7 @@ export interface WordItem {
   textExampleTranslate: string,
   isHardWord?: boolean,
   isLearnedWord?: boolean,
+  isNewWord?: boolean
 }
 export interface WordCardProp {
   word: WordItem,
