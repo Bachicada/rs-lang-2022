@@ -10,7 +10,7 @@ export class Team extends React.Component {
     render(){
      return (
          <section className='section aboutSection'>
-                <h2>Команда разработчиков</h2>
+                <h2 className={styles.h2}>Команда разработчиков</h2>
                 <div className={styles.profCardsCont}>
                     <div className={styles.profCard}>
                         <img className={styles.profPic} src={maryPic} alt='developer avatar'/>

@@ -26,12 +26,31 @@
     height: 100%;
     width:auto;
 }
+.menuList,
+.menuBook {
+    list-style-position: inside;
+}
+
+
 .menuItem,
 .bookItem {
  cursor: pointer;
  height: 20px;
  color: whitesmoke;
 }
+.menuList {
+    padding: 10px 0px;
+}
+.menuItem {
+    padding: 5px 0px 5px 10px;
+}
+.menuBook {
+    padding: 0px 0px;
+}
+.bookItem {
+    padding: 5px 0px 5px 40px;
+}
+
 
 .menuItem:hover,
 .bookItem:hover {

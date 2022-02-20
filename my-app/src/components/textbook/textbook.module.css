@@ -1,6 +1,7 @@
 .textbook {
     background-color: bisque;
 }
+
 .gamesMenu,
 .partList {
     display: flex;
@@ -11,14 +12,23 @@
     border-radius: 10px;
     cursor: pointer;
     color: whitesmoke;
+    margin-left: 20px;
+    text-align: center;
 }
 .gameItem {
     display: block;
+    width: 100px;
     padding: 10px;
     border-radius: 10px;
     background-color: #141B29;
     cursor: pointer;
+    margin-left: 20px;
+    text-align: center;
 }
+.gameItem:hover {
+    transform: scale(1.1);
+}
+
 .gameLink,
 .partLink {
     color: whitesmoke;
@@ -49,4 +59,11 @@
     grid-template-columns: repeat(4, 1fr);
     column-gap: 10px;
     row-gap: 10px;
+}
+
+@media (max-width: 770px) {
+    .wordsCont {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+}
 }

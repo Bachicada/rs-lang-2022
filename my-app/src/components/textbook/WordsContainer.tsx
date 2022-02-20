@@ -41,7 +41,8 @@ const [finalWords, setFinalWords] =  useState<WordItem[]>([]);
 
 const fetchHardWords = async () =>{
   getHardWords(userId, token).then(async (response)=>{
-    console.log(response);
+    //console.log(response);
+    if (response)
     if (response.status===200){
       const data = await response.json();
       const hardWords = data[0].paginatedResults;
@@ -79,7 +80,7 @@ const fetchHardWords = async () =>{
 
 const fetchLearnedWords = async () =>{
   getLearnedWords(userId, token).then(async (response)=>{
-  console.log(response);
+  //console.log(response);
   if (response.status===200){
     const data = await response.json();
     const learnedWords = data[0].paginatedResults;
@@ -117,6 +118,7 @@ console.log("learned",learnedWords)
 }
 
 useEffect(() =>{
+
   if (props.part === 'hardwords') {
     if (hardWords && hardWords.length) {
       const b = hardWords.map((word) =>({
@@ -160,15 +162,21 @@ useEffect(() =>{
 },[allWords,hardWords,learnedWords,props.part])
 
 useEffect(() => {
-  fetchHardWords();
-  fetchLearnedWords();
-  if (props.part !=='hardwords'){
-    getPartOfTextbook(props.page, props.part).then((allWords)=>{
-      
-      setAllWords(allWords);
-      setLoadingState(false);
-    })
-  }}, [props.page, props.part])
+  try{
+    fetchHardWords();
+    fetchLearnedWords();
+    if (props.part !=='hardwords'){
+      getPartOfTextbook(props.page, props.part).then((allWords)=>{
+        
+        setAllWords(allWords);
+        setLoadingState(false);
+      })
+    }
+  }
+  catch (e) {
+    console.error(e)
+} 
+ }, [props.page, props.part])
 
 const onDataChanged = () =>{
   console.log('first', props.part)

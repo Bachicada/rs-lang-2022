@@ -28,7 +28,7 @@ export default function BurgerMenu() {
         return (
             <ul className='menuList'>
                 <li className='menuItem'>
-                    <Link to={APP_ROUTES.MAIN}>RS Lang</Link>
+                    <Link to={APP_ROUTES.MAIN}>На главную RS Lang</Link>
                 </li>
                 <li className='menuItem'>
                     <Link to={`${APP_ROUTES.TEXTBOOK}/0`}>Учебник</Link>

@@ -28,12 +28,18 @@
     column-gap: 20px;
     text-align: right;
 }
-.title {
+.mainTitle {
     font-style: italic;
     font-size: 1.2rem;
+    color:#274E7F;
 }
 .benefitsList {
     display: flex;
+}
+.h2 {
+  text-align: center;
+  color: #391F20;
+  text-shadow: 0px 0px 20px rgb(0 0 0);
 }
 .olcards,
 .olcards * {
@@ -43,12 +49,15 @@
 }
 
 .olcards {
+  position: relative;
   list-style: none;
   font-family: sans-serif;
   display: flex;
   flex-direction: column;
+  margin-left: 10%; 
   gap: 1rem;
   padding-bottom: 1rem;
+  width: 80%;
 }
 .olcards li {
   counter-increment: cardCount;
@@ -68,20 +77,14 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  padding-inline: 0.5em;
+  padding: 10px;
 }
 
-.olcards li .content {
-
-  background-color: #F4825C ;
-  width: 70%;
+.content {
+  position: relative;
+  width: 90%;
+  background-color: #E9C9A5 ;
   transition: width 0.8s ease;
-  display: grid;
-  padding: 2em;
-  grid-template-areas:
-    "icon title"
-    "icon text";
-  gap: 0.25em 1em;
   clip-path: polygon(
     0 0,
     calc(100% - 1.5rem) 0,
@@ -90,24 +93,24 @@
     calc(100% - 1.5rem) calc(100% + 1rem),
     0 calc(100% + 1rem)
   );
-  position: relative;
+  padding: 10px 20px;
 }
-.olcards li .content:hover{
+.content:hover{
     transition: width 0.8s ease;
-    width: 80%;
+    width: 100%;
 }
-.olcards li .content::before {
+.content::before {
   content: "";
   position: absolute;
   width:1rem;
   height: 1rem;
-  background: #F4825C ;
+  background: #E9C9A5 ;
   left: 0;
   bottom: 0;
   clip-path: polygon(0 0, 100% 0, 0 100%);
   filter: brightness(0.75);
 }
-.olcards li .content::after {
+.content::after {
   content: "";
   position: absolute;
   height:1rem;
@@ -116,19 +119,27 @@
   left: 0;
   top: 100%;
 }
-.olcards li .icon {
-  grid-area: icon;
+.icon {
+  position: relative;
   align-self: center;
-  font-size: 2em;
+  width: 70px;
 }
-.olcards li .content .title {
-  grid-area: title;
-  font-size: 1.25em;
-}
-.olcards li .content .text {
-  grid-area: text;
+.innerIcon {
+  width: 100%;
+  height: auto;
 }
 
+.content .title {
+  font-size: 2em;
+  font-weight: 500;
+  color: #223754;
+}
+
+.linkItem {
+  display: flex;
+  gap: 20px;
+  color:#000;
+}
 .profCardsCont {
     position: relative;
     display: flex;

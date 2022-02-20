@@ -13,7 +13,7 @@ export class AboutApp extends React.Component {
              </div>
              <div className={styles.logoCont}>
                 <img className={styles.rsLogo} src={logoImg} alt='app-logo' />           
-                <h2 className={styles.title}>Приложение для изучения английского языка для пользователей разного уровня знаний</h2>
+                <h2 className={styles.mainTitle}>Приложение для изучения английского языка для пользователей разного уровня знаний</h2>
              </div>
             
          </section>
