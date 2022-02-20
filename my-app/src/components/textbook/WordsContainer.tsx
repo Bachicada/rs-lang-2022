@@ -66,8 +66,7 @@ const fetchHardWords = async () =>{
           newDataUser.userId = JSON.parse(LS).userId;
           newDataUser.name = JSON.parse(LS).name;
           newDataUser.token = newToken.token;
-          console.log(newToken.token);
-          newDataUser.refreshToken = JSON.parse(newToken).refreshToken;
+          newDataUser.refreshToken = newToken.refreshToken;
           localStorage.setItem('CurrentUser', JSON.stringify(newDataUser));
           userContext.dispatchUserEvent("UPDATE_USER", newDataUser);
       }
@@ -94,8 +93,13 @@ const fetchLearnedWords = async () =>{
     console.log('второй ответ', newTokenRes )
 
     const LS = localStorage.getItem('CurrentUser'||'{}');
+   if(LS && (newTokenRes.status === 401)){
+      console.log ('все истекло', newTokenRes)
+      setExpireStatus(true);
+      setTimeout(checkSignIn, 1000);
+  }
    
-   if(LS && (newTokenRes.status !==401)){
+   else if(LS && (newTokenRes.status !==401)){
         const newToken = await newTokenRes.json();
         console.log ('this new token', newToken)
         
@@ -104,34 +108,52 @@ const fetchLearnedWords = async () =>{
         newDataUser.userId = JSON.parse(LS).userId;
         newDataUser.name = JSON.parse(LS).name;
         newDataUser.token = newToken.token;
-        console.log(newToken.token);
-        newDataUser.refreshToken = JSON.parse(newToken).refreshToken;
+        newDataUser.refreshToken = newToken.refreshToken;
         localStorage.setItem('CurrentUser', JSON.stringify(newDataUser));
         userContext.dispatchUserEvent("UPDATE_USER", newDataUser);
     }
-    else if(LS && (newTokenRes.status === 401)){
-        console.log ('все истекло', newTokenRes)
-        setExpireStatus(true);
-        setTimeout(checkSignIn, 1000);
-    }
+   
 }})
 console.log("learned",learnedWords)
 }
 
 const fetchPlayedWords = async()=>{
-   
-    const played = await getPlayedWords(userId, token);
-    if (played){
-      const a = await played.json();
-      const playedList = a[0].paginatedResults;
-      console.log('played', playedList)
+  getPlayedWords(userId, token).then(async (response)=>{
+    if(response)
+    if (response.status===200){
+      const data = await response.json();
+      const playedList = data[0].paginatedResults;
       setPlayedWords(playedList);
+        setPlayedWords(learnedWords);
+        setLoadingState(false);
     }
-}
-useEffect(()=>{
-  fetchPlayedWords();
-},[])
+    else if (response.status===401){
+      const newTokenRes = await getNewToken();
+      const LS = localStorage.getItem('CurrentUser'||'{}');
 
+      console.log('второй ответ', newTokenRes )
+      if(LS && (newTokenRes.status === 401)){
+        console.log ('все истекло', newTokenRes)
+        setExpireStatus(true);
+        setTimeout(checkSignIn, 1000);
+     }
+     else if(LS && (newTokenRes.status !==401)){
+          const newToken = await newTokenRes.json();
+          console.log ('this new token', newToken)
+          
+          const newDataUser: CurUser = {};
+          newDataUser.message = JSON.parse(LS).message;
+          newDataUser.userId = JSON.parse(LS).userId;
+          newDataUser.name = JSON.parse(LS).name;
+          newDataUser.token = newToken.token;
+          console.log(newToken.token);
+          newDataUser.refreshToken = newToken.refreshToken;
+          localStorage.setItem('CurrentUser', JSON.stringify(newDataUser));
+          userContext.dispatchUserEvent("UPDATE_USER", newDataUser);
+      }
+     
+  }})
+}
 
 useEffect(() =>{
   if (props.part === 'hardwords') {

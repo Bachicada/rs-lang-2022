@@ -186,11 +186,7 @@ export const getNewToken = async () => {
   }
 
   export const getPlayedWords = async (userId: string, token: string) =>{ 
-    if (!user){
-      return;
-    }
-
-    const hardFilter ='{"$and":[{"userWord.difficulty":"new"}]}' /*, {"page":${page}*/
+   const hardFilter ='{"$and":[{"userWord.difficulty":"new"}]}' /*, {"page":${page}*/
     try{
       const data = await fetch(`${API_URL}${ENDPOINTS.USERS}/${userId}/aggregatedwords?wordsPerPage=3600&filter=${hardFilter}`, {
         method: 'GET',
