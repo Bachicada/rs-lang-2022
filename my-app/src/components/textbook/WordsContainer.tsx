@@ -42,24 +42,22 @@ const [finalWords, setFinalWords] =  useState<WordItem[]>([]);
 
 const fetchHardWords = async () =>{
   getHardWords(userId, token).then(async (response)=>{
-    //console.log(response);
+ 
     if (response)
     if (response.status===200){
       const data = await response.json();
       const hardWords = data[0].paginatedResults;
-      console.log("hardWords", hardWords);
+    
         setHardWords(hardWords);
         setLoadingState(false);
     }
     else if (response.status===401){
       const newTokenRes = await getNewToken();
-      console.log('второй ответ', newTokenRes )
 
       const LS = localStorage.getItem('CurrentUser'||'{}');
      
      if(LS && (newTokenRes.status !==401)){
           const newToken = await newTokenRes.json();
-          console.log ('this new token', newToken)
           
           const newDataUser: CurUser = {};
           newDataUser.message = JSON.parse(LS).message;
@@ -71,7 +69,7 @@ const fetchHardWords = async () =>{
           userContext.dispatchUserEvent("UPDATE_USER", newDataUser);
       }
       else if(LS && (newTokenRes.status === 401)){
-          console.log ('все истекло', newTokenRes)
+    
           setExpireStatus(true);
           setTimeout(checkSignIn, 1000);
       }
@@ -80,28 +78,25 @@ const fetchHardWords = async () =>{
 
 const fetchLearnedWords = async () =>{
   getLearnedWords(userId, token).then(async (response)=>{
-  //console.log(response);
+
   if (response.status===200){
     const data = await response.json();
     const learnedWords = data[0].paginatedResults;
-    console.log("learnedWords", learnedWords);
       setLearnedWords(learnedWords);
       setLoadingState(false);
   }
   else if (response.status===401){
     const newTokenRes = await getNewToken();
-    console.log('второй ответ', newTokenRes )
 
     const LS = localStorage.getItem('CurrentUser'||'{}');
    if(LS && (newTokenRes.status === 401)){
-      console.log ('все истекло', newTokenRes)
+      
       setExpireStatus(true);
       setTimeout(checkSignIn, 1000);
   }
    
    else if(LS && (newTokenRes.status !==401)){
         const newToken = await newTokenRes.json();
-        console.log ('this new token', newToken)
         
         const newDataUser: CurUser = {};
         newDataUser.message = JSON.parse(LS).message;
@@ -114,7 +109,6 @@ const fetchLearnedWords = async () =>{
     }
    
 }})
-console.log("learned",learnedWords)
 }
 
 const fetchPlayedWords = async()=>{
@@ -131,22 +125,18 @@ const fetchPlayedWords = async()=>{
       const newTokenRes = await getNewToken();
       const LS = localStorage.getItem('CurrentUser'||'{}');
 
-      console.log('второй ответ', newTokenRes )
       if(LS && (newTokenRes.status === 401)){
-        console.log ('все истекло', newTokenRes)
         setExpireStatus(true);
         setTimeout(checkSignIn, 1000);
      }
      else if(LS && (newTokenRes.status !==401)){
           const newToken = await newTokenRes.json();
-          console.log ('this new token', newToken)
           
           const newDataUser: CurUser = {};
           newDataUser.message = JSON.parse(LS).message;
           newDataUser.userId = JSON.parse(LS).userId;
           newDataUser.name = JSON.parse(LS).name;
           newDataUser.token = newToken.token;
-          console.log(newToken.token);
           newDataUser.refreshToken = newToken.refreshToken;
           localStorage.setItem('CurrentUser', JSON.stringify(newDataUser));
           userContext.dispatchUserEvent("UPDATE_USER", newDataUser);
@@ -158,12 +148,11 @@ const fetchPlayedWords = async()=>{
 useEffect(() =>{
   if (props.part === 'hardwords') {
     if (hardWords && hardWords.length) {
-      const b = hardWords.map((word) =>({
+      const hardList = hardWords.map((word) =>({
         ...word,
         isHardWord:true
       }));
-      console.log('1',b)
-      setFinalWords(b)
+       setFinalWords(hardList)
     } else {
       setFinalWords([]);
     }
@@ -171,7 +160,7 @@ useEffect(() =>{
     if (allWords && allWords.length) {   
       if (learnedWords.length && hardWords.length) {
 
-        const hl = allWords.map((word) =>{
+        const hardOrLearnedList = allWords.map((word) =>{
            if (hardWords.find((w) => w._id === word.id)) {
             return{
               ...word,
@@ -188,11 +177,10 @@ useEffect(() =>{
         
         return word;
       })
-        console.log('4',hl)
-        setFinalWords(hl);
+        setFinalWords(hardOrLearnedList);
       }
       else if (hardWords.length && !learnedWords.length) {
-      const a = allWords.map((word) =>{
+      const onlyHardList = allWords.map((word) =>{
         if (hardWords.find((w) => w._id === word.id)) {
           return{
             ...word,
@@ -201,11 +189,10 @@ useEffect(() =>{
         }
       return word;
     })
-      console.log('2',a)
-      setFinalWords(a)
+      setFinalWords(onlyHardList)
     } 
       else if (learnedWords.length && !hardWords.length) {
-      const l = allWords.map((word) =>{
+      const onlyLearnedList = allWords.map((word) =>{
         if (learnedWords.find((w) => w._id === word.id)) {
           return{
             ...word,
@@ -214,22 +201,15 @@ useEffect(() =>{
         }
       return word;
     })
-      console.log('3',l)
-      setFinalWords(l);
+      setFinalWords(onlyLearnedList);
     }
       else {
-      console.log('5',allWords)
       setFinalWords(allWords);
     }
     } else {
       setFinalWords([]);
     }
   }
-console.log("learnedWords.length && hardWords", learnedWords && hardWords);
-
-console.log("hardWords.length && !learnedWords.length", hardWords.length && !learnedWords.length);
-
-console.log("learnedWords.length && !hardWords.length", learnedWords.length && !hardWords.length);
 
 },[allWords,hardWords,learnedWords,playedWords,props.part,props.page])
 
@@ -271,7 +251,7 @@ useEffect(() => {
  }, [props.page, props.part])
 
 const onDataChanged = () =>{
-  console.log('first', props.part)
+
   fetchHardWords();
   fetchLearnedWords();
   fetchPlayedWords();

@@ -18,10 +18,10 @@ export default function BurgerMenu() {
         const target = (event.target as HTMLElement).dataset.part;
         if (target !=='hardWords'){
             const partNumber = (Number(target) - 1).toString();
-            navigate(`${APP_ROUTES.TEXTBOOK}/${partNumber}/0`)
+            navigate(`${APP_ROUTES.TEXTBOOK}/${partNumber}/1`)
         }
         else{
-            navigate(`${APP_ROUTES.TEXTBOOK}/hardwords/0`)
+            navigate(`${APP_ROUTES.TEXTBOOK}/hardwords/1`)
         }
         
     }

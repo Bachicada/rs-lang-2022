@@ -19,7 +19,6 @@ export default function Textbook(){
   const params = useParams< string >();
   const navigate = useNavigate();
 
-  console.log(params)
 
   useEffect(() => {
     if ((!params.part) && (params.part !=="hardWords")){

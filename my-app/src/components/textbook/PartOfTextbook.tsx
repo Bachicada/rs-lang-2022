@@ -24,7 +24,6 @@ export default function PartOfTextBook() {
       setPageNumber(params.page);
     }
     if (params.part) {
-      console.log('params', params)
       setCurrentPart(params.part);
     }
   }, [params, navigate]);
