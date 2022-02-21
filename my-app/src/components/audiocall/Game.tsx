@@ -13,6 +13,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import { useNavigate } from 'react-router';
 import AudioGame from '../audiocall/AudioGame';
 import { AudioContext } from './Audiocall';
+import GameLife from './GameLife';
 
 interface GameProps {
   type: GAME_TYPE;
@@ -70,7 +71,8 @@ const Game = (props: GameProps) => {
         </div>}
     {quizState.isGameReady &&
         <div className={styles.game}>
-          {<p>{quizState.currentLifeIndex}</p>}
+          {!quizState.isGameFinished &&
+              <GameLife count={quizState.currentLifeIndex}/>}
           {!quizState.isGameFinished && 
               <Timer time={seconds} />}
           {quizState.isGameReady && !quizState.isGameFinished && 
