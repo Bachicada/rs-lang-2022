@@ -2,6 +2,7 @@ import { Container } from '@mui/material'
 import { useContext, useEffect, useState } from 'react'
 import { updateUserWord } from '../../services/UserWordService'
 import { API_URL, WORD_STATUS } from '../../utils/Constants'
+import GameScore from '../game/GameScore'
 import { QuizContext } from './Sprint'
 import SprintStars from './SprintStars'
 
@@ -11,6 +12,7 @@ const SprintGame = () => {
   const [isAnswered, setIsAnswered] = useState(false);
   const [isAnswerCorrect, setIsAnswerCorrect] = useState<boolean>(false);
   const [clickedButton, setClickedButton] = useState('');
+  const [test, setTest] = useState(false);
 
   useEffect(() => {
     if (isAnswered) {
@@ -52,11 +54,13 @@ const SprintGame = () => {
     if (bool) {
       setClickedButton('Верно');
       setIsAnswerCorrect(obj.correct)
+      setTest(obj.correct ? true : false);
       setIsAnswered(true);
     }
     else {
       setClickedButton('Неверно');
-      setIsAnswerCorrect(!obj.correct)
+      setIsAnswerCorrect(!obj.correct);
+      setTest(obj.correct ? false : true);
       setIsAnswered(true);
     }
   }
@@ -75,7 +79,9 @@ const SprintGame = () => {
   return (
     <Container maxWidth="md" style={{ background: 'rgb(153, 207, 51)', borderRadius: '5px', display: 'flex', 
         alignItems: 'center', flexDirection: 'column' }}>
-      <SprintStars count={quizState.correctAnswersCount} />
+      {/* <SprintStars count={quizState.correctAnswersCount} /> */}
+      {isAnswered &&
+          <GameScore correctAnswersCount={quizState.correctAnswersCount} isCorrect={test}/>}
       <button onClick={() => {
         audio.play();
       }}>
@@ -86,14 +92,16 @@ const SprintGame = () => {
       <div>
         <button onClick={() => {
           setClickedButton('Неверно');
-          setIsAnswerCorrect(!obj.correct)
+          setIsAnswerCorrect(!obj.correct);
+          setTest(obj.correct ? false : true);
           setIsAnswered(true);
         }}>
           Неверно
         </button>
         <button onClick={() => {
           setClickedButton('Верно');
-          setIsAnswerCorrect(obj.correct)
+          setIsAnswerCorrect(obj.correct);
+          setTest(obj.correct ? true : false);
           setIsAnswered(true);
         }}>
           Верно

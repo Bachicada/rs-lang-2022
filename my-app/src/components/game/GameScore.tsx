@@ -1,5 +1,3 @@
-import React from 'react'
-
 interface GameScoreProps {
   correctAnswersCount: number;
   isCorrect: boolean;

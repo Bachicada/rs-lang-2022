@@ -6,6 +6,7 @@ import GameScore from '../game/GameScore'
 import { GameAnswers } from '../sprint/Sprint'
 import SprintStars from '../sprint/SprintStars'
 import { AudioWords, AudioContext } from './Audiocall'
+import VolumeUpIcon from '@mui/icons-material/VolumeUp';
 
 const AudioGame = () => {
   const [quizState, dispatch] = useContext(AudioContext);
@@ -59,11 +60,11 @@ const AudioGame = () => {
       {/* <SprintStars count={quizState.correctAnswersCount} /> */}
       {isAnswered && 
           <GameScore correctAnswersCount={quizState.correctAnswersCount} isCorrect={isAnswerCorrect}/>}
-      <button onClick={() => {
+      <div onClick={() => {
         audio.play();
       }}>
-        Play word
-      </button>
+        <VolumeUpIcon/>
+      </div>
       <p>{item.word}</p>
       <div>
         {
