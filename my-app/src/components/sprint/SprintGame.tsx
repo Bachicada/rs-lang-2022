@@ -10,7 +10,6 @@ import SprintStars from './SprintStars'
 const SprintGame = () => {
   const [quizState, dispatch] = useContext(QuizContext);
   const [isAnswered, setIsAnswered] = useState(false);
-  const [clickedButton, setClickedButton] = useState('');
   const [isAnswerCorrect, setIsAnswerCorrect] = useState(false);
 
   useEffect(() => {
@@ -45,18 +44,31 @@ const SprintGame = () => {
   const obj = quizState.questions[quizState.currentQuestionIndex];
   const { item } = obj;
   const audio = new Audio(`${API_URL}/${item.audio}`);
-  
+
+  const correctClicked = () => {
+    setIsAnswerCorrect(obj.correct ? true : false);
+    setIsAnswered(true);
+  }
+  const notCorrectClicked = () => {
+    setIsAnswerCorrect(obj.correct ? false : true);
+    setIsAnswered(true);
+  }
+
   useEffect(() => {
-    document.addEventListener('keydown', (ev) => {
+    const keyDown = (ev:KeyboardEvent) => {
       if (ev.key === 'ArrowRight') {
-        console.log(quizState.currentQuestionIndex)
+        correctClicked();
       }
       if (ev.key === 'ArrowLeft') {
-        console.log(quizState.currentQuestionIndex)
+        notCorrectClicked()
       }
-    })
+    };
+    document.addEventListener('keydown', keyDown);
+    return () =>{
+      document.removeEventListener('keydown', keyDown);
+    }
   }, [quizState.currentQuestionIndex]);
-
+  
   return (
     <Container maxWidth="md" style={{ background: 'rgb(153, 207, 51)', borderRadius: '5px', display: 'flex', 
         alignItems: 'center', flexDirection: 'column' }}>
@@ -72,14 +84,12 @@ const SprintGame = () => {
       <p>{obj.correct ? item.wordTranslate : obj.incorrect}</p>
       <div>
         <button onClick={() => {
-          setClickedButton('Неверно');
           setIsAnswerCorrect(obj.correct ? false : true);
           setIsAnswered(true);
         }}>
           Неверно
         </button>
         <button onClick={() => {
-          setClickedButton('Верно');
           setIsAnswerCorrect(obj.correct ? true : false);
           setIsAnswered(true);
         }}>
