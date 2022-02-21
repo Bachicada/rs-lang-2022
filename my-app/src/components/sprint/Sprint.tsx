@@ -27,6 +27,9 @@ export interface InitialState {
   new: any[];
   currentQuestionIndex: number;
   correctAnswersCount: number;
+  maxAnswersCount: number,
+  allIncorrectCount: number,
+  allCorrectCount: number,
   showModal: boolean,
   showResults: boolean,
   isGameReady: boolean,
@@ -43,6 +46,9 @@ const initialState: InitialState = {
   new: [],
   currentQuestionIndex: 0,
   correctAnswersCount: 0,
+  maxAnswersCount: 0,
+  allIncorrectCount: 0,
+  allCorrectCount: 0,
   showModal: true,
   showResults: false,
   isGameReady: false,
@@ -51,32 +57,6 @@ const initialState: InitialState = {
   seconds: 60,
   timerActive: false,
 };
-
-// export function getPreload(part: string, page: string) {
-//   initialState.level = +part;
-//   let data: any = [];
-//   for (let i = +page; i >= 0; i--) {
-//     data.push(i);
-//   }
-//   console.log(data, part, page);
-//   const fetchData = async() => {
-//     // try {
-//     //   data = data.map(async (page: number) => {
-//     //     await getPartOfTextbook(`${page}`, `${part}`);
-//     //   });
-//     // } catch(err) {
-//     //   alert('Oops! Something goes wrong.')
-//     // }
-//     // const data = await (await Promise.allSettled(quizState.new)).map((item: any) => item.value.optional);
-//     data = [await getPartOfTextbook('0', `${part}`), await getPartOfTextbook('2', `${part}`), await getPartOfTextbook('1', `${part}`)];
-//     return data;
-//   }
-//   const a = fetchData();
-//   // initialState.questions = Utils.getSprintWords(data);
-//   console.log('PRELOAD', a);
-//   // return Utils.getSprintWords(data);
-//   return a;
-// }
 
 interface ReducerAction {
   type: any;
@@ -116,6 +96,9 @@ const reducer: Reducer<InitialState, ReducerAction> = (state, action) => {
       const answers = [...state.answers, action.payload];
       const correctAnswersCount = state.correctAnswersCount + 1;
       const currentQuestionIndex = state.currentQuestionIndex + 1;
+      const maxAnswersCount = correctAnswersCount > state.maxAnswersCount 
+          ? correctAnswersCount
+          : state.maxAnswersCount;
       const isGameFinished = state.questions.length === currentQuestionIndex ? true : false;
       return {
         ...state,
@@ -123,6 +106,8 @@ const reducer: Reducer<InitialState, ReducerAction> = (state, action) => {
         correctAnswersCount,
         currentQuestionIndex,
         isGameFinished,
+        maxAnswersCount,
+        allCorrectCount: state.allCorrectCount + 1,
       }
     }
     case 'INCORRECT_ANSWER': {
@@ -136,6 +121,7 @@ const reducer: Reducer<InitialState, ReducerAction> = (state, action) => {
         correctAnswersCount,
         currentQuestionIndex,
         isGameFinished,
+        allIncorrectCount: state.allIncorrectCount + 1,
       }
     }
     case 'ADD_NEW': {

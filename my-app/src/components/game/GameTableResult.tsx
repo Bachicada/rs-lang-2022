@@ -10,6 +10,7 @@ import Paper from '@mui/material/Paper';
 import { QuizContext } from '../sprint/Sprint';
 import { useEffect } from 'react';
 import { Skeleton } from '@mui/material';
+import { createUserStatistics, getUserStatistics } from '../../services/UserStatisticsService';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -51,7 +52,12 @@ export default function GameTableResult() {
       getScores()
           .then(() => setScore([...quizState.answers]));
       
-    }
+      // const obj = [{
+      //   maxAnswersCount: quizState.maxAnswersCount,
+      //   allCorrectCount: quizState.allCorrectCount,
+      //   allIncorrectCount: quizState.allIncorrectCount,
+      //   date: new Date().toLocaleDateString(),
+      // }];
   }, [quizState.isGameFinished]);
 
   return (
