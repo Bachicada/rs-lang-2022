@@ -4,13 +4,14 @@ import styles from './stat.module.css'
 import Utils from '../../utils/Utils';
 import Chart from './Chart';
 import ChartTitle from './ChartTitle'
+import { useLocation, useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import { APP_ROUTES } from '../../utils/Constants';
 
 const Stat = () => {
-  if (!localStorage.getItem('CurrentUser')) {
-    return <p>Войдите в аккаунт, чтобы посмотреть статистику</p>
-  }
-
-
+ if (!localStorage.getItem('CurrentUser')) {
+  return <p>Войдите в аккаунт, чтобы посмотреть статистику</p>
+}
 
   return (
     <Box
