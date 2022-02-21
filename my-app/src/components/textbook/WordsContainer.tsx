@@ -175,8 +175,9 @@ useEffect(() =>{
            if (hardWords.find((w) => w._id === word.id)) {
             return{
               ...word,
-              isHeardWord: true
+              isHardWord: true
             }
+           
           }
           else if (learnedWords.find((w) => w._id === word.id)) {
             return{
@@ -232,6 +233,7 @@ console.log("learnedWords.length && !hardWords.length", learnedWords.length && !
 
 },[allWords,hardWords,learnedWords,playedWords,props.part,props.page])
 
+
 useEffect(() => {
   try{
     fetchHardWords();
@@ -275,7 +277,6 @@ const onDataChanged = () =>{
   fetchPlayedWords();
   if (props.part !=='hardwords'){
     getPartOfTextbook(props.page, props.part).then((allWords)=>{
-
       setAllWords(allWords);
       setLoadingState(false);
     })
