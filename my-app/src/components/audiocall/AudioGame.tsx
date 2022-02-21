@@ -12,7 +12,6 @@ const AudioGame = () => {
   const [isAnswered, setIsAnswered] = useState(false);
   const [isAnswerCorrect, setIsAnswerCorrect] = useState<boolean>(false);
 
-
   useEffect(() => {
     let cleanupFunction = false;
       if (!cleanupFunction && isAnswered) {
@@ -35,6 +34,7 @@ const AudioGame = () => {
             answer: isAnswerCorrect,
             failCounter: content.optional?.failCounter || 0,
             successCounter: content.optional?.successCounter || 0,
+            audio: new Audio(`${API_URL}/${item.audio}`),
           }
 
           dispatch({ type: isAnswerCorrect ? 'CORRECT_ANSWER' : 'INCORRECT_ANSWER', payload: answer });

@@ -8,6 +8,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { AudioContext } from './Audiocall';
+import VolumeUpIcon from '@mui/icons-material/VolumeUp';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -46,6 +47,7 @@ export default function GameTableResult() {
           <TableRow>
             <StyledTableCell>Слово</StyledTableCell>
             <StyledTableCell align="right">Перевод</StyledTableCell>
+            <StyledTableCell align="right">Аудио</StyledTableCell>
             <StyledTableCell align="right">Ответ</StyledTableCell>
             <StyledTableCell align="right">Всего</StyledTableCell>
           </TableRow>
@@ -57,6 +59,11 @@ export default function GameTableResult() {
                 {row.item.word}
               </StyledTableCell>
               <StyledTableCell align="right">{row.item.wordTranslate}</StyledTableCell>
+              <StyledTableCell align="right">{
+                <div style={{cursor: 'pointer'}} onClick={() => {row.audio.play()}}>
+                  <VolumeUpIcon/>
+                </div>
+              }</StyledTableCell>
               <StyledTableCell align="right">{row.answer ? `✅` : `❌`}</StyledTableCell>
               <StyledTableCell align="right">{row.successCounter}/{row.successCounter + row.failCounter}</StyledTableCell>
             </StyledTableRow>

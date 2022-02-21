@@ -81,10 +81,10 @@ const Game = (props: GameProps) => {
               <GameTableResult />}
           {quizState.isGameFinished && 
               <div style={{display: 'flex', flexDirection: 'column'}}>
-                <CloseIcon onClick={() => {
+                <CloseIcon style={{cursor: 'pointer'}} onClick={() => {
                   navigate(`${APP_ROUTES.MAIN}`);
                 }} sx={{fontSize: 80}}/>
-                <RestartAltIcon onClick={() => {
+                <RestartAltIcon style={{cursor: 'pointer'}} onClick={() => {
                   dispatch({ type: 'RESTART' })
                 }} sx={{fontSize: 80}}/>
               </div>
