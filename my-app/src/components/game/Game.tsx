@@ -20,15 +20,24 @@ interface GameProps {
 const Game = (props: GameProps) => {
   const [quizState, dispatch] = useContext(QuizContext);
   const [ seconds, setSeconds ] = React.useState(60);
+  const [ timeId, setTimeId ] = React.useState<number>();
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (seconds > 0 && quizState.timerActive && !quizState.isGameFinished) {
-      setTimeout(setSeconds, 1000, seconds - 1);
-    } 
-    else if (seconds <= 0 && quizState.isGameReady) {
-      dispatch({ type: 'FINISH_GAME' });
+    let cleanupFunction = false;
+    if (!cleanupFunction) {
+      if (seconds > 0 && quizState.timerActive && !quizState.isGameFinished) {
+        const id = window.setTimeout(setSeconds, 1000, seconds - 1);
+        setTimeId(id);
+      } 
+      else if (seconds <= 0 && quizState.isGameReady) {
+        dispatch({ type: 'FINISH_GAME' });
+      }
     }
+    return () => {
+      if (timeId) window.clearTimeout(timeId);
+      cleanupFunction = true
+    };
   }, [dispatch, quizState.isGameFinished, quizState.timerActive, seconds]);
   // }, [ quizState.timerActive ,seconds, quizState.isGameFinished ]);
   
