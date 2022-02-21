@@ -57,9 +57,7 @@ const AudioGame = () => {
   return (
     <Container maxWidth="md" style={{ background: 'rgb(153, 207, 51)', borderRadius: '5px', display: 'flex', 
     alignItems: 'center', flexDirection: 'column' }}>
-      {/* <SprintStars count={quizState.correctAnswersCount} /> */}
-      {isAnswered && 
-          <GameScore correctAnswersCount={quizState.correctAnswersCount} isCorrect={isAnswerCorrect}/>}
+      {<GameScore correctAnswersCount={quizState.correctAnswersCount} isCorrect={isAnswerCorrect}/>}
       <div onClick={() => {
         audio.play();
       }}>
