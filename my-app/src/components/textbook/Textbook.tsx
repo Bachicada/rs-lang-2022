@@ -18,7 +18,7 @@ export default function Textbook(){
   const [partNumber, setPartNumber] = useState<string | undefined>("0");
   const params = useParams< string >();
   const navigate = useNavigate();
-
+/*
   let location = useLocation();
  console.log('location', location)
 
@@ -43,7 +43,7 @@ useEffect(() => {
   window.addEventListener('domcontentloaded', checkPage);
   return () => window.removeEventListener('domcontentloaded', checkPage);
 }, []);
-
+*/
  
 
   useEffect(() => {
