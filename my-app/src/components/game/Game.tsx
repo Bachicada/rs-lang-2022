@@ -12,6 +12,8 @@ import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import CloseIcon from '@mui/icons-material/Close';
 import { useNavigate } from 'react-router';
 import AudioGame from '../audiocall/AudioGame';
+import Utils from '../../utils/Utils';
+import { getPartOfTextbook } from '../../services/WordService';
 
 interface GameProps {
   type: GAME_TYPE;
@@ -44,6 +46,30 @@ const Game = (props: GameProps) => {
   useEffect(() => {
     setSeconds(60);
   }, [quizState.level]);
+  
+  useEffect(() => {
+    const { page, part } = Utils.params;
+    if (page !== null && part !== null) {
+      const fetchData = async() => {
+        dispatch({ type: 'LOADING' })
+        const idArr: any[] = [];
+        for (let i = page; i >= 0; i--) {
+          idArr.push(i);
+        }
+        try {
+          const prom = idArr.map((page) => getPartOfTextbook(`${page}`, `${part}`));
+          const data = await (await Promise.allSettled(prom)).map((item: any) => item.value);
+          const formatData = Utils.getSprintWords(data.flat());
+          const randomData = Utils.shuffleAnswers(formatData);
+          dispatch({ type: 'PRELOAD', payload: {randomData, level: part} });
+        } catch(err) {
+          alert('Oops! Something goes wrong.')
+        }
+      }
+
+      fetchData();
+    }
+  }, []);
 
   return (
     <Box

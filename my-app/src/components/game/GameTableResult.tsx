@@ -50,7 +50,7 @@ export default function GameTableResult() {
 
       getScores()
           .then(() => setScore([...quizState.answers]));
-      // setScore([...quizState.answers]);
+      
     }
   }, [quizState.isGameFinished]);
 
@@ -75,7 +75,7 @@ export default function GameTableResult() {
               <StyledTableCell align="right">{row.item.wordTranslate}</StyledTableCell>
               <StyledTableCell align="right">{row.answer ? `✅` : `❌`}</StyledTableCell>
               <StyledTableCell align="right">{
-                row.successCounter 
+                (row.successCounter || row.successCounter === 0) 
                     ? `${row.successCounter}/${row.successCounter + row.failCounter}`
                     : <Skeleton variant="text" />}
               </StyledTableCell>

@@ -2,7 +2,9 @@ import { Dispatch, Reducer, useEffect } from 'react';
 import { createContext, FC, useReducer } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { WordItem } from '../../types';
-import { APP_ROUTES, GAME_TYPE } from '../../utils/Constants';
+import { getPartOfTextbook } from '../../services/WordService';
+import { GAME_TYPE } from '../../utils/Constants';
+import Utils from '../../utils/Utils';
 import Game from '../game/Game';
 
 export interface GameAnswers {
@@ -50,6 +52,32 @@ const initialState: InitialState = {
   timerActive: false,
 };
 
+// export function getPreload(part: string, page: string) {
+//   initialState.level = +part;
+//   let data: any = [];
+//   for (let i = +page; i >= 0; i--) {
+//     data.push(i);
+//   }
+//   console.log(data, part, page);
+//   const fetchData = async() => {
+//     // try {
+//     //   data = data.map(async (page: number) => {
+//     //     await getPartOfTextbook(`${page}`, `${part}`);
+//     //   });
+//     // } catch(err) {
+//     //   alert('Oops! Something goes wrong.')
+//     // }
+//     // const data = await (await Promise.allSettled(quizState.new)).map((item: any) => item.value.optional);
+//     data = [await getPartOfTextbook('0', `${part}`), await getPartOfTextbook('2', `${part}`), await getPartOfTextbook('1', `${part}`)];
+//     return data;
+//   }
+//   const a = fetchData();
+//   // initialState.questions = Utils.getSprintWords(data);
+//   console.log('PRELOAD', a);
+//   // return Utils.getSprintWords(data);
+//   return a;
+// }
+
 interface ReducerAction {
   type: any;
   payload?: any;
@@ -61,6 +89,16 @@ const reducer: Reducer<InitialState, ReducerAction> = (state, action) => {
       return {
         ...state,
         isLoading: true,
+      }
+    }
+    case 'PRELOAD': {
+      return {
+        ...state,
+        level: action.payload.level,
+        questions: action.payload.randomData,
+        isLoading: false,
+        isGameReady: true,
+        timerActive: true,
       }
     }
     case 'CHANGE_LEVEL': {

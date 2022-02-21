@@ -1,9 +1,13 @@
 import * as React from 'react';
 import { APP_ROUTES } from '../../utils/Constants';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import styles from './textbook.module.css'
+import Utils from '../../utils/Utils';
 
 export default function GamesMenu() {
+  const params = useParams<{ part: string; page: string }>();
+  Utils.setParams(params);
+  console.log(Utils.params);
     return (
         <div className={styles.gamesBlock}>
             <h3>Проверь свои знания, играя:</h3>
