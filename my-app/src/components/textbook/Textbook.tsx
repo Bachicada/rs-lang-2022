@@ -4,7 +4,7 @@ import WordCard from '../wordCard/WordCard';
 import styles from "./textbook.module.css";
 import GamesMenu from './GamesMenu';
 import { APP_ROUTES } from "../../utils/Constants";
-import {Link, useParams, useNavigate} from 'react-router-dom';
+import {Link, useParams, useNavigate, useLocation} from 'react-router-dom';
 import PartOfTextBook from "./PartOfTextbook";
 import { UserContext } from "../../App";
 import { CurUser } from "../../types";
@@ -18,8 +18,33 @@ export default function Textbook(){
   const [partNumber, setPartNumber] = useState<string | undefined>("0");
   const params = useParams< string >();
   const navigate = useNavigate();
+/*
+  let location = useLocation();
+ console.log('location', location)
 
-  console.log(params)
+ useEffect(() => {
+  
+  localStorage.setItem('CurrentLink',location.pathname)
+  window.addEventListener("beforeunload", ()=> localStorage.setItem('CurrentLink',location.pathname));
+  return () => window.removeEventListener("beforeunload", ()=> localStorage.setItem('CurrentLink',location.pathname));
+}, []);
+
+useEffect(() => {
+  
+  const path = localStorage.getItem('CurrentLink');
+  const checkPage = () =>{
+    if (path){
+      navigate(`${path}`)
+    }
+    else {
+     navigate(`${APP_ROUTES.MAIN}`)
+    }
+  }
+  window.addEventListener('domcontentloaded', checkPage);
+  return () => window.removeEventListener('domcontentloaded', checkPage);
+}, []);
+*/
+ 
 
   useEffect(() => {
     if ((!params.part) && (params.part !=="hardWords")){

@@ -7,7 +7,8 @@ import { CurUser } from '../../types';
 import { UserContext } from '../../App';
 import { TramTwoTone } from '@mui/icons-material';
 
-export default function BurgerMenu() {
+export default function BurgerMenu(props:{onClick:()=>void}) {
+    
     const navigate= useNavigate();
     
     const userContext = useContext<{ user: CurUser; dispatchUserEvent: (actionType: string, payload: CurUser) => void; }>(
@@ -18,15 +19,15 @@ export default function BurgerMenu() {
         const target = (event.target as HTMLElement).dataset.part;
         if (target !=='hardWords'){
             const partNumber = (Number(target) - 1).toString();
-            navigate(`${APP_ROUTES.TEXTBOOK}/${partNumber}/0`)
+            navigate(`${APP_ROUTES.TEXTBOOK}/${partNumber}/1`)
         }
         else{
-            navigate(`${APP_ROUTES.TEXTBOOK}/hardwords/0`)
+            navigate(`${APP_ROUTES.TEXTBOOK}/hardwords/1`)
         }
         
     }
         return (
-            <ul className='menuList'>
+            <ul className='menuList' onClick={props.onClick}>
                 <li className='menuItem'>
                     <Link to={APP_ROUTES.MAIN}>На главную RS Lang</Link>
                 </li>
@@ -76,64 +77,3 @@ export default function BurgerMenu() {
         )
     
 }
-/*
-import * as React from 'react';
-import ListSubheader from '@mui/material/ListSubheader';
-import List from '@mui/material/List';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import Collapse from '@mui/material/Collapse';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import DraftsIcon from '@mui/icons-material/Drafts';
-import SendIcon from '@mui/icons-material/Send';
-import ExpandLess from '@mui/icons-material/ExpandLess';
-import ExpandMore from '@mui/icons-material/ExpandMore';
-
-export default function BurgerMenu() {
-  const [open, setOpen] = React.useState(true);
-
-  const handleClick = () => {
-    setOpen(!open);
-  };
-
-  return (
-    <List
-      sx={{ width: '100%', maxWidth: 360 }}
-      component="nav"
-      aria-labelledby="nested-list-subheader"
-      subheader={
-        <ListSubheader component="div" id="nested-list-subheader" sx={{backgroundColor:'transparent', color:'#fff'}}>
-          Nested List Items
-        </ListSubheader>
-      }
-    >
-      <ListItemButton>
-    xbfcf
-      </ListItemButton>
-      <ListItemButton>
-        <ListItemIcon>
-          <DraftsIcon />
-        </ListItemIcon>
-        <ListItemText primary="Drafts" />
-      </ListItemButton>
-      <ListItemButton onClick={handleClick}>
-        <ListItemIcon>
-          <InboxIcon />
-        </ListItemIcon>
-        <ListItemText primary="Inbox" />
-        {open ? <ExpandLess /> : <ExpandMore />}
-      </ListItemButton>
-      <Collapse in={open} timeout="auto" unmountOnExit>
-        <List component="div" disablePadding>
-          <ListItemButton sx={{ pl: 4 }}>
-           Tra,nv
-          </ListItemButton>
-        </List>
-      </Collapse>
-      <ListItemButton>
-       xnjx
-      </ListItemButton>
-    </List>
-  );
-}*/

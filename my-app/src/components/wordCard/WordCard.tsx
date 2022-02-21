@@ -110,7 +110,7 @@ export default function WordCard({word,onDataChanged}: WordCardProp) {
 
   return (
     <Card sx={{ maxWidth: 345, backgroundColor: checkBg}} >
-        { userContext.user.name ? <WordStat word={word} /> : '' }
+        { userContext.user.name ? <WordStat  word={word} /> : '' }
        <CardMedia
           component="img"
           height="140"

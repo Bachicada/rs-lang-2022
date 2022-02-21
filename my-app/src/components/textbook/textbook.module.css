@@ -5,6 +5,8 @@
 .gamesMenu,
 .partList {
     display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
 }
 .partList li {
     display: block;
@@ -13,6 +15,7 @@
     cursor: pointer;
     color: whitesmoke;
     margin-left: 20px;
+    margin-bottom: 20px;
     text-align: center;
 }
 .gameItem {

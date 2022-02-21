@@ -5,8 +5,8 @@ import {Benefits} from './Benefits';
 import {Team} from './Team';
 
 
-export default class Landing extends React.Component {
-    render(){
+export default function Landing() {
+    
      return (
        <div  className={styles.landing} >
           <AboutApp />
@@ -14,5 +14,5 @@ export default class Landing extends React.Component {
           <Team />
        </div>
      )
-    }
+    
 }

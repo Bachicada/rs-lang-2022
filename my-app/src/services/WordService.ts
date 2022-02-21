@@ -6,6 +6,8 @@ import { CurUser, PartProps, WordItem } from "../types";
 import { API_URL, ENDPOINTS, WORD_STATUS } from "../utils/Constants";
  
 
+const user = JSON.stringify(localStorage.getItem('CurrentUser'));
+
 export async function getWords() {
         try {
             const words = await fetch(`${API_URL}${ENDPOINTS.WORDS}`, {
@@ -41,6 +43,7 @@ export const getRefreshToken = () => {
 
 export const getUserId = () => {
   const LS=localStorage.getItem('CurrentUser'||'{}');
+
   if(LS){
     return JSON.parse(LS).userId;
   }
@@ -49,14 +52,16 @@ export const getUserId = () => {
 export const getNewToken = async () => {
   const userId = getUserId();
   const refreshToken = getRefreshToken();
-  const res = await fetch(`${API_URL}${ENDPOINTS.USERS}/${userId}${ENDPOINTS.TOKENS}`, {
-    method: 'GET',
-    headers: {
-      'Authorization': `Bearer ${refreshToken}`,
-}});
 
-   return res;
-}
+    const res = await fetch(`${API_URL}${ENDPOINTS.USERS}/${userId}${ENDPOINTS.TOKENS}`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${refreshToken}`,
+  }});
+     return res;
+  }
+
+
 
  export const createWord = async ({ userId, wordId, word, wordStatus }:{userId: string, wordId: string, word: WordItem, wordStatus: string }) => {
     const token = getUserToken();
@@ -178,17 +183,24 @@ export const getNewToken = async () => {
     })
     return data;
   }
+
   export const getPlayedWords = async (userId: string, token: string) =>{ 
-    const hardFilter ='{"$and":[{"userWord.difficulty":"new"}]}' /*, {"page":${page}*/
-    const data = await fetch(`${API_URL}${ENDPOINTS.USERS}/${userId}/aggregatedwords?wordsPerPage=3600&filter=${hardFilter}`, {
-      method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${token}`,
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      }
-    })
-    return data;
+   const hardFilter ='{"$and":[{"userWord.difficulty":"new"}]}' /*, {"page":${page}*/
+    try{
+      const data = await fetch(`${API_URL}${ENDPOINTS.USERS}/${userId}/aggregatedwords?wordsPerPage=3600&filter=${hardFilter}`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        }
+      })
+      return data;
+    }
+    catch (error){
+       console.log(error);
+   }
+   
   }
 
  export const getAllUserWords = async (userId: string, token: string) =>{ 

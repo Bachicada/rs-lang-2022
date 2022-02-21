@@ -87,8 +87,8 @@ export default function OptionalBtns({word,onDataChanged}:OptionBtnsProp){
                         newDataUser.message = JSON.parse(LS).message;
                         newDataUser.userId = JSON.parse(LS).userId;
                         newDataUser.name = JSON.parse(LS).name;
-                        newDataUser.token = JSON.parse(newToken).token;
-                        newDataUser.refreshToken = JSON.parse(newToken).refreshToken;
+                        newDataUser.token = newToken.token;
+                        newDataUser.refreshToken = newToken.refreshToken;
                         localStorage.setItem('CurrentUser', JSON.stringify(newDataUser));
                         userContext.dispatchUserEvent("UPDATE_USER", newDataUser);
                     }

@@ -4,7 +4,7 @@ import './App.css';
 import { PersistentDrawerRight } from './components/shared/Appnav';
 import { Footer } from './components/shared/Footer';
 import Landing from './components/start-page/Landing';
-import { Routes, Route, Link, BrowserRouter } from "react-router-dom";
+import { Routes, Route, Link, BrowserRouter, useNavigate, useLocation } from "react-router-dom";
 import {APP_ROUTES} from './utils/Constants';
 import Textbook from './components/textbook/Textbook';
 import Sprint from './components/sprint/Sprint';
@@ -48,7 +48,6 @@ const dispatchUserEvent = (actionType: string, payload: CurUser) => {
       return;
   }
 };
-
 
   return (
     <BrowserRouter>

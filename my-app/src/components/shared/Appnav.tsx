@@ -59,7 +59,6 @@ const DrawerHeader = styled('div')(({ theme }) => ({
   justifyContent: 'flex-start',
 }));
 
-
 export function PersistentDrawerRight() {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
@@ -80,6 +79,7 @@ export function PersistentDrawerRight() {
   useEffect(() => {
     setUserName(userContext.user.name || "Гость");
   }, [userContext]);
+
 
   return (
     <div>
@@ -108,7 +108,6 @@ export function PersistentDrawerRight() {
     
       <Drawer
         sx={{
-          
           width: drawerWidth,
           flexShrink: 0,
           '& .MuiDrawer-paper': {
@@ -117,9 +116,10 @@ export function PersistentDrawerRight() {
             width: drawerWidth,
           },
         }}
-        variant="persistent"
         anchor="right"
         open={open}
+        variant="temporary"
+        onBackdropClick={handleDrawerClose}
       >
         <DrawerHeader>
           <IconButton sx={{color:'#ffff'}} onClick={handleDrawerClose}>
@@ -127,7 +127,7 @@ export function PersistentDrawerRight() {
           </IconButton>
        
         </DrawerHeader>
-        <BurgerMenu />
+        <BurgerMenu onClick={handleDrawerClose} />
       </Drawer>
       </div>
   );
