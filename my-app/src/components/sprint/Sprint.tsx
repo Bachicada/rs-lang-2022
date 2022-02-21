@@ -22,6 +22,7 @@ export interface InitialState {
   level: number | null;
   questions: any[];
   answers: any[];
+  new: any[];
   currentQuestionIndex: number;
   correctAnswersCount: number;
   showModal: boolean,
@@ -37,6 +38,7 @@ const initialState: InitialState = {
   level: null,
   questions: [],
   answers: [],
+  new: [],
   currentQuestionIndex: 0,
   correctAnswersCount: 0,
   showModal: true,
@@ -96,6 +98,27 @@ const reducer: Reducer<InitialState, ReducerAction> = (state, action) => {
         correctAnswersCount,
         currentQuestionIndex,
         isGameFinished,
+      }
+    }
+    case 'ADD_NEW': {
+      const newArr = [...state.new, action.payload];
+      return {
+        ...state,
+        new: newArr,
+      }
+    }
+    case 'SET_SCORE': {
+      const answer = [...state.answers];
+      state.new.map((item, id) => {
+        item.then((res: any) => {
+          answer[id].failCounter = res.optional.failCounter;
+          answer[id].successCounter = res.optional.successCounter;
+        })
+      })
+      return {
+        ...state,
+        answer,
+        isLoading: false,
       }
     }
     case 'FINISH_GAME': {

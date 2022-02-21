@@ -8,6 +8,8 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { QuizContext } from '../sprint/Sprint';
+import { useEffect } from 'react';
+import { Skeleton } from '@mui/material';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -37,7 +39,21 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 export default function GameTableResult() {
   const [quizState, dispatch] = React.useContext(QuizContext);
-  
+  const [score, setScore] = React.useState(quizState.answers);
+
+  useEffect(() => {
+    if (quizState.isGameFinished) {
+      const getScores = async () => {
+        const data = await (await Promise.allSettled(quizState.new)).map((item: any) => item.value.optional);
+        dispatch({ type: 'SET_SCORE', payload: data });
+      }
+
+      getScores()
+          .then(() => setScore([...quizState.answers]));
+      // setScore([...quizState.answers]);
+    }
+  }, [quizState.isGameFinished]);
+
   return (
     <Paper sx={{width: '100%', overflow: 'hidden'}}>
     <TableContainer sx={{maxHeight: 440, width: '100%'}} component={Paper}>
@@ -51,14 +67,18 @@ export default function GameTableResult() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {quizState.answers.map((row) => (
+          {score.map((row) => (
             <StyledTableRow className={row.answer ? 'success' : 'fail'} key={row.item.id}>
               <StyledTableCell component="th" scope="row">
                 {row.item.word}
               </StyledTableCell>
               <StyledTableCell align="right">{row.item.wordTranslate}</StyledTableCell>
               <StyledTableCell align="right">{row.answer ? `✅` : `❌`}</StyledTableCell>
-              <StyledTableCell align="right">{row.successCounter}/{row.successCounter + row.failCounter}</StyledTableCell>
+              <StyledTableCell align="right">{
+                row.successCounter 
+                    ? `${row.successCounter}/${row.successCounter + row.failCounter}`
+                    : <Skeleton variant="text" />}
+              </StyledTableCell>
             </StyledTableRow>
           ))}
         </TableBody>

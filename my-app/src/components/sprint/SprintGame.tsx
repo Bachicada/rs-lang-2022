@@ -17,7 +17,7 @@ const SprintGame = () => {
       const updAnswer = async () => {
         const item = quizState.questions[quizState.currentQuestionIndex].item;
         const [failCounter, successCounter] = [+!isAnswerCorrect, +isAnswerCorrect];
-        const content = await updateUserWord({
+        const content = updateUserWord({
           wordId: `${item.id}`, 
           word: { 
             difficulty: WORD_STATUS.NEW, 
@@ -27,11 +27,12 @@ const SprintGame = () => {
             }
           }
         });
+        dispatch({ type: 'ADD_NEW', payload: content });
         const answer = {
           item,
           answer: isAnswerCorrect,
-          failCounter: content.optional?.failCounter || 0,
-          successCounter: content.optional?.successCounter || 0,
+          // failCounter: content.optional?.failCounter || 0,
+          // successCounter: content.optional?.successCounter || 0,
         }
 
         dispatch({ type: isAnswerCorrect ? 'CORRECT_ANSWER' : 'INCORRECT_ANSWER', payload: answer });
@@ -68,7 +69,7 @@ const SprintGame = () => {
       document.removeEventListener('keydown', keyDown);
     }
   }, [quizState.currentQuestionIndex]);
-  
+
   return (
     <Container maxWidth="md" style={{ background: 'rgb(153, 207, 51)', borderRadius: '5px', display: 'flex', 
         alignItems: 'center', flexDirection: 'column' }}>
