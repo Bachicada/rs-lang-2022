@@ -5,7 +5,7 @@ const LevelModal = () => {
   const LEVELS = [1, 2, 3, 4, 5, 6];
   return (
     <Container style={{display: 'flex', 
-        position: 'absolute', width: '100%', height: '100%', background: 'purple', zIndex: '100',
+        position: 'absolute', width: '100%', height: '100%', zIndex: '100',
         alignItems: 'center'}}>
       <Container maxWidth="sm">
         <h2 style={{textAlign: 'center'}}>Выбери свой уровень</h2>
