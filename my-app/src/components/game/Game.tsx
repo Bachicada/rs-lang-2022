@@ -14,6 +14,7 @@ import { useNavigate } from 'react-router';
 import AudioGame from '../audiocall/AudioGame';
 import Utils from '../../utils/Utils';
 import { getPartOfTextbook } from '../../services/WordService';
+import { getHardWords } from '../../services/UserWordService';
 
 interface GameProps {
   type: GAME_TYPE;
@@ -49,7 +50,26 @@ const Game = (props: GameProps) => {
   
   useEffect(() => {
     const { page, part } = Utils.params;
-    if (page !== null && part !== null) {
+    if (part === 'hardwords') {
+      const fetchData = async() => {
+        dispatch({ type: 'LOADING' })
+        try {
+          const prom = await getHardWords();
+          const data = prom[0].paginatedResults;
+          const formatData = Utils.getSprintWords(data.flat());
+          const randomData = Utils.shuffleAnswers(formatData);
+          randomData.forEach((item, idx) => {
+            randomData[idx].item.id = randomData[idx].item._id;
+          });
+          dispatch({ type: 'PRELOAD', payload: {randomData, level: part} });
+        } catch(err) {
+          alert('Oops! Something goes wrong.')
+        }
+      }
+
+      fetchData();
+    }
+    else if (page !== null && part !== null) {
       const fetchData = async() => {
         dispatch({ type: 'LOADING' })
         const idArr: any[] = [];

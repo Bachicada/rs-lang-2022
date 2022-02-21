@@ -58,6 +58,7 @@ export default function GameTableResult() {
       //   allIncorrectCount: quizState.allIncorrectCount,
       //   date: new Date().toLocaleDateString(),
       // }];
+    }
   }, [quizState.isGameFinished]);
 
   return (

@@ -6,7 +6,6 @@ import GameScore from '../game/GameScore'
 import { QuizContext } from './Sprint'
 import SprintStars from './SprintStars'
 
-
 const SprintGame = () => {
   const [quizState, dispatch] = useContext(QuizContext);
   const [isAnswered, setIsAnswered] = useState(false);
@@ -15,6 +14,10 @@ const SprintGame = () => {
   useEffect(() => {
     if (isAnswered) {
       const updAnswer = async () => {
+        const audio = isAnswerCorrect 
+            ? new Audio(require('../../assets/correct.mp3'))
+            : new Audio(require('../../assets/incorrect.mp3'))
+        audio.play();
         const item = quizState.questions[quizState.currentQuestionIndex].item;
         const [failCounter, successCounter] = [+!isAnswerCorrect, +isAnswerCorrect];
         const content = updateUserWord({
@@ -31,12 +34,10 @@ const SprintGame = () => {
         const answer = {
           item,
           answer: isAnswerCorrect,
-          // failCounter: content.optional?.failCounter || 0,
-          // successCounter: content.optional?.successCounter || 0,
         }
 
         dispatch({ type: isAnswerCorrect ? 'CORRECT_ANSWER' : 'INCORRECT_ANSWER', payload: answer });
-        setIsAnswered(false);        
+        setIsAnswered(false);     
       }
       updAnswer();
     }
@@ -72,10 +73,11 @@ const SprintGame = () => {
 
   return (
     <Container maxWidth="md" style={{ background: 'rgb(153, 207, 51)', borderRadius: '5px', display: 'flex', 
-        alignItems: 'center', flexDirection: 'column' }}>
+        alignItems: 'center', flexDirection: 'column', minHeight: '400px', justifyContent: 'center'}}>
       {/* <SprintStars count={quizState.correctAnswersCount} /> */}
-      {isAnswered &&
-          <GameScore correctAnswersCount={quizState.correctAnswersCount} isCorrect={isAnswerCorrect}/>}
+      {<GameScore correctAnswersCount={quizState.correctAnswersCount} isCorrect={isAnswerCorrect}/>}
+      {/* {isAnswered &&
+          <GameScore correctAnswersCount={quizState.correctAnswersCount} isCorrect={isAnswerCorrect}/>} */}
       <button onClick={() => {
         audio.play();
       }}>

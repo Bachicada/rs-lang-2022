@@ -29,7 +29,7 @@ const LevelButton = ({item}: LevelButtonProps) => {
   }, [level]);
 
   return (
-    <div style={{ cursor: 'pointer', background: 'yellow', width: '50px', height: '50px',
+    <div style={{ cursor: 'pointer', background: '#1976d2', width: '50px', height: '50px',
         borderRadius: '5px', display: 'flex', justifyContent: 'space-around', alignItems: 'center'}} onClick={() => {
       setLevel(item - 1);
     }}>{item}</div>

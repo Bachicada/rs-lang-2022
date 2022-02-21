@@ -28,6 +28,7 @@ export interface InitialState {
   currentQuestionIndex: number;
   correctAnswersCount: number;
   maxAnswersCount: number,
+  score: number,
   allIncorrectCount: number,
   allCorrectCount: number,
   showModal: boolean,
@@ -47,6 +48,7 @@ const initialState: InitialState = {
   currentQuestionIndex: 0,
   correctAnswersCount: 0,
   maxAnswersCount: 0,
+  score: 0,
   allIncorrectCount: 0,
   allCorrectCount: 0,
   showModal: true,
@@ -79,6 +81,12 @@ const reducer: Reducer<InitialState, ReducerAction> = (state, action) => {
         isLoading: false,
         isGameReady: true,
         timerActive: true,
+      }
+    }
+    case 'SET_RECORD': {
+      return {
+        ...state,
+        score: state.score + action.payload,
       }
     }
     case 'CHANGE_LEVEL': {
