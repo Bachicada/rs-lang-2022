@@ -1,7 +1,8 @@
-import { Dispatch, Reducer } from 'react';
+import { Dispatch, Reducer, useEffect } from 'react';
 import { createContext, FC, useReducer } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { WordItem } from '../../types';
-import { GAME_TYPE } from '../../utils/Constants';
+import { APP_ROUTES, GAME_TYPE } from '../../utils/Constants';
 import Game from './Game';
 
 export interface GameAnswers {
@@ -146,7 +147,31 @@ type IQuizContext = [InitialState, Dispatch<{ type: string; payload?: any; }>];
 export const AudioContext = createContext<IQuizContext>([initialState, () => null]);
 
 const Sprint: FC = () => {
+  const navigate = useNavigate();
+  const  location = useLocation();
+ 
+  useEffect(() => {
+   window.addEventListener("beforeunload", ()=> localStorage.setItem('CurrentLink',location.pathname));
+   return () => window.removeEventListener("beforeunload", ()=> localStorage.setItem('CurrentLink',location.pathname));
+ }, [location]);
+ 
+ useEffect(() => {
+   const path = localStorage.getItem('CurrentLink');
+   console.log("pac", path)
+   const checkPage = () =>{
+     if (path){
+       navigate(`${path}`)
+     }
+     else {
+      navigate(`${APP_ROUTES.MAIN}`)
+     }
+   }
+   window.addEventListener('domcontentloaded', checkPage);
+   return () => window.removeEventListener('domcontentloaded', checkPage);
+ }, []);
+
   const value = useReducer(reducer, initialState);
+
   return (
     <AudioContext.Provider value ={value}>
       <Game type={GAME_TYPE.AUDIOCALL}/>

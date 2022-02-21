@@ -6,7 +6,7 @@ import {Team} from './Team';
 
 
 export default function Landing() {
-    
+
      return (
        <div  className={styles.landing} >
           <AboutApp />

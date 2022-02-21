@@ -18,14 +18,16 @@ import { createContext } from "react";
 import { CurUser, WordItem } from './types';
 
 
+
 export const UserContext = createContext({
     user: {},
     dispatchUserEvent: (actionType: string, payload: CurUser) => {}
   });
-  
+
+
 function App() {
   const [user, setUser] = useState<CurUser>({});
-
+  
 useEffect(() => {
   dispatchUserEvent(
     "UPDATE_USER",
@@ -49,8 +51,33 @@ const dispatchUserEvent = (actionType: string, payload: CurUser) => {
   }
 };
 
+const  location = useLocation();
+const navigate = useNavigate();
+
+useEffect(()=>{
+  const path = localStorage.getItem('CurrentLink');
+  if (path){
+    const b = path;
+    navigate(b);
+    console.log(b)
+  }
+  else {
+    navigate(`${APP_ROUTES.MAIN}`)
+  }
+},[])
+
+useEffect(() => {
+
+ window.addEventListener("beforeunload", ()=> localStorage.setItem('CurrentLink',location.pathname));
+
+ return () => window.removeEventListener("beforeunload", ()=> localStorage.setItem('CurrentLink',location.pathname));
+ 
+}, [location]);
+
+
+
   return (
-    <BrowserRouter>
+    
       <UserContext.Provider value={{ user, dispatchUserEvent }}>
         <div className="App">
           <PersistentDrawerRight />
@@ -73,7 +100,7 @@ const dispatchUserEvent = (actionType: string, payload: CurUser) => {
          <Footer />
         </div>
       </UserContext.Provider>
-    </BrowserRouter>
+  
   );
 }
 
