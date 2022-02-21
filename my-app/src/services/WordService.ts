@@ -58,7 +58,6 @@ export const getNewToken = async () => {
       headers: {
         'Authorization': `Bearer ${refreshToken}`,
   }});
-  
      return res;
   }
 
