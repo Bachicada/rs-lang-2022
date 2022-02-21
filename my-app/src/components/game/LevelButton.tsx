@@ -16,7 +16,7 @@ const LevelButton = ({item}: LevelButtonProps) => {
       const fetchData = async() => {
         dispatch({ type: 'LOADING' })
         try {
-          const data = [await getPartOfTextbook('0', `${level}`), await getPartOfTextbook('2', `${level}`), await getPartOfTextbook('1', `${level}`)];
+          const data = [await getPartOfTextbook(`${Utils.random(0,29)}`, `${level}`), await getPartOfTextbook(`${Utils.random(0,29)}`, `${level}`), await getPartOfTextbook(`${Utils.random(0,29)}`, `${level}`)];
           const result = Utils.getRandomWords(data);
           dispatch({ type: 'CHANGE_LEVEL', payload: {result, level} });
         } catch(err) {
