@@ -2,6 +2,7 @@ import { Container } from '@mui/material'
 import { Dispatch, SetStateAction, useContext, useEffect, useState } from 'react'
 import { updateUserWord } from '../../services/UserWordService'
 import { API_URL, WORD_STATUS } from '../../utils/Constants'
+import GameScore from '../game/GameScore'
 import { GameAnswers } from '../sprint/Sprint'
 import SprintStars from '../sprint/SprintStars'
 import { AudioWords, AudioContext } from './Audiocall'
@@ -55,7 +56,9 @@ const AudioGame = () => {
   return (
     <Container maxWidth="md" style={{ background: 'rgb(153, 207, 51)', borderRadius: '5px', display: 'flex', 
     alignItems: 'center', flexDirection: 'column' }}>
-      <SprintStars count={quizState.correctAnswersCount} />
+      {/* <SprintStars count={quizState.correctAnswersCount} /> */}
+      {isAnswered && 
+          <GameScore correctAnswersCount={quizState.correctAnswersCount} isCorrect={isAnswerCorrect}/>}
       <button onClick={() => {
         audio.play();
       }}>
@@ -76,14 +79,6 @@ const AudioGame = () => {
             }}>{word}</button> 
           })
         }
-        {/* {obj.incorrect.map((word, id) => {
-          return <button key={props.words[id].item.id} onClick={() => {
-            props.gameAnswers.push(
-              word === item.wordTranslate ? {item: item, answer: true} : {item: item, answer: false}
-            )
-            props.setWordsId(props.wordsId + 1);  
-          }}>{word}</button>
-        })} */}
       </div>
     </Container>
   )
