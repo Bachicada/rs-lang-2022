@@ -2,6 +2,7 @@ import { Container } from '@mui/material'
 import { useContext, useEffect, useState } from 'react'
 import { updateUserWord } from '../../services/UserWordService'
 import { API_URL, WORD_STATUS } from '../../utils/Constants'
+import GameScore from '../game/GameScore'
 import { QuizContext } from './Sprint'
 import SprintStars from './SprintStars'
 
@@ -9,16 +10,14 @@ import SprintStars from './SprintStars'
 const SprintGame = () => {
   const [quizState, dispatch] = useContext(QuizContext);
   const [isAnswered, setIsAnswered] = useState(false);
-  const [isAnswerCorrect, setIsAnswerCorrect] = useState<boolean>(false);
   const [clickedButton, setClickedButton] = useState('');
+  const [isAnswerCorrect, setIsAnswerCorrect] = useState(false);
 
   useEffect(() => {
     if (isAnswered) {
       const updAnswer = async () => {
         const item = quizState.questions[quizState.currentQuestionIndex].item;
-        const [failCounter, successCounter] = clickedButton === 'Неверно' 
-            ? [+isAnswerCorrect, +!isAnswerCorrect]
-            : [+!isAnswerCorrect, +isAnswerCorrect];
+        const [failCounter, successCounter] = [+!isAnswerCorrect, +isAnswerCorrect];
         const content = await updateUserWord({
           wordId: `${item.id}`, 
           word: { 
@@ -46,36 +45,24 @@ const SprintGame = () => {
   const obj = quizState.questions[quizState.currentQuestionIndex];
   const { item } = obj;
   const audio = new Audio(`${API_URL}/${item.audio}`);
-
-  let setAnswer = (bool: boolean) => {
-    const obj = quizState.questions[quizState.currentQuestionIndex];
-    if (bool) {
-      setClickedButton('Верно');
-      setIsAnswerCorrect(obj.correct)
-      setIsAnswered(true);
-    }
-    else {
-      setClickedButton('Неверно');
-      setIsAnswerCorrect(!obj.correct)
-      setIsAnswered(true);
-    }
-  }
-
+  
   useEffect(() => {
     document.addEventListener('keydown', (ev) => {
       if (ev.key === 'ArrowRight') {
-        setAnswer(true);
+        console.log(quizState.currentQuestionIndex)
       }
       if (ev.key === 'ArrowLeft') {
-        setAnswer(false);
+        console.log(quizState.currentQuestionIndex)
       }
     })
-  }, []);
+  }, [quizState.currentQuestionIndex]);
 
   return (
     <Container maxWidth="md" style={{ background: 'rgb(153, 207, 51)', borderRadius: '5px', display: 'flex', 
         alignItems: 'center', flexDirection: 'column' }}>
-      <SprintStars count={quizState.correctAnswersCount} />
+      {/* <SprintStars count={quizState.correctAnswersCount} /> */}
+      {isAnswered &&
+          <GameScore correctAnswersCount={quizState.correctAnswersCount} isCorrect={isAnswerCorrect}/>}
       <button onClick={() => {
         audio.play();
       }}>
@@ -86,14 +73,14 @@ const SprintGame = () => {
       <div>
         <button onClick={() => {
           setClickedButton('Неверно');
-          setIsAnswerCorrect(!obj.correct)
+          setIsAnswerCorrect(obj.correct ? false : true);
           setIsAnswered(true);
         }}>
           Неверно
         </button>
         <button onClick={() => {
           setClickedButton('Верно');
-          setIsAnswerCorrect(obj.correct)
+          setIsAnswerCorrect(obj.correct ? true : false);
           setIsAnswered(true);
         }}>
           Верно

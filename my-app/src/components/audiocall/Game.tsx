@@ -1,5 +1,5 @@
 import { Box } from '@mui/material';
-import React, { useContext, useEffect } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { APP_ROUTES, GAME_TYPE } from '../../utils/Constants';
 import LevelModal from './LevelModal';
 import { QuizContext } from '../sprint/Sprint';
@@ -12,38 +12,44 @@ import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import CloseIcon from '@mui/icons-material/Close';
 import { useNavigate } from 'react-router';
 import AudioGame from '../audiocall/AudioGame';
+import { AudioContext } from './Audiocall';
+import GameLife from './GameLife';
 
 interface GameProps {
   type: GAME_TYPE;
 }
 
 const Game = (props: GameProps) => {
-  const [quizState, dispatch] = useContext(QuizContext);
-  const [ seconds, setSeconds ] = React.useState(60);
-  const [ timeId, setTimeId ] = React.useState<number>();
+  const [quizState, dispatch] = useContext(AudioContext);
+  const [ seconds, setSeconds ] = useState(quizState.seconds);
+  const [timeId, setTimeId] = useState<number>();
   const navigate = useNavigate();
 
   useEffect(() => {
     let cleanupFunction = false;
-    if (!cleanupFunction) {
-      if (seconds > 0 && quizState.timerActive && !quizState.isGameFinished) {
-        const id = window.setTimeout(setSeconds, 1000, seconds - 1);
-        setTimeId(id);
-      } 
-      else if (seconds <= 0 && quizState.isGameReady) {
-        dispatch({ type: 'FINISH_GAME' });
-      }
+    if (!cleanupFunction && seconds > 0 && quizState.timerActive && !quizState.isGameFinished) {
+      // setTimeout(setSeconds, 1000, seconds - 1);
+      const id = window.setTimeout(() => {
+        setSeconds(seconds - 1);
+      }, 1000);
+      setTimeId(id);
+    } 
+    else if (!cleanupFunction && seconds <= 0) {
+      dispatch({ type: 'OUT_OF_TIME' });
+      setSeconds(quizState.seconds);
     }
     return () => {
-      if (timeId) window.clearTimeout(timeId);
+      if (timeId) window.clearInterval(timeId);
       cleanupFunction = true
     };
   }, [dispatch, quizState.isGameFinished, quizState.timerActive, seconds]);
-  // }, [ quizState.timerActive ,seconds, quizState.isGameFinished ]);
-  
+
   useEffect(() => {
-    setSeconds(60);
-  }, [quizState.level]);
+    if (timeId) {
+      window.clearTimeout(timeId);
+    }
+    setSeconds(12);
+  }, [quizState.currentQuestionIndex]);
 
   return (
     <Box
@@ -65,15 +71,12 @@ const Game = (props: GameProps) => {
         </div>}
     {quizState.isGameReady &&
         <div className={styles.game}>
+          {!quizState.isGameFinished &&
+              <GameLife count={quizState.currentLifeIndex}/>}
           {!quizState.isGameFinished && 
               <Timer time={seconds} />}
-          {props.type === GAME_TYPE.AUDIOCALL 
-              ? <AudioGame /> 
-              : null}
-          {props.type === GAME_TYPE.SPRINT 
-              ? quizState.isGameReady && !quizState.isGameFinished &&
-                  <SprintGame /> 
-              : null}
+          {quizState.isGameReady && !quizState.isGameFinished && 
+              <AudioGame />}
           {quizState.isGameFinished && 
               <GameTableResult />}
           {quizState.isGameFinished && 

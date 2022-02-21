@@ -1,17 +1,17 @@
-import { Box } from '@mui/material';
-import React, { useEffect, useState } from 'react'
-import { getPartOfTextbook } from '../../services/WordService';
+import { Dispatch, Reducer } from 'react';
+import { createContext, FC, useReducer } from 'react';
 import { WordItem } from '../../types';
 import { GAME_TYPE } from '../../utils/Constants';
-import Utils from '../../utils/Utils';
-import LevelModal from '../game/LevelModal';
-import { GameAnswers } from '../sprint/Sprint';
-import SprintResults from '../game/GameResult';
-import Timer from '../game/Timer';
-import AudioGame from './AudioGame';
-import Game from '../game/Game';
+import Game from './Game';
 
-interface AudiocallProps {
+export interface GameAnswers {
+  item: WordItem;
+  answer: boolean;
+  failCounter?: number;
+  successCounter?: number;
+}
+
+export interface AudiocallProps {
   level?: number;
 }
 
@@ -20,13 +20,138 @@ export interface AudioWords {
   incorrect: string[];
 }
 
-let gameAnswers: GameAnswers[] = [];
-
-const Audiocall = (props: AudiocallProps) => {
-
-  return (
-    <Game type={GAME_TYPE.AUDIOCALL}/>
-  )
+export interface IWords {
+  item: WordItem;
+  correct: boolean;
+  incorrect: string;
 }
 
-export default Audiocall
+export interface InitialState {
+  level: number | null;
+  questions: any[];
+  answers: any[];
+  currentQuestionIndex: number;
+  currentLifeIndex: number;
+  correctAnswersCount: number;
+  showModal: boolean,
+  showResults: boolean,
+  isGameReady: boolean,
+  isGameFinished: boolean,
+  isLoading: boolean,
+  seconds: number,
+  timerActive: boolean,
+}
+
+const initialState: InitialState = {
+  level: null,
+  questions: [],
+  answers: [],
+  currentQuestionIndex: 0,
+  currentLifeIndex: 5,
+  correctAnswersCount: 0,
+  showModal: true,
+  showResults: false,
+  isGameReady: false,
+  isGameFinished: false,
+  isLoading: false,
+  seconds: 12,
+  timerActive: false,
+};
+
+interface ReducerAction {
+  type: any;
+  payload?: any;
+}
+
+const reducer: Reducer<InitialState, ReducerAction> = (state, action) => {
+  switch (action.type) {
+    case 'LOADING': {
+      return {
+        ...state,
+        isLoading: true,
+      }
+    }
+    case 'CHANGE_LEVEL': {
+      const { level, result } = action.payload;
+      return {
+        ...state,
+        level: level,
+        questions: result,
+        isLoading: false,
+        isGameReady: true,
+        timerActive: true,
+      }
+    }
+    case 'CORRECT_ANSWER': {
+      const answers = [...state.answers, action.payload];
+      const correctAnswersCount = state.correctAnswersCount + 1;
+      const currentQuestionIndex = state.currentQuestionIndex + 1;
+      const isGameFinished = state.questions.length === currentQuestionIndex ? true : false;
+      return {
+        ...state,
+        answers,
+        correctAnswersCount,
+        currentQuestionIndex,
+        isGameFinished,
+      }
+    }
+    case 'INCORRECT_ANSWER': {
+      const answers = [...state.answers, action.payload];
+      const correctAnswersCount = 0;
+      const currentQuestionIndex = state.currentQuestionIndex + 1;
+      const currentLifeIndex = state.currentLifeIndex - 1;
+      const isGameFinished = (state.questions.length === currentQuestionIndex || currentLifeIndex === 0) ? true : false;
+      return {
+        ...state,
+        answers,
+        correctAnswersCount,
+        currentQuestionIndex,
+        isGameFinished,
+        currentLifeIndex,
+      }
+    }
+    case 'SECOND': {
+      const seconds = state.seconds - 1;
+      return {
+        ...initialState,
+        seconds,
+      }
+    }
+    case 'OUT_OF_TIME': {
+      const currentLifeIndex = state.currentLifeIndex - 1;
+      const currentQuestionIndex = state.currentQuestionIndex + 1;
+      const isGameFinished = (currentLifeIndex === 0 || currentQuestionIndex >= state.questions.length) 
+          ? true 
+          : false;
+      const seconds = currentLifeIndex === 0 ? 0 : 12;
+      return {
+        ...state,
+        currentLifeIndex,
+        isGameFinished,
+        seconds,
+        currentQuestionIndex,
+      }
+    }
+    case 'RESTART': {
+      return {
+        ...initialState
+      }
+    }
+    default:
+      return state;
+  }
+};
+
+type IQuizContext = [InitialState, Dispatch<{ type: string; payload?: any; }>];
+export const AudioContext = createContext<IQuizContext>([initialState, () => null]);
+
+const Sprint: FC = () => {
+  const value = useReducer(reducer, initialState);
+  return (
+    <AudioContext.Provider value ={value}>
+      <Game type={GAME_TYPE.AUDIOCALL}/>
+    </AudioContext.Provider>
+  );
+}
+
+export default Sprint;
