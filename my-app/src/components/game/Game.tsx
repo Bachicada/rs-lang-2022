@@ -26,11 +26,15 @@ const Game = (props: GameProps) => {
     if (seconds > 0 && quizState.timerActive && !quizState.isGameFinished) {
       setTimeout(setSeconds, 1000, seconds - 1);
     } 
-    else if (seconds <= 0) {
+    else if (seconds <= 0 && quizState.isGameReady) {
       dispatch({ type: 'FINISH_GAME' });
     }
   }, [dispatch, quizState.isGameFinished, quizState.timerActive, seconds]);
   // }, [ quizState.timerActive ,seconds, quizState.isGameFinished ]);
+  
+  useEffect(() => {
+    setSeconds(60);
+  }, [quizState.level]);
 
   return (
     <Box
@@ -65,10 +69,10 @@ const Game = (props: GameProps) => {
               <GameTableResult />}
           {quizState.isGameFinished && 
               <div style={{display: 'flex', flexDirection: 'column'}}>
-                <CloseIcon onClick={() => {
+                <CloseIcon style={{cursor: 'pointer'}} onClick={() => {
                   navigate(`${APP_ROUTES.MAIN}`);
                 }} sx={{fontSize: 80}}/>
-                <RestartAltIcon onClick={() => {
+                <RestartAltIcon style={{cursor: 'pointer'}} onClick={() => {
                   dispatch({ type: 'RESTART' })
                 }} sx={{fontSize: 80}}/>
               </div>
