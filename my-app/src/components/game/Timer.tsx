@@ -8,12 +8,13 @@ import { Box, Typography } from '@mui/material';
 
 interface TimerProps {
   time: number;
+  max: number;
 }
 
 function CircularProgressWithLabel(
-  props: CircularProgressProps & { value: number },
+  props: CircularProgressProps & { value: number, max: number },
 ) {
-  const percent = 100 / (60 / props.value);
+  const percent = 100 / (props.max / props.value);
   return (
     <Box className={styles.timer} sx={{ position: 'absolute', display: 'inline-flex' }}>
       <CircularProgress variant="determinate" {...props} value={percent} />
@@ -42,7 +43,7 @@ function CircularProgressWithLabel(
 const Timer = (props: TimerProps) => {
   const [quizState, dispatch] = useContext(QuizContext);
   return (
-    <CircularProgressWithLabel value={props.time} />
+    <CircularProgressWithLabel value={props.time} max={props.max} />
   )
 }
 

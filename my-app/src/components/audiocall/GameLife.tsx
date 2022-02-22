@@ -11,8 +11,9 @@ const GameLife = (props: GameLifeProps) => {
     (i < (props.count)) ? data.push(emoji[0]) : data.push(emoji[1]);
   }
   return (
-    <div style={{position: 'absolute', top: '0', left: '0'}}
-    >{data}</div>
+    <div>
+      {data}
+    </div>
   )
 }
 

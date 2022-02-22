@@ -1,7 +1,7 @@
 import { Container } from '@mui/material'
 import { useContext, useEffect, useState } from 'react'
 import { updateUserWord } from '../../services/UserWordService'
-import { API_URL, WORD_STATUS } from '../../utils/Constants'
+import { API_URL, GAME_TYPE, WORD_STATUS } from '../../utils/Constants'
 import GameScore from '../game/GameScore'
 import { QuizContext } from './Sprint'
 import SprintStars from './SprintStars'
@@ -76,7 +76,7 @@ const SprintGame = () => {
   return (
     <Container maxWidth="md" style={{ border: '1px solid black', borderRadius: '5px', display: 'flex', 
         alignItems: 'center', flexDirection: 'column', minHeight: '400px', justifyContent: 'space-between'}}>
-      {<GameScore correctAnswersCount={quizState.correctAnswersCount} isCorrect={isAnswerCorrect}/>}
+      {<GameScore correctAnswersCount={quizState.correctAnswersCount} isCorrect={isAnswerCorrect} type={GAME_TYPE.SPRINT}/>}
       <VolumeUpIcon style={{marginTop: '10px', width: '50px', height: '50px'}} onClick={() => {
         audio.play();
       }}/>
@@ -90,25 +90,13 @@ const SprintGame = () => {
           setIsAnswered(true);
         }}>
           Неверно
-        </Button>
-        <Button variant="outlined" color="success" style={{width: '200px', height: '70px'}} onClick={() => {
+      </Button>
+      <Button variant="outlined" color="success" style={{width: '200px', height: '70px'}} onClick={() => {
           setIsAnswerCorrect(obj.correct ? true : false);
           setIsAnswered(true);
         }}>
           Верно
-        </Button>
-        {/* <button onClick={() => {
-          setIsAnswerCorrect(obj.correct ? false : true);
-          setIsAnswered(true);
-        }}>
-          Неверно
-        </button>
-        <button onClick={() => {
-          setIsAnswerCorrect(obj.correct ? true : false);
-          setIsAnswered(true);
-        }}>
-          Верно
-        </button> */}
+      </Button>
       </div>
     </Container>
   )

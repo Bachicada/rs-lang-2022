@@ -114,7 +114,7 @@ const Game = (props: GameProps) => {
     {quizState.isGameReady &&
         <div className={styles.game}>
           {!quizState.isGameFinished && 
-              <Timer time={seconds} />}
+              <Timer time={seconds} max={60}/>}
           {props.type === GAME_TYPE.AUDIOCALL 
               ? <AudioGame /> 
               : null}

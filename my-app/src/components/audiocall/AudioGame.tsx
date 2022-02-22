@@ -1,12 +1,13 @@
 import { Container } from '@mui/material'
 import { Dispatch, SetStateAction, useContext, useEffect, useState } from 'react'
 import { updateUserWord } from '../../services/UserWordService'
-import { API_URL, WORD_STATUS } from '../../utils/Constants'
+import { API_URL, GAME_TYPE, WORD_STATUS } from '../../utils/Constants'
 import GameScore from '../game/GameScore'
 import { GameAnswers } from '../sprint/Sprint'
 import SprintStars from '../sprint/SprintStars'
 import { AudioWords, AudioContext } from './Audiocall'
 import VolumeUpIcon from '@mui/icons-material/VolumeUp';
+import Button from '@mui/material/Button';
 
 const AudioGame = () => {
   const [quizState, dispatch] = useContext(AudioContext);
@@ -19,7 +20,7 @@ const AudioGame = () => {
         const updAnswer = async () => {
           const item = quizState.questions[quizState.currentQuestionIndex].item;
           const [failCounter, successCounter] = [+!isAnswerCorrect, +isAnswerCorrect];
-          const content = await updateUserWord({
+          const content = updateUserWord({
             wordId: `${item.id}`, 
             word: { 
               difficulty: WORD_STATUS.NEW, 
@@ -29,12 +30,10 @@ const AudioGame = () => {
               }
             }
           });
-          
+          dispatch({ type: 'ADD_NEW', payload: content });
           const answer = {
             item,
             answer: isAnswerCorrect,
-            failCounter: content.optional?.failCounter || 0,
-            successCounter: content.optional?.successCounter || 0,
             audio: new Audio(`${API_URL}/${item.audio}`),
           }
 
@@ -55,19 +54,19 @@ const AudioGame = () => {
   }, [quizState.currentQuestionIndex]);
 
   return (
-    <Container maxWidth="md" style={{ background: 'rgb(153, 207, 51)', borderRadius: '5px', display: 'flex', 
-    alignItems: 'center', flexDirection: 'column' }}>
-      {<GameScore correctAnswersCount={quizState.correctAnswersCount} isCorrect={isAnswerCorrect}/>}
-      <div onClick={() => {
+    <Container maxWidth="md" style={{ border: '1px solid black', borderRadius: '5px', display: 'flex', 
+    alignItems: 'center', flexDirection: 'column', minHeight: '400px', justifyContent: 'space-between'}}>
+      {<GameScore correctAnswersCount={quizState.correctAnswersCount} isCorrect={isAnswerCorrect} type={GAME_TYPE.AUDIOCALL}/>}
+      <VolumeUpIcon style={{marginTop: '10px', width: '50px', height: '50px'}} onClick={() => {
         audio.play();
-      }}>
-        <VolumeUpIcon/>
+      }}/>
+      <div style={{textAlign: 'center'}}>
+        <h2 style={{color: '#5393E1'}}>{item.word}</h2>
       </div>
-      <p>{item.word}</p>
       <div>
         {
           obj.incorrect.map((word: string, id: number) => {
-            return <button key={id} onClick={() => {
+            return <Button variant="outlined" key={id} onClick={() => {
               if (word === item.wordTranslate) {
                 setIsAnswerCorrect(true);
                 setIsAnswered(true);
@@ -75,7 +74,7 @@ const AudioGame = () => {
                 setIsAnswerCorrect(false);
                 setIsAnswered(true);
               }
-            }}>{word}</button> 
+            }}>{word}</Button> 
           })
         }
       </div>
