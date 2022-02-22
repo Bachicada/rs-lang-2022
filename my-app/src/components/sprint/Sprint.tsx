@@ -2,7 +2,9 @@ import { Dispatch, Reducer, useEffect } from 'react';
 import { createContext, FC, useReducer } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { WordItem } from '../../types';
-import { APP_ROUTES, GAME_TYPE } from '../../utils/Constants';
+import { getPartOfTextbook } from '../../services/WordService';
+import { GAME_TYPE } from '../../utils/Constants';
+import Utils from '../../utils/Utils';
 import Game from '../game/Game';
 
 export interface GameAnswers {
@@ -22,8 +24,13 @@ export interface InitialState {
   level: number | null;
   questions: any[];
   answers: any[];
+  new: any[];
   currentQuestionIndex: number;
   correctAnswersCount: number;
+  maxAnswersCount: number,
+  score: number,
+  allIncorrectCount: number,
+  allCorrectCount: number,
   showModal: boolean,
   showResults: boolean,
   isGameReady: boolean,
@@ -37,8 +44,13 @@ const initialState: InitialState = {
   level: null,
   questions: [],
   answers: [],
+  new: [],
   currentQuestionIndex: 0,
   correctAnswersCount: 0,
+  maxAnswersCount: 0,
+  score: 0,
+  allIncorrectCount: 0,
+  allCorrectCount: 0,
   showModal: true,
   showResults: false,
   isGameReady: false,
@@ -61,6 +73,22 @@ const reducer: Reducer<InitialState, ReducerAction> = (state, action) => {
         isLoading: true,
       }
     }
+    case 'PRELOAD': {
+      return {
+        ...state,
+        level: action.payload.level,
+        questions: action.payload.randomData,
+        isLoading: false,
+        isGameReady: true,
+        timerActive: true,
+      }
+    }
+    case 'SET_RECORD': {
+      return {
+        ...state,
+        score: state.score + action.payload,
+      }
+    }
     case 'CHANGE_LEVEL': {
       const { level, result } = action.payload;
       return {
@@ -76,6 +104,9 @@ const reducer: Reducer<InitialState, ReducerAction> = (state, action) => {
       const answers = [...state.answers, action.payload];
       const correctAnswersCount = state.correctAnswersCount + 1;
       const currentQuestionIndex = state.currentQuestionIndex + 1;
+      const maxAnswersCount = correctAnswersCount > state.maxAnswersCount 
+          ? correctAnswersCount
+          : state.maxAnswersCount;
       const isGameFinished = state.questions.length === currentQuestionIndex ? true : false;
       return {
         ...state,
@@ -83,6 +114,8 @@ const reducer: Reducer<InitialState, ReducerAction> = (state, action) => {
         correctAnswersCount,
         currentQuestionIndex,
         isGameFinished,
+        maxAnswersCount,
+        allCorrectCount: state.allCorrectCount + 1,
       }
     }
     case 'INCORRECT_ANSWER': {
@@ -96,6 +129,28 @@ const reducer: Reducer<InitialState, ReducerAction> = (state, action) => {
         correctAnswersCount,
         currentQuestionIndex,
         isGameFinished,
+        allIncorrectCount: state.allIncorrectCount + 1,
+      }
+    }
+    case 'ADD_NEW': {
+      const newArr = [...state.new, action.payload];
+      return {
+        ...state,
+        new: newArr,
+      }
+    }
+    case 'SET_SCORE': {
+      const answer = [...state.answers];
+      state.new.map((item, id) => {
+        item.then((res: any) => {
+          answer[id].failCounter = res.optional.failCounter;
+          answer[id].successCounter = res.optional.successCounter;
+        })
+      })
+      return {
+        ...state,
+        answer,
+        isLoading: false,
       }
     }
     case 'FINISH_GAME': {

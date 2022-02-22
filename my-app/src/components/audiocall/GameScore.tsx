@@ -1,6 +1,6 @@
 import React from "react";
 import { useEffect, useState } from "react";
-import { QuizContext } from "../sprint/Sprint";
+import { AudioContext } from './Audiocall'
 
 interface GameScoreProps {
   correctAnswersCount: number;
@@ -8,7 +8,7 @@ interface GameScoreProps {
 }
 
 const GameScore = (props: GameScoreProps) => {
-  const [quizState, dispatch] = React.useContext(QuizContext);
+  const [quizState, dispatch] = React.useContext(AudioContext);
   const [score, setScore] = useState(0);
   const points = [10, 20, 40, 80];
   const id = props.correctAnswersCount > (points.length - 1) 

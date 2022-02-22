@@ -1,8 +1,27 @@
 import { WordItem } from "../types";
 
 const Utils = {
+  params: {part: null, page: null},
+
+  setParams: (arr: any) => {
+    Utils.params.part = arr.part;
+    Utils.params.page = arr.page;
+  },
+
   random: (min: number, max: number) => {
     return min + Math.floor(Math.random() * (max - min + 1));
+  },
+
+  getSprintWords: (arr: WordItem[]) => {
+    return arr.map((item) => {
+      return {
+        item,
+        //Determines whether the answer will be the correct translation or not
+        correct: Utils.random(0,1) === 1 ? true: false,
+        //If need be - random incorrect translate
+        incorrect: arr[Utils.random(0, arr.length - 1)].wordTranslate
+      }
+    });
   },
 
   getRandomWords: (arr: WordItem[][]) => {
@@ -84,14 +103,14 @@ const Utils = {
       return [];
     }
     const unshuffledAnswers = [
-      question.correctAnswer,
-      ...question.incorrectAnswers,
+      ...question
     ];
     return unshuffledAnswers
       .map((a) => ({ sort: Math.random(), value: a }))
       .sort((a, b) => a.sort - b.sort)
       .map((a) => a.value);
   },
+
 
 }
 

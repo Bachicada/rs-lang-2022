@@ -72,6 +72,11 @@ const reducer: Reducer<InitialState, ReducerAction> = (state, action) => {
         isLoading: true,
       }
     }
+    case 'SET_RECORD': {
+      return {
+        ...state,
+      }
+    }
     case 'CHANGE_LEVEL': {
       const { level, result } = action.payload;
       return {

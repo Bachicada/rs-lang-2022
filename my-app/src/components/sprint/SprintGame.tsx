@@ -6,19 +6,21 @@ import GameScore from '../game/GameScore'
 import { QuizContext } from './Sprint'
 import SprintStars from './SprintStars'
 
-
 const SprintGame = () => {
   const [quizState, dispatch] = useContext(QuizContext);
   const [isAnswered, setIsAnswered] = useState(false);
-  const [clickedButton, setClickedButton] = useState('');
   const [isAnswerCorrect, setIsAnswerCorrect] = useState(false);
 
   useEffect(() => {
     if (isAnswered) {
       const updAnswer = async () => {
+        const audio = isAnswerCorrect 
+            ? new Audio(require('../../assets/correct.mp3'))
+            : new Audio(require('../../assets/incorrect.mp3'))
+        audio.play();
         const item = quizState.questions[quizState.currentQuestionIndex].item;
         const [failCounter, successCounter] = [+!isAnswerCorrect, +isAnswerCorrect];
-        const content = await updateUserWord({
+        const content = updateUserWord({
           wordId: `${item.id}`, 
           word: { 
             difficulty: WORD_STATUS.NEW, 
@@ -28,15 +30,14 @@ const SprintGame = () => {
             }
           }
         });
+        dispatch({ type: 'ADD_NEW', payload: content });
         const answer = {
           item,
           answer: isAnswerCorrect,
-          failCounter: content.optional?.failCounter || 0,
-          successCounter: content.optional?.successCounter || 0,
         }
 
         dispatch({ type: isAnswerCorrect ? 'CORRECT_ANSWER' : 'INCORRECT_ANSWER', payload: answer });
-        setIsAnswered(false);        
+        setIsAnswered(false);     
       }
       updAnswer();
     }
@@ -45,24 +46,38 @@ const SprintGame = () => {
   const obj = quizState.questions[quizState.currentQuestionIndex];
   const { item } = obj;
   const audio = new Audio(`${API_URL}/${item.audio}`);
-  
+
+  const correctClicked = () => {
+    setIsAnswerCorrect(obj.correct ? true : false);
+    setIsAnswered(true);
+  }
+  const notCorrectClicked = () => {
+    setIsAnswerCorrect(obj.correct ? false : true);
+    setIsAnswered(true);
+  }
+
   useEffect(() => {
-    document.addEventListener('keydown', (ev) => {
+    const keyDown = (ev:KeyboardEvent) => {
       if (ev.key === 'ArrowRight') {
-        console.log(quizState.currentQuestionIndex)
+        correctClicked();
       }
       if (ev.key === 'ArrowLeft') {
-        console.log(quizState.currentQuestionIndex)
+        notCorrectClicked()
       }
-    })
+    };
+    document.addEventListener('keydown', keyDown);
+    return () =>{
+      document.removeEventListener('keydown', keyDown);
+    }
   }, [quizState.currentQuestionIndex]);
 
   return (
     <Container maxWidth="md" style={{ background: 'rgb(153, 207, 51)', borderRadius: '5px', display: 'flex', 
-        alignItems: 'center', flexDirection: 'column' }}>
+        alignItems: 'center', flexDirection: 'column', minHeight: '400px', justifyContent: 'center'}}>
       {/* <SprintStars count={quizState.correctAnswersCount} /> */}
-      {isAnswered &&
-          <GameScore correctAnswersCount={quizState.correctAnswersCount} isCorrect={isAnswerCorrect}/>}
+      {<GameScore correctAnswersCount={quizState.correctAnswersCount} isCorrect={isAnswerCorrect}/>}
+      {/* {isAnswered &&
+          <GameScore correctAnswersCount={quizState.correctAnswersCount} isCorrect={isAnswerCorrect}/>} */}
       <button onClick={() => {
         audio.play();
       }}>
@@ -72,14 +87,12 @@ const SprintGame = () => {
       <p>{obj.correct ? item.wordTranslate : obj.incorrect}</p>
       <div>
         <button onClick={() => {
-          setClickedButton('Неверно');
           setIsAnswerCorrect(obj.correct ? false : true);
           setIsAnswered(true);
         }}>
           Неверно
         </button>
         <button onClick={() => {
-          setClickedButton('Верно');
           setIsAnswerCorrect(obj.correct ? true : false);
           setIsAnswered(true);
         }}>
