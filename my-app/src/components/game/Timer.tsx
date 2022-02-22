@@ -13,7 +13,7 @@ interface TimerProps {
 function CircularProgressWithLabel(
   props: CircularProgressProps & { value: number },
 ) {
-  const percent = (60 / props.value) * 100;
+  const percent = 100 / (60 / props.value);
   return (
     <Box className={styles.timer} sx={{ position: 'absolute', display: 'inline-flex' }}>
       <CircularProgress variant="determinate" {...props} value={percent} />
@@ -33,7 +33,7 @@ function CircularProgressWithLabel(
           variant="caption"
           component="div"
           color="text.secondary"
-        >{`${Math.round(props.value)}с`}</Typography>
+        >{`${Math.round(props.value)}`}</Typography>
       </Box>
     </Box>
   );
@@ -41,13 +41,6 @@ function CircularProgressWithLabel(
 
 const Timer = (props: TimerProps) => {
   const [quizState, dispatch] = useContext(QuizContext);
-  // if(!quizState.isGameReady && quizState.isGameFinished) {
-  //   return <div className={styles.timer}>60</div>
-  // } else {
-  //   return (
-  //     <div className={styles.timer}>{props.time}</div>
-  //   )
-  // }
   return (
     <CircularProgressWithLabel value={props.time} />
   )
