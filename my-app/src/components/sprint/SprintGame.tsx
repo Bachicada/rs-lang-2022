@@ -5,6 +5,7 @@ import { API_URL, WORD_STATUS } from '../../utils/Constants'
 import GameScore from '../game/GameScore'
 import { QuizContext } from './Sprint'
 import SprintStars from './SprintStars'
+import VolumeUpIcon from '@mui/icons-material/VolumeUp';
 
 const SprintGame = () => {
   const [quizState, dispatch] = useContext(QuizContext);
@@ -72,17 +73,12 @@ const SprintGame = () => {
   }, [quizState.currentQuestionIndex]);
 
   return (
-    <Container maxWidth="md" style={{ background: 'rgb(153, 207, 51)', borderRadius: '5px', display: 'flex', 
+    <Container maxWidth="md" style={{ border: '1px solid black', borderRadius: '5px', display: 'flex', 
         alignItems: 'center', flexDirection: 'column', minHeight: '400px', justifyContent: 'center'}}>
-      {/* <SprintStars count={quizState.correctAnswersCount} /> */}
       {<GameScore correctAnswersCount={quizState.correctAnswersCount} isCorrect={isAnswerCorrect}/>}
-      {/* {isAnswered &&
-          <GameScore correctAnswersCount={quizState.correctAnswersCount} isCorrect={isAnswerCorrect}/>} */}
-      <button onClick={() => {
+      <VolumeUpIcon onClick={() => {
         audio.play();
-      }}>
-        Play word
-      </button>
+      }}/>
       <p>{item.word}</p>
       <p>{obj.correct ? item.wordTranslate : obj.incorrect}</p>
       <div>
