@@ -15,6 +15,7 @@ import AudioGame from '../audiocall/AudioGame';
 import Utils from '../../utils/Utils';
 import { getPartOfTextbook } from '../../services/WordService';
 import { getHardWords } from '../../services/UserWordService';
+import CircularProgress from '@mui/material/CircularProgress';
 
 interface GameProps {
   type: GAME_TYPE;
@@ -107,12 +108,13 @@ const Game = (props: GameProps) => {
         : <LevelModal />}
     {quizState.isLoading && 
         <div className={styles.gameLoadingIcon}>
-          <LoadingIcon />
+          <CircularProgress />
+          {/* <LoadingIcon /> */}
         </div>}
     {quizState.isGameReady &&
         <div className={styles.game}>
           {!quizState.isGameFinished && 
-              <Timer time={seconds} />}
+              <Timer time={seconds} max={60}/>}
           {props.type === GAME_TYPE.AUDIOCALL 
               ? <AudioGame /> 
               : null}

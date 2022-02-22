@@ -4,7 +4,8 @@ import { APP_ROUTES, GAME_TYPE } from '../../utils/Constants';
 import LevelModal from './LevelModal';
 import { QuizContext } from '../sprint/Sprint';
 import SprintGame from '../sprint/SprintGame';
-import Timer from './Timer';
+// import Timer from './Timer';
+import Timer from '../game/Timer';
 import { LoadingIcon } from '../shared/LoadingIcon';
 import styles from './Game.module.css'
 import GameTableResult from './GameTableResult';
@@ -14,6 +15,7 @@ import { useNavigate } from 'react-router';
 import AudioGame from '../audiocall/AudioGame';
 import { AudioContext } from './Audiocall';
 import GameLife from './GameLife';
+import CircularProgress from '@mui/material/CircularProgress';
 
 interface GameProps {
   type: GAME_TYPE;
@@ -67,14 +69,14 @@ const Game = (props: GameProps) => {
         : <LevelModal />}
     {quizState.isLoading && 
         <div className={styles.gameLoadingIcon}>
-          <LoadingIcon />
+          <CircularProgress />
         </div>}
     {quizState.isGameReady &&
         <div className={styles.game}>
-          {!quizState.isGameFinished &&
-              <GameLife count={quizState.currentLifeIndex}/>}
+          {/* {!quizState.isGameFinished &&
+              <GameLife count={quizState.currentLifeIndex}/>} */}
           {!quizState.isGameFinished && 
-              <Timer time={seconds} />}
+              <Timer time={seconds} max={12} />}
           {quizState.isGameReady && !quizState.isGameFinished && 
               <AudioGame />}
           {quizState.isGameFinished && 

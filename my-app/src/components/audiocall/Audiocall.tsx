@@ -31,6 +31,7 @@ export interface InitialState {
   level: number | null;
   questions: any[];
   answers: any[];
+  new: any[];
   currentQuestionIndex: number;
   currentLifeIndex: number;
   correctAnswersCount: number;
@@ -47,6 +48,7 @@ const initialState: InitialState = {
   level: null,
   questions: [],
   answers: [],
+  new: [],
   currentQuestionIndex: 0,
   currentLifeIndex: 5,
   correctAnswersCount: 0,
@@ -75,6 +77,13 @@ const reducer: Reducer<InitialState, ReducerAction> = (state, action) => {
     case 'SET_RECORD': {
       return {
         ...state,
+      }
+    }
+    case 'ADD_NEW': {
+      const newArr = [...state.new, action.payload];
+      return {
+        ...state,
+        new: newArr,
       }
     }
     case 'CHANGE_LEVEL': {

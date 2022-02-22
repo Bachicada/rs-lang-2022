@@ -1,10 +1,12 @@
 import { Container } from '@mui/material'
 import { useContext, useEffect, useState } from 'react'
 import { updateUserWord } from '../../services/UserWordService'
-import { API_URL, WORD_STATUS } from '../../utils/Constants'
+import { API_URL, GAME_TYPE, WORD_STATUS } from '../../utils/Constants'
 import GameScore from '../game/GameScore'
 import { QuizContext } from './Sprint'
 import SprintStars from './SprintStars'
+import VolumeUpIcon from '@mui/icons-material/VolumeUp';
+import Button from '@mui/material/Button';
 
 const SprintGame = () => {
   const [quizState, dispatch] = useContext(QuizContext);
@@ -72,32 +74,29 @@ const SprintGame = () => {
   }, [quizState.currentQuestionIndex]);
 
   return (
-    <Container maxWidth="md" style={{ background: 'rgb(153, 207, 51)', borderRadius: '5px', display: 'flex', 
-        alignItems: 'center', flexDirection: 'column', minHeight: '400px', justifyContent: 'center'}}>
-      {/* <SprintStars count={quizState.correctAnswersCount} /> */}
-      {<GameScore correctAnswersCount={quizState.correctAnswersCount} isCorrect={isAnswerCorrect}/>}
-      {/* {isAnswered &&
-          <GameScore correctAnswersCount={quizState.correctAnswersCount} isCorrect={isAnswerCorrect}/>} */}
-      <button onClick={() => {
+    <Container maxWidth="md" style={{ border: '1px solid black', borderRadius: '5px', display: 'flex', 
+        alignItems: 'center', flexDirection: 'column', minHeight: '400px', justifyContent: 'space-between'}}>
+      {<GameScore correctAnswersCount={quizState.correctAnswersCount} isCorrect={isAnswerCorrect} type={GAME_TYPE.SPRINT}/>}
+      <VolumeUpIcon style={{marginTop: '10px', width: '50px', height: '50px'}} onClick={() => {
         audio.play();
-      }}>
-        Play word
-      </button>
-      <p>{item.word}</p>
-      <p>{obj.correct ? item.wordTranslate : obj.incorrect}</p>
+      }}/>
+      <div style={{textAlign: 'center'}}>
+        <h2 style={{color: '#5393E1'}}>{item.word}</h2>
+        <h2>{obj.correct ? item.wordTranslate : obj.incorrect}</h2>
+      </div>
       <div>
-        <button onClick={() => {
+      <Button variant="outlined" color="error" style={{width: '200px', height: '70px'}} onClick={() => {
           setIsAnswerCorrect(obj.correct ? false : true);
           setIsAnswered(true);
         }}>
           Неверно
-        </button>
-        <button onClick={() => {
+      </Button>
+      <Button variant="outlined" color="success" style={{width: '200px', height: '70px'}} onClick={() => {
           setIsAnswerCorrect(obj.correct ? true : false);
           setIsAnswered(true);
         }}>
           Верно
-        </button>
+      </Button>
       </div>
     </Container>
   )
