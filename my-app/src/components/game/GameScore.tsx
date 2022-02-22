@@ -1,3 +1,4 @@
+import { Paper } from "@mui/material";
 import React from "react";
 import { useEffect, useState } from "react";
 import { QuizContext } from "../sprint/Sprint";
@@ -23,7 +24,7 @@ const GameScore = (props: GameScoreProps) => {
     }
   }, [quizState.currentQuestionIndex]);
   return (
-    <div style={{position: 'absolute', top: '0', left: '0', border: '1px solid #5393E1',
+    <Paper elevation={3} style={{position: 'absolute', top: '0', left: '0', border: '1px solid #5393E1',
         borderRadius: '5px', padding: '10px'
     }}>
       <p>{props.isCorrect 
@@ -40,7 +41,7 @@ const GameScore = (props: GameScoreProps) => {
       <div>
         Всего {score} баллов!
       </div>
-    </div>
+    </Paper>
   )
 }
 

@@ -6,6 +6,7 @@ import GameScore from '../game/GameScore'
 import { QuizContext } from './Sprint'
 import SprintStars from './SprintStars'
 import VolumeUpIcon from '@mui/icons-material/VolumeUp';
+import Button from '@mui/material/Button';
 
 const SprintGame = () => {
   const [quizState, dispatch] = useContext(QuizContext);
@@ -74,15 +75,29 @@ const SprintGame = () => {
 
   return (
     <Container maxWidth="md" style={{ border: '1px solid black', borderRadius: '5px', display: 'flex', 
-        alignItems: 'center', flexDirection: 'column', minHeight: '400px', justifyContent: 'center'}}>
+        alignItems: 'center', flexDirection: 'column', minHeight: '400px', justifyContent: 'space-between'}}>
       {<GameScore correctAnswersCount={quizState.correctAnswersCount} isCorrect={isAnswerCorrect}/>}
-      <VolumeUpIcon onClick={() => {
+      <VolumeUpIcon style={{marginTop: '10px', width: '50px', height: '50px'}} onClick={() => {
         audio.play();
       }}/>
-      <p>{item.word}</p>
-      <p>{obj.correct ? item.wordTranslate : obj.incorrect}</p>
+      <div style={{textAlign: 'center'}}>
+        <h2 style={{color: '#5393E1'}}>{item.word}</h2>
+        <h2>{obj.correct ? item.wordTranslate : obj.incorrect}</h2>
+      </div>
       <div>
-        <button onClick={() => {
+      <Button variant="outlined" color="error" style={{width: '200px', height: '70px'}} onClick={() => {
+          setIsAnswerCorrect(obj.correct ? false : true);
+          setIsAnswered(true);
+        }}>
+          Неверно
+        </Button>
+        <Button variant="outlined" color="success" style={{width: '200px', height: '70px'}} onClick={() => {
+          setIsAnswerCorrect(obj.correct ? true : false);
+          setIsAnswered(true);
+        }}>
+          Верно
+        </Button>
+        {/* <button onClick={() => {
           setIsAnswerCorrect(obj.correct ? false : true);
           setIsAnswered(true);
         }}>
@@ -93,7 +108,7 @@ const SprintGame = () => {
           setIsAnswered(true);
         }}>
           Верно
-        </button>
+        </button> */}
       </div>
     </Container>
   )
