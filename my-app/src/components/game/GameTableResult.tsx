@@ -82,7 +82,6 @@ export default function GameTableResult() {
 
   useEffect(() => {
     const userJSON = localStorage.getItem('CurrentUser');
-    console.log('NUUU?', userJSON);
     if (!userJSON) {
       setOpen(true);
     };

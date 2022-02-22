@@ -69,6 +69,7 @@ const Game = (props: GameProps) => {
       }
 
       fetchData();
+      Utils.setParams({ part: null, page: null });
     }
     else if (page !== null && part !== null) {
       const fetchData = async() => {
@@ -89,6 +90,7 @@ const Game = (props: GameProps) => {
       }
 
       fetchData();
+      Utils.setParams({ part: null, page: null });
     }
   }, []);
 

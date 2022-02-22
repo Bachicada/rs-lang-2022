@@ -16,6 +16,9 @@ import AudioGame from '../audiocall/AudioGame';
 import { AudioContext } from './Audiocall';
 import GameLife from './GameLife';
 import CircularProgress from '@mui/material/CircularProgress';
+import Utils from '../../utils/Utils';
+import { getHardWords } from '../../services/UserWordService';
+import { getPartOfTextbook } from '../../services/WordService';
 
 interface GameProps {
   type: GAME_TYPE;
@@ -52,6 +55,52 @@ const Game = (props: GameProps) => {
     }
     setSeconds(12);
   }, [quizState.currentQuestionIndex]);
+
+  useEffect(() => {
+    const { page, part } = Utils.params;
+    if (part === 'hardwords') {
+      const fetchData = async() => {
+        dispatch({ type: 'LOADING' })
+        try {
+          const prom = await getHardWords();
+          const data = prom[0].paginatedResults;
+          const formatData = Utils.getAudioWords(data.flat());
+          const randomData = Utils.shuffleAnswers(formatData);
+          randomData.forEach((item, idx) => {
+            randomData[idx].item.id = randomData[idx].item._id;
+          });
+          dispatch({ type: 'PRELOAD', payload: {randomData, level: part} });
+        } catch(err) {
+          alert('Oops! Something goes wrong.')
+        }
+      }
+
+      fetchData();
+      Utils.setParams({ part: null, page: null });
+    }
+    else if (page !== null && part !== null) {
+      const fetchData = async() => {
+        dispatch({ type: 'LOADING' })
+        const idArr: any[] = [];
+        for (let i = page; i >= 0; i--) {
+          idArr.push(i);
+        }
+        try {
+          const prom = idArr.map((page) => getPartOfTextbook(`${page}`, `${part}`));
+          const data = await (await Promise.allSettled(prom)).map((item: any) => item.value);
+          const formatData = Utils.getAudioWords(data.flat());
+          const randomData = Utils.shuffleAnswers(formatData);
+          dispatch({ type: 'PRELOAD', payload: {randomData, level: part} });
+        } catch(err) {
+          alert('Oops! Something goes wrong.')
+        }
+      }
+
+      fetchData();
+      Utils.setParams({ part: null, page: null });
+    }
+  }, []);
+
 
   return (
     <Box

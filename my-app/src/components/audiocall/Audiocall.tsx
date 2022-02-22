@@ -86,6 +86,16 @@ const reducer: Reducer<InitialState, ReducerAction> = (state, action) => {
         new: newArr,
       }
     }
+    case 'PRELOAD': {
+      return {
+        ...state,
+        level: action.payload.level,
+        questions: action.payload.randomData,
+        isLoading: false,
+        isGameReady: true,
+        timerActive: true,
+      }
+    }
     case 'CHANGE_LEVEL': {
       const { level, result } = action.payload;
       return {
