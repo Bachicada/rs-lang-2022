@@ -1,3 +1,4 @@
+import { Fab } from '@mui/material';
 import { useContext, useEffect, useState } from 'react';
 import { getPartOfTextbook } from '../../services/WordService';
 import Utils from '../../utils/Utils';
@@ -29,10 +30,9 @@ const LevelButton = ({item}: LevelButtonProps) => {
   }, [level]);
 
   return (
-    <div style={{ cursor: 'pointer', background: '#1976d2', width: '50px', height: '50px',
-        borderRadius: '5px', display: 'flex', justifyContent: 'space-around', alignItems: 'center'}} onClick={() => {
+    <Fab color="primary" style={{ width: '60px', height: '60px'}} onClick={() => {
       setLevel(item - 1);
-    }}>{item}</div>
+    }}>{item}</Fab>
   )
 }
 
