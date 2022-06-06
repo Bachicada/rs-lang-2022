@@ -1,21 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import logo from './logo.svg';
 import './App.css';
 import { PersistentDrawerRight } from './components/shared/Appnav';
 import { Footer } from './components/shared/Footer';
 import Landing from './components/start-page/Landing';
-import { Routes, Route, Link, BrowserRouter, useNavigate, useLocation } from "react-router-dom";
+import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
 import {APP_ROUTES} from './utils/Constants';
 import Textbook from './components/textbook/Textbook';
 import Sprint from './components/sprint/Sprint';
 import Audiocall from './components/audiocall/Audiocall';
 import Stat from './components/statistics/Stat';
-import WordsContainer from './components/textbook/WordsContainer';
-import PartOfTextBook from './components/textbook/PartOfTextbook';
 import SignInForm from './components/autorisation/SignInForm';
 import RegForm from './components/autorisation/RegisterForm';
 import { createContext } from "react";
-import { CurUser, WordItem } from './types';
+import { CurUser } from './types';
 
 
 
