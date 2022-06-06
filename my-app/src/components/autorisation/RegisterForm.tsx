@@ -15,7 +15,7 @@ import { useContext, useState } from 'react';
 import {Link, useNavigate} from 'react-router-dom'
 import { CurUser, NewUser } from '../../types';
 import { APP_ROUTES } from '../../utils/Constants';
-import styles from './Autorisation.module.css';
+import styles from './autorisation.module.css';
 import { UserContext } from "../../App";
 import { LoadingIcon } from '../shared/LoadingIcon';
 

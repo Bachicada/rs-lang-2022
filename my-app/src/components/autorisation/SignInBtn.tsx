@@ -1,5 +1,5 @@
 import * as React from 'react';
-import styles from './Autorisation.module.css'
+import styles from './autorisation.module.css'
 import { Link } from 'react-router-dom';
 import { APP_ROUTES } from '../../utils/Constants';
 

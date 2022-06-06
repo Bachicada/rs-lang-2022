@@ -1,5 +1,5 @@
 import * as React from 'react';
-import styles from './Autorisation.module.css';
+import styles from './autorisation.module.css';
 import { UserContext } from '../../App';
 import { CurUser } from '../../types';
 import { useContext } from 'react';

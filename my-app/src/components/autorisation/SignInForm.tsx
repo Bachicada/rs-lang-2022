@@ -16,7 +16,7 @@ import { CurUser, NewUser } from '../../types';
 import { Link , useNavigate} from 'react-router-dom';
 import {LoadingIcon} from '../shared/LoadingIcon'
 
-import styles from './Autorisation.module.css';
+import styles from './autorisation.module.css';
 import { UserContext } from '../../App';
 
 const theme = createTheme();
