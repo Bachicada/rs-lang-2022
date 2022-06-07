@@ -121,7 +121,6 @@ export default function RegForm() {
 
         if(dataUser){
           const currentUser = await dataUser.json();
-          console.log("newUser", currentUser);
           user.message = currentUser.message;
           user.userId = currentUser.userId;
           user.token = currentUser.token;
@@ -138,7 +137,6 @@ export default function RegForm() {
     else {
       setLoadingState(true)
       setAlreadyRegError(true);
-      console.log('Aккаунт уже существует. Попробуйте войти')
     }
   }
 
@@ -239,8 +237,3 @@ export default function RegForm() {
     </ThemeProvider>
   );
 }
-
-function currentUser(arg0: string, currentUser: any) {
-  throw new Error('Function not implemented.');
-}
-

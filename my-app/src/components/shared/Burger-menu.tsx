@@ -1,6 +1,5 @@
 
 import React, { SyntheticEvent, useContext } from 'react';
-import './../general.css'
 import { APP_ROUTES } from '../../utils/Constants';
 import { Link, useNavigate } from 'react-router-dom';
 import { CurUser } from '../../types';

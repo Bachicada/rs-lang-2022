@@ -1,23 +1,21 @@
 import * as React from 'react';
-import '../general.css'
 import gitIcon from '../../assets/git-icon.png';
 import rsLogo from '../../assets/rs-logo.png'
-import Box from '@mui/material/Box';
 
 export function Footer() {
   return (
     <footer className='footer'>
         <span>2022</span>
-        <a className='footerLink' href='https://github.com/timursk' target="_blank">
+        <a className='footerLink' href='https://github.com/timursk' target="_blank" rel="noreferrer">
           <span>timursk</span>
-          <img className='gitIcon' src={gitIcon} />
+          <img className='gitIcon' src={gitIcon} alt="gitIcon" />
         </a>
-        <a className='footerLink' href='https://github.com/Bachicada' target="_blank">
+        <a className='footerLink' href='https://github.com/Bachicada' target="_blank" rel="noreferrer">
           <span>bachicada</span> 
-          <img className='gitIcon' src={gitIcon}/>
+          <img className='gitIcon' src={gitIcon} alt="gitIcon" />
         </a>
-        <a className='footerLink' href='https://rs.school/' target="_blank">
-           <img className='gitIcon' src={rsLogo}/>
+        <a className='footerLink' href='https://rs.school/' target="_blank" rel="noreferrer">
+           <img className='gitIcon' src={rsLogo} alt="gitIcon" />
         </a>
     </footer>
   );

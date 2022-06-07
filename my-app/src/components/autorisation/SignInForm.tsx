@@ -77,38 +77,51 @@ export default function SignInForm() {
   
   const [loadingState, setLoadingState] = useState(false);
 
+  const handleGuestLogin = async (e: React.MouseEvent) => {
+    e.preventDefault();
 
-    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-      event.preventDefault();
-      const data = new FormData(event.currentTarget);
-     
-      const curUser: NewUser = {
-        email: data.get('email') as string,
-        password: data.get('password') as string
-      }
-      
-      const dataUser = await loginUser(curUser);
-      
-
-      if(dataUser){
-        const currentUser = await dataUser.json();
-        console.log("currentUser", currentUser)
-        userInfo.message = currentUser.message;
-        userInfo.userId = currentUser.userId;
-        userInfo.token = currentUser.token;
-        userInfo.refreshToken = currentUser.refreshToken;
-        userInfo.name = currentUser.name;
-        localStorage.setItem('CurrentUser', JSON.stringify(userInfo));
-        dispatchUserEvent("UPDATE_USER", userInfo);
-        setValidUser(true); 
-        setLoadingState(true);
-        navigate(-1);
-      }
-       else {
-        setValidUser(false);
-       }
-      
+    const curUser: NewUser = {
+      email: 'guest@mail.ru',
+      password: 'guest1234'
     }
+    
+    const dataUser = await loginUser(curUser);
+    updateUser(dataUser);
+  }
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const data = new FormData(event.currentTarget);
+    
+    const curUser: NewUser = {
+      email: data.get('email') as string,
+      password: data.get('password') as string
+    }
+    
+    const dataUser = await loginUser(curUser);
+    updateUser(dataUser);
+  }
+
+  const updateUser = async (dataUser: void | Response | undefined) => {
+    if(dataUser){
+      const currentUser = await dataUser.json() as CurUser;
+
+      userInfo.message = currentUser.message;
+      userInfo.userId = currentUser.userId;
+      userInfo.token = currentUser.token;
+      userInfo.refreshToken = currentUser.refreshToken;
+      userInfo.name = currentUser.name;
+
+      localStorage.setItem('CurrentUser', JSON.stringify(userInfo));
+      dispatchUserEvent("UPDATE_USER", userInfo);
+      setValidUser(true); 
+      setLoadingState(true);
+      navigate(APP_ROUTES.MAIN);
+    }
+     else {
+      setValidUser(false);
+     }
+  }
   
     return (
       <ThemeProvider theme={theme}>
@@ -158,15 +171,26 @@ export default function SignInForm() {
                 id="password"
                 autoComplete="current-password"
               />
+              
               <Button
                 type="submit"
                 fullWidth
                 variant="contained"
-                sx={{ mt: 3, mb: 2 }}
+                sx={{ mt: 3, mb: 1 }}
                 disabled={passError || emailError}
               >
                 Войти
               </Button>
+
+              <Button
+                fullWidth
+                variant="contained"
+                sx={{  mb: 2, background: 'darkseagreen' }}
+                onClick={handleGuestLogin}
+              >
+                Гостевой вход
+              </Button>
+
               <Grid container>
                 <Grid item>
                   <span>Впервые на сайте? </span>

@@ -20,7 +20,7 @@ import { SignInBtn } from '../autorisation/SignInBtn';
 import { UserContext } from '../../App';
 import { CurUser } from '../../types';
 
-const drawerWidth = 240;
+const drawerWidth = 280;
 
 interface AppBarProps extends MuiAppBarProps {
   open?: boolean;

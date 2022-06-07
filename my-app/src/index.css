@@ -1,9 +1,7 @@
-a {
-  text-decoration: none;
-  color: whitesmoke;
+* {
+  box-sizing: border-box;
 }
 
-button {border: none;}
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -16,4 +14,13 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+a {
+  text-decoration: none;
+  color: whitesmoke;
+}
+
+button {
+  border: none;
 }

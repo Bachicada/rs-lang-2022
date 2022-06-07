@@ -15,6 +15,6 @@ export default function LogOutBtn(){
         dispatchUserEvent("CLEAR_USER", {});
     }
     return (
-        <button  className={styles.signInBtn} onClick={()=>logOut()}>Выйти</button>
+        <button className={styles.signInBtn} onClick={()=>logOut()}>Выйти</button>
     )
 }
