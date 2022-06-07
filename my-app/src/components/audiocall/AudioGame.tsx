@@ -4,7 +4,6 @@ import { updateUserWord } from '../../services/UserWordService'
 import { API_URL, GAME_TYPE, WORD_STATUS } from '../../utils/Constants'
 import GameScore from '../game/GameScore'
 import { GameAnswers } from '../sprint/Sprint'
-import SprintStars from '../sprint/SprintStars'
 import { AudioWords, AudioContext } from './Audiocall'
 import VolumeUpIcon from '@mui/icons-material/VolumeUp';
 import Button from '@mui/material/Button';

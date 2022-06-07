@@ -18,12 +18,11 @@ const style = {
 export default function ModalExpire(props:{open:boolean}) {
 
   const [open, setOpen] = React.useState(props.open);
-  const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
   return (
       <Modal
-        open={props.open}
+        open={open}
         onClose={handleClose}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"

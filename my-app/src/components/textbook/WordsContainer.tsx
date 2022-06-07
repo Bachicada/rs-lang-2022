@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { useState, useEffect, useContext } from 'react';
-import { CurUser, PageProps, UserWordItem, WordItem } from '../../types';
+import { CurUser, PageProps, WordItem } from '../../types';
 import styles from './textbook.module.css'
-import { getHardWords, getLearnedWords, getNewToken, getPartOfTextbook, getPlayedWords, getUserId, getUserToken, getWords } from '../../services/WordService';
+import { getHardWords, getLearnedWords, getNewToken, getPartOfTextbook, getPlayedWords, getUserId, getUserToken } from '../../services/WordService';
 import WordCard from '../wordCard/WordCard';
 import { LoadingIcon } from '../shared/LoadingIcon';
 import { UserContext } from '../../App';
@@ -12,7 +12,6 @@ import ModalExpire from '../shared/ModalExpire';
 
 
 export default function WordsContainer(props: PageProps){
-  const [pageWords, setWords] = useState ([]);
   const [loadingState, setLoadingState] = useState(true);
   
   const userId = getUserId();
@@ -31,13 +30,13 @@ export default function WordsContainer(props: PageProps){
     localStorage.clear();
     userContext.dispatchUserEvent("CLEAR_USER", {});
     navigate(`${APP_ROUTES.SIGNIN}`);
-}
+  }
 
-const [hardWords, setHardWords] =  useState<WordItem[]>([]);
-const [learnedWords, setLearnedWords] = useState<WordItem[]>([]);
-const [allWords, setAllWords] =  useState<WordItem[]>([]);
-const [playedWords, setPlayedWords] =  useState<WordItem[]>([]);
-const [finalWords, setFinalWords] =  useState<WordItem[]>([]);
+  const [hardWords, setHardWords] =  useState<WordItem[]>([]);
+  const [learnedWords, setLearnedWords] = useState<WordItem[]>([]);
+  const [allWords, setAllWords] =  useState<WordItem[]>([]);
+  const [playedWords, setPlayedWords] =  useState<WordItem[]>([]);
+  const [finalWords, setFinalWords] =  useState<WordItem[]>([]);
 
 
 const fetchHardWords = async () =>{

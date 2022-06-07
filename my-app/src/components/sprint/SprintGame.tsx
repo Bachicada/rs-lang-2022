@@ -4,9 +4,11 @@ import { updateUserWord } from '../../services/UserWordService'
 import { API_URL, GAME_TYPE, WORD_STATUS } from '../../utils/Constants'
 import GameScore from '../game/GameScore'
 import { QuizContext } from './Sprint'
-import SprintStars from './SprintStars'
 import VolumeUpIcon from '@mui/icons-material/VolumeUp';
 import Button from '@mui/material/Button';
+
+const correctAudio = new Audio(require('../../assets/correct.mp3'));
+const incorrectAudio = new Audio(require('../../assets/incorrect.mp3'))
 
 const SprintGame = () => {
   const [quizState, dispatch] = useContext(QuizContext);
@@ -16,10 +18,8 @@ const SprintGame = () => {
   useEffect(() => {
     if (isAnswered) {
       const updAnswer = async () => {
-        const audio = isAnswerCorrect 
-            ? new Audio(require('../../assets/correct.mp3'))
-            : new Audio(require('../../assets/incorrect.mp3'))
-        audio.play();
+        isAnswerCorrect ? correctAudio.play() : incorrectAudio.play();
+
         const item = quizState.questions[quizState.currentQuestionIndex].item;
         const [failCounter, successCounter] = [+!isAnswerCorrect, +isAnswerCorrect];
         const content = updateUserWord({
@@ -41,9 +41,10 @@ const SprintGame = () => {
         dispatch({ type: isAnswerCorrect ? 'CORRECT_ANSWER' : 'INCORRECT_ANSWER', payload: answer });
         setIsAnswered(false);     
       }
+      
       updAnswer();
     }
-  }, [isAnswered]);
+  }, [dispatch, isAnswerCorrect, isAnswered, quizState.currentQuestionIndex, quizState.questions]);
   
   const obj = quizState.questions[quizState.currentQuestionIndex];
   const { item } = obj;

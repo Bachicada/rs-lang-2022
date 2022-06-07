@@ -1,10 +1,7 @@
-import { Dispatch, Reducer, useEffect } from 'react';
+import { Dispatch, Reducer } from 'react';
 import { createContext, FC, useReducer } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
 import { WordItem } from '../../types';
-import { getPartOfTextbook } from '../../services/WordService';
 import { GAME_TYPE } from '../../utils/Constants';
-import Utils from '../../utils/Utils';
 import Game from '../game/Game';
 
 export interface GameAnswers {

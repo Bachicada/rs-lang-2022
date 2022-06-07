@@ -1,9 +1,6 @@
 import * as React from 'react';
 import { APP_ROUTES } from '../../utils/Constants';
-import { Link, useParams, useNavigate } from 'react-router-dom';
-import styles from './textbook.module.css'
-import { PartProps } from '../../types';
-import { getPartOfTextbook } from '../../services/WordService';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 
 
@@ -13,7 +10,6 @@ import WordsContainer from './WordsContainer';
 
 export default function PartOfTextBook() {
   const [pageNumber, setPageNumber] = useState("0");
-  const [currentPart, setCurrentPart] = useState<string>("0");
   const params = useParams<{ part: string; page: string }>();
   const navigate = useNavigate();
 
@@ -22,9 +18,6 @@ export default function PartOfTextBook() {
       navigate(`${APP_ROUTES.TEXTBOOK}/${params.part}/1`);
     } else if(params.page !=='hardwords') {
       setPageNumber(params.page);
-    }
-    if (params.part) {
-      setCurrentPart(params.part);
     }
   }, [params, navigate]);
 
