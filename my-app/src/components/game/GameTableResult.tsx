@@ -14,13 +14,9 @@ import { createUserStatistics, getUserStatistics } from '../../services/UserStat
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
 
-const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
-  props,
-  ref,
-) {
+const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
-
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -57,20 +53,21 @@ export default function GameTableResult() {
     if (reason === 'clickaway') {
       return;
     }
-  
+
     setOpen(false);
   };
-  
+
   useEffect(() => {
     if (quizState.isGameFinished) {
       const getScores = async () => {
-        const data = await (await Promise.allSettled(quizState.new)).map((item: any) => item.value.optional);
+        const data = await (
+          await Promise.allSettled(quizState.new)
+        ).map((item: any) => item.value.optional);
         dispatch({ type: 'SET_SCORE', payload: data });
-      }
+      };
 
-      getScores()
-          .then(() => setScore([...quizState.answers]));
-      
+      getScores().then(() => setScore([...quizState.answers]));
+
       // const obj = [{
       //   maxAnswersCount: quizState.maxAnswersCount,
       //   allCorrectCount: quizState.allCorrectCount,
@@ -85,44 +82,53 @@ export default function GameTableResult() {
     console.log('NUUU?', userJSON);
     if (!userJSON) {
       setOpen(true);
-    };
+    }
   }, []);
 
   return (
-    <Paper sx={{width: '100%', overflow: 'hidden'}}>
-    {<Snackbar style={{bottom: '50px'}} open={open} autoHideDuration={6000} onClose={handleClose}>
-    <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
-      Зарегистрируйтесь, чтобы увидеть результат!
-    </Alert>
-  </Snackbar>}
-    <TableContainer sx={{maxHeight: 440, width: '100%'}} component={Paper}>
-      <Table sx={{ minWidth: 400 }} stickyHeader aria-label="sticky customized table">
-        <TableHead>
-          <TableRow>
-            <StyledTableCell>Слово</StyledTableCell>
-            <StyledTableCell align="right">Перевод</StyledTableCell>
-            <StyledTableCell align="right">Ответ</StyledTableCell>
-            <StyledTableCell align="right">Всего</StyledTableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {score.map((row) => (
-            <StyledTableRow className={row.answer ? 'success' : 'fail'} key={row.item.id}>
-              <StyledTableCell component="th" scope="row">
-                {row.item.word}
-              </StyledTableCell>
-              <StyledTableCell align="right">{row.item.wordTranslate}</StyledTableCell>
-              <StyledTableCell align="right">{row.answer ? `✅` : `❌`}</StyledTableCell>
-              <StyledTableCell align="right">{
-                (row.successCounter || row.successCounter === 0) 
-                    ? `${row.successCounter}/${row.successCounter + row.failCounter}`
-                    : <Skeleton variant="text" />}
-              </StyledTableCell>
-            </StyledTableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+    <Paper sx={{ width: '100%', overflow: 'hidden' }}>
+      {
+        <Snackbar
+          style={{ bottom: '50px' }}
+          open={open}
+          autoHideDuration={6000}
+          onClose={handleClose}
+        >
+          <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
+            Зарегистрируйтесь, чтобы увидеть результат!
+          </Alert>
+        </Snackbar>
+      }
+      <TableContainer sx={{ maxHeight: 440, width: '100%' }} component={Paper}>
+        <Table sx={{ minWidth: 400 }} stickyHeader aria-label="sticky customized table">
+          <TableHead>
+            <TableRow>
+              <StyledTableCell>Слово</StyledTableCell>
+              <StyledTableCell align="right">Перевод</StyledTableCell>
+              <StyledTableCell align="right">Ответ</StyledTableCell>
+              <StyledTableCell align="right">Всего</StyledTableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {score.map((row) => (
+              <StyledTableRow className={row.answer ? 'success' : 'fail'} key={row.item.id}>
+                <StyledTableCell component="th" scope="row">
+                  {row.item.word}
+                </StyledTableCell>
+                <StyledTableCell align="right">{row.item.wordTranslate}</StyledTableCell>
+                <StyledTableCell align="right">{row.answer ? `✅` : `❌`}</StyledTableCell>
+                <StyledTableCell align="right">
+                  {row.successCounter || row.successCounter === 0 ? (
+                    `${row.successCounter}/${row.successCounter + row.failCounter}`
+                  ) : (
+                    <Skeleton variant="text" />
+                  )}
+                </StyledTableCell>
+              </StyledTableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
     </Paper>
   );
 }

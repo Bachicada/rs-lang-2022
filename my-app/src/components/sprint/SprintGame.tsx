@@ -1,14 +1,14 @@
-import { Container } from '@mui/material'
-import { useContext, useEffect, useState } from 'react'
-import { updateUserWord } from '../../services/UserWordService'
-import { API_URL, GAME_TYPE, WORD_STATUS } from '../../utils/Constants'
-import GameScore from '../game/GameScore'
-import { QuizContext } from './Sprint'
+import { Container } from '@mui/material';
+import { useContext, useEffect, useState } from 'react';
+import { updateUserWord } from '../../services/UserWordService';
+import { API_URL, GAME_TYPE, WORD_STATUS } from '../../utils/Constants';
+import GameScore from '../game/GameScore';
+import { QuizContext } from './Sprint';
 import VolumeUpIcon from '@mui/icons-material/VolumeUp';
 import Button from '@mui/material/Button';
 
 const correctAudio = new Audio(require('../../assets/correct.mp3'));
-const incorrectAudio = new Audio(require('../../assets/incorrect.mp3'))
+const incorrectAudio = new Audio(require('../../assets/incorrect.mp3'));
 
 const SprintGame = () => {
   const [quizState, dispatch] = useContext(QuizContext);
@@ -23,29 +23,32 @@ const SprintGame = () => {
         const item = quizState.questions[quizState.currentQuestionIndex].item;
         const [failCounter, successCounter] = [+!isAnswerCorrect, +isAnswerCorrect];
         const content = updateUserWord({
-          wordId: `${item.id}`, 
-          word: { 
-            difficulty: WORD_STATUS.NEW, 
+          wordId: `${item.id}`,
+          word: {
+            difficulty: WORD_STATUS.NEW,
             optional: {
               failCounter,
               successCounter,
-            }
-          }
+            },
+          },
         });
         dispatch({ type: 'ADD_NEW', payload: content });
         const answer = {
           item,
           answer: isAnswerCorrect,
-        }
+        };
 
-        dispatch({ type: isAnswerCorrect ? 'CORRECT_ANSWER' : 'INCORRECT_ANSWER', payload: answer });
-        setIsAnswered(false);     
-      }
-      
+        dispatch({
+          type: isAnswerCorrect ? 'CORRECT_ANSWER' : 'INCORRECT_ANSWER',
+          payload: answer,
+        });
+        setIsAnswered(false);
+      };
+
       updAnswer();
     }
   }, [dispatch, isAnswerCorrect, isAnswered, quizState.currentQuestionIndex, quizState.questions]);
-  
+
   const obj = quizState.questions[quizState.currentQuestionIndex];
   const { item } = obj;
   const audio = new Audio(`${API_URL}/${item.audio}`);
@@ -53,54 +56,83 @@ const SprintGame = () => {
   const correctClicked = () => {
     setIsAnswerCorrect(obj.correct ? true : false);
     setIsAnswered(true);
-  }
+  };
   const notCorrectClicked = () => {
     setIsAnswerCorrect(obj.correct ? false : true);
     setIsAnswered(true);
-  }
+  };
 
   useEffect(() => {
-    const keyDown = (ev:KeyboardEvent) => {
+    const keyDown = (ev: KeyboardEvent) => {
       if (ev.key === 'ArrowRight') {
         correctClicked();
       }
       if (ev.key === 'ArrowLeft') {
-        notCorrectClicked()
+        notCorrectClicked();
       }
     };
     document.addEventListener('keydown', keyDown);
-    return () =>{
+    return () => {
       document.removeEventListener('keydown', keyDown);
-    }
+    };
   }, [quizState.currentQuestionIndex]);
 
   return (
-    <Container maxWidth="md" style={{ border: '1px solid black', borderRadius: '5px', display: 'flex', 
-        alignItems: 'center', flexDirection: 'column', minHeight: '400px', justifyContent: 'space-between'}}>
-      {<GameScore correctAnswersCount={quizState.correctAnswersCount} isCorrect={isAnswerCorrect} type={GAME_TYPE.SPRINT}/>}
-      <VolumeUpIcon style={{marginTop: '10px', width: '50px', height: '50px'}} onClick={() => {
-        audio.play();
-      }}/>
-      <div style={{textAlign: 'center'}}>
-        <h2 style={{color: '#5393E1'}}>{item.word}</h2>
+    <Container
+      maxWidth="md"
+      style={{
+        border: '1px solid black',
+        borderRadius: '5px',
+        display: 'flex',
+        alignItems: 'center',
+        flexDirection: 'column',
+        minHeight: '400px',
+        justifyContent: 'space-between',
+      }}
+    >
+      {
+        <GameScore
+          correctAnswersCount={quizState.correctAnswersCount}
+          isCorrect={isAnswerCorrect}
+          type={GAME_TYPE.SPRINT}
+        />
+      }
+      <VolumeUpIcon
+        style={{ marginTop: '10px', width: '50px', height: '50px' }}
+        onClick={() => {
+          audio.play();
+        }}
+      />
+      <div style={{ textAlign: 'center' }}>
+        <h2 style={{ color: '#5393E1' }}>{item.word}</h2>
         <h2>{obj.correct ? item.wordTranslate : obj.incorrect}</h2>
       </div>
       <div>
-      <Button variant="outlined" color="error" style={{width: '200px', height: '70px'}} onClick={() => {
-          setIsAnswerCorrect(obj.correct ? false : true);
-          setIsAnswered(true);
-        }}>
+        <Button
+          variant="outlined"
+          color="error"
+          style={{ width: '200px', height: '70px' }}
+          onClick={() => {
+            setIsAnswerCorrect(obj.correct ? false : true);
+            setIsAnswered(true);
+          }}
+        >
           Неверно
-      </Button>
-      <Button variant="outlined" color="success" style={{width: '200px', height: '70px'}} onClick={() => {
-          setIsAnswerCorrect(obj.correct ? true : false);
-          setIsAnswered(true);
-        }}>
+        </Button>
+        <Button
+          variant="outlined"
+          color="success"
+          style={{ width: '200px', height: '70px' }}
+          onClick={() => {
+            setIsAnswerCorrect(obj.correct ? true : false);
+            setIsAnswered(true);
+          }}
+        >
           Верно
-      </Button>
+        </Button>
       </div>
     </Container>
-  )
-}
+  );
+};
 
-export default SprintGame
+export default SprintGame;

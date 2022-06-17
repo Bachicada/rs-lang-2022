@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 
 interface GameLifeProps {
   count: number;
@@ -8,13 +8,9 @@ const GameLife = (props: GameLifeProps) => {
   const emoji = ['🧡', '💔'];
   const data = [];
   for (let i = 0; i < 5; i++) {
-    (i < (props.count)) ? data.push(emoji[0]) : data.push(emoji[1]);
+    i < props.count ? data.push(emoji[0]) : data.push(emoji[1]);
   }
-  return (
-    <div>
-      {data}
-    </div>
-  )
-}
+  return <div>{data}</div>;
+};
 
-export default GameLife
+export default GameLife;

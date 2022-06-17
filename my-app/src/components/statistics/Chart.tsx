@@ -10,20 +10,15 @@ import {
   Legend,
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
-import { createUserWord, deleteUserWord, getUserWord, getUserWords } from '../../services/UserWordService';
+import {
+  createUserWord,
+  deleteUserWord,
+  getUserWord,
+  getUserWords,
+} from '../../services/UserWordService';
 import { createUserStatistics, getUserStatistics } from '../../services/UserStatisticsService';
 
-
-
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend
-);
+ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
 interface ChartProps {
   title: string;
@@ -34,7 +29,7 @@ interface ChartProps {
 
 // const userWords = getUserWords();
 //   userWords.then((result) => console.log(result));
-  // deleteUserWord('5e9f5ee35eb9e72bc21af718');
+// deleteUserWord('5e9f5ee35eb9e72bc21af718');
 //   getUserWord('5e9f5ee35eb9e72bc21af718').then((res) => console.log(res ? res : 'not found'));
 //   createUserWord({
 //     wordId: "5e9f5ee35eb9e72bc21af718",
@@ -50,7 +45,6 @@ interface ChartProps {
 getUserStatistics().then((res) => console.log(res));
 
 const Chart = (props: ChartProps) => {
-
   const options = {
     responsive: true,
     plugins: {
@@ -63,9 +57,9 @@ const Chart = (props: ChartProps) => {
       },
     },
   };
-  
+
   const labels = props.labels;
-  
+
   const data = {
     labels,
     datasets: [
@@ -78,6 +72,6 @@ const Chart = (props: ChartProps) => {
     ],
   };
   return <Line options={options} data={data} />;
-}
+};
 
 export default Chart;

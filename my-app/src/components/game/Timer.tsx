@@ -1,9 +1,7 @@
-import { useContext } from 'react'
+import { useContext } from 'react';
 import { QuizContext } from '../sprint/Sprint';
-import styles from './Game.module.css'
-import CircularProgress, {
-  CircularProgressProps,
-} from '@mui/material/CircularProgress';
+import styles from './Game.module.css';
+import CircularProgress, { CircularProgressProps } from '@mui/material/CircularProgress';
 import { Box, Typography } from '@mui/material';
 
 interface TimerProps {
@@ -11,9 +9,7 @@ interface TimerProps {
   max: number;
 }
 
-function CircularProgressWithLabel(
-  props: CircularProgressProps & { value: number, max: number },
-) {
+function CircularProgressWithLabel(props: CircularProgressProps & { value: number; max: number }) {
   const percent = 100 / (props.max / props.value);
   return (
     <Box className={styles.timer} sx={{ position: 'absolute', display: 'inline-flex' }}>
@@ -30,11 +26,9 @@ function CircularProgressWithLabel(
           justifyContent: 'center',
         }}
       >
-        <Typography
-          variant="caption"
-          component="div"
-          color="text.secondary"
-        >{`${Math.round(props.value)}`}</Typography>
+        <Typography variant="caption" component="div" color="text.secondary">{`${Math.round(
+          props.value
+        )}`}</Typography>
       </Box>
     </Box>
   );
@@ -42,9 +36,7 @@ function CircularProgressWithLabel(
 
 const Timer = (props: TimerProps) => {
   const [quizState, dispatch] = useContext(QuizContext);
-  return (
-    <CircularProgressWithLabel value={props.time} max={props.max} />
-  )
-}
+  return <CircularProgressWithLabel value={props.time} max={props.max} />;
+};
 
-export default Timer
+export default Timer;

@@ -1,7 +1,7 @@
-import { WordItem } from "../types";
+import { WordItem } from '../types';
 
 const Utils = {
-  params: {part: null, page: null},
+  params: { part: null, page: null },
 
   setParams: (arr: any) => {
     Utils.params.part = arr.part;
@@ -17,10 +17,10 @@ const Utils = {
       return {
         item,
         //Determines whether the answer will be the correct translation or not
-        correct: Utils.random(0,1) === 1 ? true: false,
+        correct: Utils.random(0, 1) === 1 ? true : false,
         //If need be - random incorrect translate
-        incorrect: arr[Utils.random(0, arr.length - 1)].wordTranslate
-      }
+        incorrect: arr[Utils.random(0, arr.length - 1)].wordTranslate,
+      };
     });
   },
 
@@ -37,22 +37,22 @@ const Utils = {
         idxArr.push(rand);
       }
     }
-    //Get an arr of words by idx 
+    //Get an arr of words by idx
     // const piece = idxArr.map((id) => {
     //   return arr[id]
     // }).flat();
     const piece = [...arr].flat();
-    
+
     const result = piece.map((item) => {
       return {
         item: item,
         //Determines whether the answer will be the correct translation or not
-        correct: Utils.random(0,1) === 1 ? true: false,
+        correct: Utils.random(0, 1) === 1 ? true : false,
         //If need be - random incorrect translate
-        incorrect: piece[Utils.random(0, 29)].wordTranslate
-      }
+        incorrect: piece[Utils.random(0, 29)].wordTranslate,
+      };
     });
-    
+
     return result;
   },
 
@@ -69,7 +69,7 @@ const Utils = {
         idxArr.push(rand);
       }
     }
-    //Get an arr of words by idx 
+    //Get an arr of words by idx
     // const piece = idxArr.map((id) => {
     //   return arr[id]
     // }).flat();
@@ -87,14 +87,16 @@ const Utils = {
           incorrect.push(rand);
         }
       }
-      const rightId = Utils.random(0,3);
+      const rightId = Utils.random(0, 3);
       return {
         item: item,
         //4 incorrect words
-        incorrect: incorrect.map((num, id) => id === rightId ? item.wordTranslate : piece[num].wordTranslate),
-      }
+        incorrect: incorrect.map((num, id) =>
+          id === rightId ? item.wordTranslate : piece[num].wordTranslate
+        ),
+      };
     });
-    
+
     return result;
   },
 
@@ -102,16 +104,12 @@ const Utils = {
     if (!question) {
       return [];
     }
-    const unshuffledAnswers = [
-      ...question
-    ];
+    const unshuffledAnswers = [...question];
     return unshuffledAnswers
       .map((a) => ({ sort: Math.random(), value: a }))
       .sort((a, b) => a.sort - b.sort)
       .map((a) => a.value);
   },
-
-
-}
+};
 
 export default Utils;

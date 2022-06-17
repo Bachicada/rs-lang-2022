@@ -10,13 +10,19 @@ const GameResult = (props: GameResultProps) => {
   const [quizState, dispatch] = useContext(AudioContext);
   if (quizState.isGameFinished) {
     return (
-      <div style={{height: '300px', overflowY: 'auto'}}>{quizState.answers.map((obj) => {
-        return <p key={obj.item.id + props.type}>{`${obj.item.word} ${obj.item.wordTranslate} ${obj.answer} 
+      <div style={{ height: '300px', overflowY: 'auto' }}>
+        {quizState.answers.map((obj) => {
+          return (
+            <p key={obj.item.id + props.type}>{`${obj.item.word} ${obj.item.wordTranslate} ${
+              obj.answer
+            } 
             ${obj.successCounter}/${obj.successCounter + obj.failCounter}`}</p>
-      })}</div>
+          );
+        })}
+      </div>
     );
   }
   return <></>;
-}
+};
 
-export default GameResult
+export default GameResult;

@@ -9,7 +9,7 @@ import IconButton, { IconButtonProps } from '@mui/material/IconButton';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { CurUser, WordCardProp, WordItem } from '../../types';
 import { API_URL, APP_ROUTES } from '../../utils/Constants';
-import styles from './WordCard.module.css'
+import styles from './WordCard.module.css';
 import { Chip } from '@mui/material';
 import DoneIcon from '@mui/icons-material/Done';
 import { useContext, useState } from 'react';
@@ -34,104 +34,100 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
   }),
 }));
 
-export default function WordCard({word,onDataChanged}: WordCardProp) {
-  
+export default function WordCard({ word, onDataChanged }: WordCardProp) {
   const [expanded, setExpanded] = React.useState(false);
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
 
-  function createMarkup(){
+  function createMarkup() {
     return { __html: word.textMeaning };
   }
-  function createExample(){
-    return { __html: word.textExample};
+  function createExample() {
+    return { __html: word.textExample };
   }
-  function checkBorder(word: WordItem){
-    let bg; 
+  function checkBorder(word: WordItem) {
+    let bg;
     switch (word.group) {
       case 0:
-       bg = '#82B2ED';
+        bg = '#82B2ED';
         break;
       case 1:
-       bg = '#689BDC';
-       break;
+        bg = '#689BDC';
+        break;
       case 2:
-       bg = '#295488';
-        break; 
+        bg = '#295488';
+        break;
       case 3:
-       bg = '#295488';
-          break;
-     case 4:
-         bg = '#1B2D46';
-         break;
-     case 5:
-         bg = '#141B29';
-          break;     
-    }
-     return bg;
-   }
-
-  let isPlay = false; 
-  function togglePlay(word: WordItem){
-    const audioList = [
-      new Audio(`${API_URL}/${word.audio}`),
-      new Audio(`${API_URL}/${word.audioMeaning}`),
-      new Audio(`${API_URL}/${word.audioExample}`)
-    ];
-
-    if(!isPlay){
-      audioList[0].play();
-      audioList[0].addEventListener('ended', ()=>audioList[1].play());
-      audioList[1].addEventListener('ended', ()=>audioList[2].play());
-      isPlay = true;
-    }
-    else{
-      audioList.forEach(item=>item.pause());
-      isPlay = false;
-    }
-  }
-
-  const userContext = useContext<{ user: CurUser; dispatchUserEvent: (actionType: string, payload: CurUser) => void; }>(
-    UserContext
-  );
- 
-  const checkBg = () =>{
-    let bg;
-    if(word.isHardWord){
-      bg='#f77e3d8f';
-    }
-    else if(word.isLearnedWord){
-      bg='#36a33854';
+        bg = '#295488';
+        break;
+      case 4:
+        bg = '#1B2D46';
+        break;
+      case 5:
+        bg = '#141B29';
+        break;
     }
     return bg;
   }
 
-  return (
-    <Card sx={{ maxWidth: 345, backgroundColor: checkBg}} >
-        { userContext.user.name ? <WordStat  word={word} /> : '' }
-       <CardMedia
-          component="img"
-          height="140"
-          image={`${API_URL}/${word.image}`}
-          alt={word.word}/>
-       <div className={styles.cardContent}>
-          <div className={styles.wordTitle} style={{borderLeft: `8px solid ${checkBorder(word)}`}}> 
-             <div>
-                <h4 className={styles.wordName}> {word.word} </h4>
-                <p className={styles.wordsMain}>{word.transcription}</p>
-                <p className={styles.wordsMain}>{word.wordTranslate}</p>
-             </div>
-             <button className={styles.soundBtn} style={{border: `3px solid ${checkBorder(word)}`}}
-                     onClick={() => { togglePlay(word) } }
-             >
-            </button>
-          </div>    
-       </div>  
-      <CardActions disableSpacing>
+  let isPlay = false;
+  function togglePlay(word: WordItem) {
+    const audioList = [
+      new Audio(`${API_URL}/${word.audio}`),
+      new Audio(`${API_URL}/${word.audioMeaning}`),
+      new Audio(`${API_URL}/${word.audioExample}`),
+    ];
 
-      { userContext.user.name ? <OptionalBtns word={word} onDataChanged={onDataChanged}/> : '' }
+    if (!isPlay) {
+      audioList[0].play();
+      audioList[0].addEventListener('ended', () => audioList[1].play());
+      audioList[1].addEventListener('ended', () => audioList[2].play());
+      isPlay = true;
+    } else {
+      audioList.forEach((item) => item.pause());
+      isPlay = false;
+    }
+  }
+
+  const userContext = useContext<{
+    user: CurUser;
+    dispatchUserEvent: (actionType: string, payload: CurUser) => void;
+  }>(UserContext);
+
+  const checkBg = () => {
+    let bg;
+    if (word.isHardWord) {
+      bg = '#f77e3d8f';
+    } else if (word.isLearnedWord) {
+      bg = '#36a33854';
+    }
+    return bg;
+  };
+
+  return (
+    <Card sx={{ maxWidth: 345, backgroundColor: checkBg }}>
+      {userContext.user.name ? <WordStat word={word} /> : ''}
+      <CardMedia component="img" height="140" image={`${API_URL}/${word.image}`} alt={word.word} />
+      <div className={styles.cardContent}>
+        <div className={styles.wordTitle} style={{ borderLeft: `8px solid ${checkBorder(word)}` }}>
+          <div>
+            <h4 className={styles.wordName}> {word.word} </h4>
+            <p className={styles.wordsMain}>{word.transcription}</p>
+            <p className={styles.wordsMain}>{word.wordTranslate}</p>
+          </div>
+          <button
+            className={styles.soundBtn}
+            style={{ border: `3px solid ${checkBorder(word)}` }}
+            onClick={() => {
+              togglePlay(word);
+            }}
+          ></button>
+        </div>
+      </div>
+      <CardActions disableSpacing>
+        {userContext.user.name ? <OptionalBtns word={word} onDataChanged={onDataChanged} /> : ''}
         <ExpandMore
           expand={expanded}
           onClick={handleExpandClick}
@@ -143,7 +139,7 @@ export default function WordCard({word,onDataChanged}: WordCardProp) {
       </CardActions>
       <Collapse in={expanded} timeout="auto" unmountOnExit>
         <CardContent>
-        <div>
+          <div>
             <h5 className={styles.h5}>Значение слова:</h5>
             <p dangerouslySetInnerHTML={createMarkup()}></p>
             <p>{word.textMeaningTranslate}</p>
@@ -152,7 +148,6 @@ export default function WordCard({word,onDataChanged}: WordCardProp) {
             <p dangerouslySetInnerHTML={createExample()}></p>
             <p>{word.textExampleTranslate}</p>
           </div>
-         
         </CardContent>
       </Collapse>
     </Card>

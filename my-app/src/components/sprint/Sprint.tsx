@@ -24,17 +24,17 @@ export interface InitialState {
   new: any[];
   currentQuestionIndex: number;
   correctAnswersCount: number;
-  maxAnswersCount: number,
-  score: number,
-  allIncorrectCount: number,
-  allCorrectCount: number,
-  showModal: boolean,
-  showResults: boolean,
-  isGameReady: boolean,
-  isGameFinished: boolean,
-  isLoading: boolean,
-  seconds: number,
-  timerActive: boolean,
+  maxAnswersCount: number;
+  score: number;
+  allIncorrectCount: number;
+  allCorrectCount: number;
+  showModal: boolean;
+  showResults: boolean;
+  isGameReady: boolean;
+  isGameFinished: boolean;
+  isLoading: boolean;
+  seconds: number;
+  timerActive: boolean;
 }
 
 const initialState: InitialState = {
@@ -68,7 +68,7 @@ const reducer: Reducer<InitialState, ReducerAction> = (state, action) => {
       return {
         ...state,
         isLoading: true,
-      }
+      };
     }
     case 'PRELOAD': {
       return {
@@ -78,13 +78,13 @@ const reducer: Reducer<InitialState, ReducerAction> = (state, action) => {
         isLoading: false,
         isGameReady: true,
         timerActive: true,
-      }
+      };
     }
     case 'SET_RECORD': {
       return {
         ...state,
         score: state.score + action.payload,
-      }
+      };
     }
     case 'CHANGE_LEVEL': {
       const { level, result } = action.payload;
@@ -95,15 +95,14 @@ const reducer: Reducer<InitialState, ReducerAction> = (state, action) => {
         isLoading: false,
         isGameReady: true,
         timerActive: true,
-      }
+      };
     }
     case 'CORRECT_ANSWER': {
       const answers = [...state.answers, action.payload];
       const correctAnswersCount = state.correctAnswersCount + 1;
       const currentQuestionIndex = state.currentQuestionIndex + 1;
-      const maxAnswersCount = correctAnswersCount > state.maxAnswersCount 
-          ? correctAnswersCount
-          : state.maxAnswersCount;
+      const maxAnswersCount =
+        correctAnswersCount > state.maxAnswersCount ? correctAnswersCount : state.maxAnswersCount;
       const isGameFinished = state.questions.length === currentQuestionIndex ? true : false;
       return {
         ...state,
@@ -113,7 +112,7 @@ const reducer: Reducer<InitialState, ReducerAction> = (state, action) => {
         isGameFinished,
         maxAnswersCount,
         allCorrectCount: state.allCorrectCount + 1,
-      }
+      };
     }
     case 'INCORRECT_ANSWER': {
       const answers = [...state.answers, action.payload];
@@ -127,14 +126,14 @@ const reducer: Reducer<InitialState, ReducerAction> = (state, action) => {
         currentQuestionIndex,
         isGameFinished,
         allIncorrectCount: state.allIncorrectCount + 1,
-      }
+      };
     }
     case 'ADD_NEW': {
       const newArr = [...state.new, action.payload];
       return {
         ...state,
         new: newArr,
-      }
+      };
     }
     case 'SET_SCORE': {
       const answer = [...state.answers];
@@ -142,41 +141,41 @@ const reducer: Reducer<InitialState, ReducerAction> = (state, action) => {
         item.then((res: any) => {
           answer[id].failCounter = res.optional.failCounter;
           answer[id].successCounter = res.optional.successCounter;
-        })
-      })
+        });
+      });
       return {
         ...state,
         answer,
         isLoading: false,
-      }
+      };
     }
     case 'FINISH_GAME': {
       return {
         ...state,
         isGameFinished: true,
-      }
+      };
     }
     case 'RESTART': {
       return {
         ...initialState,
         isGameFinished: false,
-      }
+      };
     }
     default:
       return state;
   }
 };
 
-type IQuizContext = [InitialState, Dispatch<{ type: string; payload?: any; }>];
+type IQuizContext = [InitialState, Dispatch<{ type: string; payload?: any }>];
 export const QuizContext = createContext<IQuizContext>([initialState, () => null]);
 
 const Sprint: FC = () => {
   const value = useReducer(reducer, initialState);
   return (
-    <QuizContext.Provider value ={value}>
-      <Game type={GAME_TYPE.SPRINT}/>
+    <QuizContext.Provider value={value}>
+      <Game type={GAME_TYPE.SPRINT} />
     </QuizContext.Provider>
   );
-}
+};
 
 export default Sprint;

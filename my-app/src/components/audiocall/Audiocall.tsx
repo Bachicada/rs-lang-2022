@@ -35,13 +35,13 @@ export interface InitialState {
   currentQuestionIndex: number;
   currentLifeIndex: number;
   correctAnswersCount: number;
-  showModal: boolean,
-  showResults: boolean,
-  isGameReady: boolean,
-  isGameFinished: boolean,
-  isLoading: boolean,
-  seconds: number,
-  timerActive: boolean,
+  showModal: boolean;
+  showResults: boolean;
+  isGameReady: boolean;
+  isGameFinished: boolean;
+  isLoading: boolean;
+  seconds: number;
+  timerActive: boolean;
 }
 
 const initialState: InitialState = {
@@ -72,19 +72,19 @@ const reducer: Reducer<InitialState, ReducerAction> = (state, action) => {
       return {
         ...state,
         isLoading: true,
-      }
+      };
     }
     case 'SET_RECORD': {
       return {
         ...state,
-      }
+      };
     }
     case 'ADD_NEW': {
       const newArr = [...state.new, action.payload];
       return {
         ...state,
         new: newArr,
-      }
+      };
     }
     case 'CHANGE_LEVEL': {
       const { level, result } = action.payload;
@@ -95,7 +95,7 @@ const reducer: Reducer<InitialState, ReducerAction> = (state, action) => {
         isLoading: false,
         isGameReady: true,
         timerActive: true,
-      }
+      };
     }
     case 'CORRECT_ANSWER': {
       const answers = [...state.answers, action.payload];
@@ -108,14 +108,15 @@ const reducer: Reducer<InitialState, ReducerAction> = (state, action) => {
         correctAnswersCount,
         currentQuestionIndex,
         isGameFinished,
-      }
+      };
     }
     case 'INCORRECT_ANSWER': {
       const answers = [...state.answers, action.payload];
       const correctAnswersCount = 0;
       const currentQuestionIndex = state.currentQuestionIndex + 1;
       const currentLifeIndex = state.currentLifeIndex - 1;
-      const isGameFinished = (state.questions.length === currentQuestionIndex || currentLifeIndex === 0) ? true : false;
+      const isGameFinished =
+        state.questions.length === currentQuestionIndex || currentLifeIndex === 0 ? true : false;
       return {
         ...state,
         answers,
@@ -123,21 +124,20 @@ const reducer: Reducer<InitialState, ReducerAction> = (state, action) => {
         currentQuestionIndex,
         isGameFinished,
         currentLifeIndex,
-      }
+      };
     }
     case 'SECOND': {
       const seconds = state.seconds - 1;
       return {
         ...initialState,
         seconds,
-      }
+      };
     }
     case 'OUT_OF_TIME': {
       const currentLifeIndex = state.currentLifeIndex - 1;
       const currentQuestionIndex = state.currentQuestionIndex + 1;
-      const isGameFinished = (currentLifeIndex === 0 || currentQuestionIndex >= state.questions.length) 
-          ? true 
-          : false;
+      const isGameFinished =
+        currentLifeIndex === 0 || currentQuestionIndex >= state.questions.length ? true : false;
       const seconds = currentLifeIndex === 0 ? 0 : 12;
       return {
         ...state,
@@ -145,52 +145,56 @@ const reducer: Reducer<InitialState, ReducerAction> = (state, action) => {
         isGameFinished,
         seconds,
         currentQuestionIndex,
-      }
+      };
     }
     case 'RESTART': {
       return {
-        ...initialState
-      }
+        ...initialState,
+      };
     }
     default:
       return state;
   }
 };
 
-type IQuizContext = [InitialState, Dispatch<{ type: string; payload?: any; }>];
+type IQuizContext = [InitialState, Dispatch<{ type: string; payload?: any }>];
 export const AudioContext = createContext<IQuizContext>([initialState, () => null]);
 
 const Sprint: FC = () => {
   const navigate = useNavigate();
-  const  location = useLocation();
- 
+  const location = useLocation();
+
   useEffect(() => {
-   window.addEventListener("beforeunload", ()=> localStorage.setItem('CurrentLink',location.pathname));
-   return () => window.removeEventListener("beforeunload", ()=> localStorage.setItem('CurrentLink',location.pathname));
- }, [location]);
- 
- useEffect(() => {
-   const path = localStorage.getItem('CurrentLink');
-   console.log("pac", path)
-   const checkPage = () =>{
-     if (path){
-       navigate(`${path}`)
-     }
-     else {
-      navigate(`${APP_ROUTES.MAIN}`)
-     }
-   }
-   window.addEventListener('domcontentloaded', checkPage);
-   return () => window.removeEventListener('domcontentloaded', checkPage);
- }, []);
+    window.addEventListener('beforeunload', () =>
+      localStorage.setItem('CurrentLink', location.pathname)
+    );
+    return () =>
+      window.removeEventListener('beforeunload', () =>
+        localStorage.setItem('CurrentLink', location.pathname)
+      );
+  }, [location]);
+
+  useEffect(() => {
+    const path = localStorage.getItem('CurrentLink');
+    console.log('pac', path);
+    const checkPage = () => {
+      if (path) {
+        navigate(`${path}`);
+      } else {
+        navigate(`${APP_ROUTES.MAIN}`);
+      }
+    };
+    window.addEventListener('domcontentloaded', checkPage);
+    return () => window.removeEventListener('domcontentloaded', checkPage);
+  }, []);
 
   const value = useReducer(reducer, initialState);
 
   return (
-    <AudioContext.Provider value ={value}>
-      <Game type={GAME_TYPE.AUDIOCALL}/>
+    <AudioContext.Provider value={value}>
+      <Game type={GAME_TYPE.AUDIOCALL} />
     </AudioContext.Provider>
   );
-}
+};
 
 export default Sprint;

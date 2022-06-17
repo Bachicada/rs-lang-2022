@@ -32,7 +32,6 @@ const style = {
   textAlign: 'right',
 };
 
-
 const AppBar = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== 'open',
 })<AppBarProps>(({ theme, open }) => ({
@@ -72,28 +71,28 @@ export function PersistentDrawerRight() {
   };
 
   const [userName, setUserName] = useState('Гость');
-  const userContext = useContext<{ user: CurUser; dispatchUserEvent: (actionType: string, payload: CurUser) => void; }>(
-    UserContext
-  );
+  const userContext = useContext<{
+    user: CurUser;
+    dispatchUserEvent: (actionType: string, payload: CurUser) => void;
+  }>(UserContext);
 
   useEffect(() => {
-    setUserName(userContext.user.name || "Гость");
+    setUserName(userContext.user.name || 'Гость');
   }, [userContext]);
-
 
   return (
     <div>
-       <AppBar sx={style} position="fixed" open={open}>
+      <AppBar sx={style} position="fixed" open={open}>
         <Toolbar>
-          { userContext.user.name ? <LogOutBtn /> : <SignInBtn/> }
-          
+          {userContext.user.name ? <LogOutBtn /> : <SignInBtn />}
+
           <Typography variant="h6" noWrap sx={{ flexGrow: 2 }} component="div">
             Здравствуй, {userName}
           </Typography>
           <Typography variant="h6" noWrap sx={{ flexGrow: 1 }} component="div">
             Меню
           </Typography>
-         
+
           <IconButton
             color="inherit"
             aria-label="open drawer"
@@ -105,14 +104,14 @@ export function PersistentDrawerRight() {
           </IconButton>
         </Toolbar>
       </AppBar>
-    
+
       <Drawer
         sx={{
           width: drawerWidth,
           flexShrink: 0,
           '& .MuiDrawer-paper': {
-            backgroundColor:'#171F2B',
-            color:'#ffff',
+            backgroundColor: '#171F2B',
+            color: '#ffff',
             width: drawerWidth,
           },
         }}
@@ -122,13 +121,12 @@ export function PersistentDrawerRight() {
         onBackdropClick={handleDrawerClose}
       >
         <DrawerHeader>
-          <IconButton sx={{color:'#ffff'}} onClick={handleDrawerClose}>
+          <IconButton sx={{ color: '#ffff' }} onClick={handleDrawerClose}>
             {theme.direction === 'rtl' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
           </IconButton>
-       
         </DrawerHeader>
         <BurgerMenu onClick={handleDrawerClose} />
       </Drawer>
-      </div>
+    </div>
   );
 }
