@@ -10,20 +10,20 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useEffect, useState } from 'react';
-import { APP_ROUTES } from '../../utils/Constants';
-import { loginUser } from '../../services/UserService';
-import { CurUser, NewUser } from '../../types';
+import { APP_ROUTES } from '../../../utils/Constants';
+import { loginUser } from '../../../services/UserService';
+import { CurUser, NewUser } from '../../../types';
 import { Link, useNavigate } from 'react-router-dom';
-import { LoadingIcon } from '../shared/LoadingIcon';
+import { LoadingIcon } from '../../shared/LoadingIcon';
 
 import styles from './autorisation.module.css';
-import { UserContext } from '../../App';
+import { UserContext } from '../../../App';
 
 const theme = createTheme();
 
 export default function SignInForm() {
   const [validUser, setValidUser] = useState(true);
-
+  console.log('a');
   const userInfo: CurUser = {};
 
   const navigate = useNavigate();

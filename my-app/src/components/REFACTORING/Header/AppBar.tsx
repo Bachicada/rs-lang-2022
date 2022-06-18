@@ -16,29 +16,29 @@ interface Props {
 
 interface AppBarProps extends MuiAppBarProps {
   open?: boolean;
-  drawerWidth?: number;
+  drawerwidth?: number;
 }
 
 const AppBarComponent = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== 'open',
-})<AppBarProps>(({ theme, open, drawerWidth }) => ({
+})<AppBarProps>(({ theme, open, drawerwidth }) => ({
   transition: theme.transitions.create(['margin', 'width'], {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
   }),
   ...(open && {
-    width: `calc(100% - ${drawerWidth}px)`,
+    width: `calc(100% - ${drawerwidth}px)`,
     transition: theme.transitions.create(['margin', 'width'], {
       easing: theme.transitions.easing.easeOut,
       duration: theme.transitions.duration.enteringScreen,
     }),
-    marginRight: drawerWidth,
+    marginRight: drawerwidth,
   }),
 }));
 
 const AppBar = ({ open, drawerWidth, userName, handleDrawerOpen }: Props) => {
   return (
-    <AppBarComponent position="fixed" open={open} drawerWidth={drawerWidth}>
+    <AppBarComponent position="fixed" open={open} drawerwidth={drawerWidth}>
       <Toolbar sx={{ justifyContent: 'space-between' }}>
         <img style={{ maxWidth: '125px' }} src={logoImg} alt="app top banner" />
 

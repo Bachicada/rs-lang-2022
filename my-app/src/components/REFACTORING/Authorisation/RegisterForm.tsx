@@ -10,14 +10,14 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { createUser, loginUser } from '../../services/UserService';
+import { createUser, loginUser } from '../../../services/UserService';
 import { useContext, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { CurUser, NewUser } from '../../types';
-import { APP_ROUTES } from '../../utils/Constants';
+import { CurUser, NewUser } from '../../../types';
+import { APP_ROUTES } from '../../../utils/Constants';
 import styles from './autorisation.module.css';
-import { UserContext } from '../../App';
-import { LoadingIcon } from '../shared/LoadingIcon';
+import { UserContext } from '../../../App';
+import { LoadingIcon } from '../../shared/LoadingIcon';
 
 const theme = createTheme();
 
