@@ -8,7 +8,8 @@ const themeOptions: ThemeOptions = {
     },
     secondary: {
       // main: '#7d9ef2',
-      main: '#fff',
+      // main: '#fff',
+      main: '#000',
     },
   },
   typography: {

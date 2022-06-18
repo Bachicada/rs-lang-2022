@@ -8,7 +8,7 @@ export default function Landing() {
   return (
     <div className={styles.landing}>
       <AboutApp />
-      {/* <Benefits /> */}
+      <Benefits />
       <Team />
     </div>
   );

@@ -94,7 +94,7 @@ const Game = (props: GameProps) => {
     <Box
       sx={{
         width: '100%',
-        height: 'calc(100vh - 64px - 64px)',
+        minHeight: 'calc(100vh - 64px - 64px)',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',

@@ -21,14 +21,24 @@ const StyledBox = styled('div')`
   background-color: #fff;
   width: 100%;
   min-height: 100px;
-  // width: 300px;
-  // height: 300px;
+  width: 200px;
+  height: 200px;
   border-radius: 50px;
   cursor: pointer;
   transition: all 0.2s ease-in-out;
 
   &:hover {
     background: #f5f5f5;
+  }
+
+  @media (min-width: 600px) {
+    width: 250px;
+    height: 250px;
+  }
+
+  @media (min-width: 992px) {
+    width: 300px;
+    height: 300px;
   }
 `;
 
@@ -81,7 +91,7 @@ const LevelButton = ({ item, name, content }: LevelButtonProps) => {
       }}
     >
       <StyledImg src={content.img} alt={name} />
-      <Typography mb="7%" fontSize="1.5rem" variant="body1" component="p">
+      <Typography mb="7%" textAlign="center" fontSize="1.5rem" variant="body1" component="p">
         {name}
       </Typography>
     </StyledBox>

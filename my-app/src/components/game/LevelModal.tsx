@@ -1,4 +1,4 @@
-import { Box, Container, Grid, Typography } from '@mui/material';
+import { Box, Container, Grid, styled, Typography } from '@mui/material';
 import LevelButton from './LevelButton';
 import imgHappy from '../../assets/illustrations/manHappy.png';
 import imgIdea from '../../assets/illustrations/manIdea.png';
@@ -72,6 +72,34 @@ const ARR = [
 //   },
 // ];
 
+const FlexContainer = styled('div')`
+  display: grid;
+  grid-template-columns: repeat(auto-fit, 200px);
+  grid-gap: 20px;
+  justify-content: space-around;
+  justify-items: center;
+  width: 100%;
+
+  @media (min-width: 600px) {
+    grid-template-columns: repeat(auto-fit, 250px);
+  }
+
+  @media (min-width: 992px) {
+    grid-template-columns: repeat(auto-fit, 300px);
+  }
+`;
+// const FlexContainer = styled('div')`
+//   display: flex;
+//   justify-content: space-between;
+//   align-items: center;
+//   flex-wrap: wrap;
+//   align-content: center;
+// `;
+
+const StyledItem = styled('div')`
+  background: purple;
+`;
+
 const LevelModal = () => {
   const LEVELS = [1, 2, 3, 4, 5, 6];
   const NAMES = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
@@ -83,7 +111,6 @@ const LevelModal = () => {
         style={{
           display: 'flex',
           flexDirection: 'column',
-          position: 'absolute',
           width: '100%',
           height: '100%',
           zIndex: '100',
@@ -96,23 +123,20 @@ const LevelModal = () => {
           Выбери уровень
         </Typography>
 
-        <Grid container spacing={2}>
+        <FlexContainer>
+          {ARR.map((item, index) => (
+            // <StyledItem key={index}>
+            <LevelButton item={item.level} name={item.name} content={item} key={index} />
+            // </StyledItem>
+          ))}
+        </FlexContainer>
+        {/* <Grid container spacing={2}>
           {ARR.map((item, index) => (
             <Grid item key={index} xs={6} sm={6} md={4}>
               <LevelButton item={item.level} name={item.name} content={item} />
             </Grid>
           ))}
-          {/* {LEVELS.map((item, index) => (
-            <Grid item key={index} xs={4}>
-              <LevelButton item={item} name={NAMES[index]} />
-            </Grid>
-          ))} */}
-        </Grid>
-        {/* <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-          {LEVELS.map((item, index) => (
-            <LevelButton item={item} key={index} />
-          ))}
-        </Box> */}
+        </Grid> */}
       </Container>
     </>
   );

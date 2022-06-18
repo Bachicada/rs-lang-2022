@@ -1,6 +1,7 @@
 import { Toolbar, IconButton } from '@mui/material';
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
-import logoImg from '../../../assets/rs-logo1.svg';
+// import logoImg from '../../../assets/rs-logo1.svg';
+import logoImg from '../../../assets/rslang-logo1.png';
 import React from 'react';
 import { styled } from '@mui/material/styles';
 import MenuIcon from '@mui/icons-material/Menu';
