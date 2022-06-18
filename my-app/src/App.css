@@ -42,13 +42,13 @@
     padding: 10px 0px;
 }
 .menuItem {
-    padding: 5px 0px 5px 10px;
+  padding-left: 10px;
 }
 .menuBook {
     padding: 0px 0px;
 }
 .bookItem {
-    padding: 5px 0px 5px 40px;
+  padding-left: 40px;
 }
 
 

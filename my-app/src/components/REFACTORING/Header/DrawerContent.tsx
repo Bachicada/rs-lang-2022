@@ -1,11 +1,14 @@
 import React, { SyntheticEvent, useContext } from 'react';
-import { APP_ROUTES } from '../../utils/Constants';
-import { Link, useNavigate } from 'react-router-dom';
-import { CurUser } from '../../types';
-import { UserContext } from '../../App';
-import { TramTwoTone } from '@mui/icons-material';
+import { useNavigate } from 'react-router';
+import { Link } from 'react-router-dom';
+import { UserContext } from '../../../App';
+import { CurUser } from '../../../types';
+import { APP_ROUTES } from '../../../utils/Constants';
 
-export default function BurgerMenu(props: { onClick: () => void }) {
+interface Props {
+  onClick: () => void;
+}
+const DrawerContent = ({ onClick }: Props) => {
   const navigate = useNavigate();
 
   const userContext = useContext<{
@@ -15,6 +18,7 @@ export default function BurgerMenu(props: { onClick: () => void }) {
 
   function checkNavigation(event: SyntheticEvent) {
     const target = (event.target as HTMLElement).dataset.part;
+
     if (target !== 'hardWords') {
       const partNumber = (Number(target) - 1).toString();
       navigate(`${APP_ROUTES.TEXTBOOK}/${partNumber}/1`);
@@ -22,15 +26,18 @@ export default function BurgerMenu(props: { onClick: () => void }) {
       navigate(`${APP_ROUTES.TEXTBOOK}/hardwords/1`);
     }
   }
+
   return (
-    <ul className="menuList" onClick={props.onClick}>
+    <ul className="menuList" onClick={onClick}>
       <li className="menuItem">
         <Link to={APP_ROUTES.MAIN}>На главную RS Lang</Link>
       </li>
+
       <li className="menuItem">
         <Link to={`${APP_ROUTES.TEXTBOOK}/0`}>Учебник</Link>
       </li>
-      <ul className="menuBook" onClick={(event) => checkNavigation(event)}>
+
+      <ul className="menuBook" onClick={checkNavigation}>
         <li className="bookItem" data-part="1">
           Раздел 1
         </li>
@@ -49,6 +56,7 @@ export default function BurgerMenu(props: { onClick: () => void }) {
         <li className="bookItem" data-part="6">
           Раздел 6
         </li>
+
         {userContext.user.name ? (
           <li className="bookItem" data-part="hardWords">
             Сложные слова
@@ -69,4 +77,6 @@ export default function BurgerMenu(props: { onClick: () => void }) {
       </li>
     </ul>
   );
-}
+};
+
+export default DrawerContent;

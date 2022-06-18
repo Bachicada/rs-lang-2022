@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './App.css';
-import { PersistentDrawerRight } from './components/shared/Appnav';
+import Header from './components/REFACTORING/Header/Header';
 import { Footer } from './components/shared/Footer';
 import Landing from './components/start-page/Landing';
 import { Routes, Route } from 'react-router-dom';
@@ -48,7 +48,7 @@ function App() {
     <ThemeProvider theme={theme}>
       <UserContext.Provider value={{ user, dispatchUserEvent }}>
         <div className="App">
-          <PersistentDrawerRight />
+          <Header />
           <div id="mainContainer">
             <Routes>
               <Route path={APP_ROUTES.MAIN} element={<Landing />} />
