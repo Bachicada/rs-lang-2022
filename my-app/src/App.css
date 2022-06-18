@@ -1,18 +1,48 @@
+.App {
+  background-image: linear-gradient(203deg, #f5f5f5, rgba(255,0,0,0) 70.71%), linear-gradient(17deg, rgb(255 168 221), rgba(0,255,0,0) 70.71%), linear-gradient(107deg, rgb(255 240 120), rgba(0,0,255,0) 70.71%); 
+  position: relative;
+  background-image: linear-gradient(209deg, #347eff, rgba(255,0,0,0) 70.71%), linear-gradient(307deg, rgb(255 202 234), rgba(0,255,0,0) 70.71%), linear-gradient(43deg, rgb(255 159 159), rgba(0,0,255,0) 70.71%);
+}
+
+.App::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url('./assets/texture.png');
+  /* background-image: url('./assets/noise.png'); */
+  background-position: center;
+  background-repeat: repeat;
+  background-size: inherit;
+  mix-blend-mode: overlay;
+  opacity: 0.55;
+  pointer-events: none;
+}
+
 #mainContainer {
-    margin-top: 64px;
+    /* margin-top: 64px; */
+    padding: 64px 0;
     flex-grow: 1;
-    min-height: calc(100vh - 64px - 25px - 10px);
+    min-height: 100vh;
+    /* min-height: calc(100vh - 30px); */
+    /* min-height: calc(100vh - 64px - 25px - 10px); */
     padding-left:24px;
     padding-right:24px;
 }
 .footer {
-    position: relative;
+    position: absolute;
     display: flex;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 64px;
     justify-content: space-between;
     align-items: center;
-    height: 30px;
     padding: 5px;
     color: whitesmoke;
+    background: transparent;
 }
 .footerLink {
     position:relative;

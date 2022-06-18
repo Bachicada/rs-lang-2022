@@ -3,11 +3,16 @@ import { ThemeOptions } from '@mui/material/styles/createTheme';
 const themeOptions: ThemeOptions = {
   palette: {
     primary: {
-      main: '#343E8A',
+      // main: '#343E8A',
+      main: '#fff',
     },
     secondary: {
-      main: '#8a8134',
+      // main: '#7d9ef2',
+      main: '#fff',
     },
+  },
+  typography: {
+    fontFamily: 'Helvetica Neue',
   },
 };
 

@@ -26,6 +26,9 @@ const AppBarComponent = styled(MuiAppBar, {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
   }),
+  background: 'transparent',
+  boxShadow: 'none',
+
   ...(open && {
     width: `calc(100% - ${drawerwidth}px)`,
     transition: theme.transitions.create(['margin', 'width'], {
