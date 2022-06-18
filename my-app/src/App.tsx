@@ -13,6 +13,8 @@ import SignInForm from './components/autorisation/SignInForm';
 import RegForm from './components/autorisation/RegisterForm';
 import { createContext } from 'react';
 import { CurUser } from './types';
+import { ThemeProvider } from '@mui/material';
+import theme from './theme';
 
 export const UserContext = createContext({
   user: {},
@@ -43,29 +45,31 @@ function App() {
   };
 
   return (
-    <UserContext.Provider value={{ user, dispatchUserEvent }}>
-      <div className="App">
-        <PersistentDrawerRight />
-        <div id="mainContainer">
-          <Routes>
-            <Route path={APP_ROUTES.MAIN} element={<Landing />} />
-            <Route path={APP_ROUTES.SIGNIN} element={<SignInForm />} />
-            <Route path={APP_ROUTES.REGFORM} element={<RegForm />} />
-            <Route path={APP_ROUTES.TEXTBOOK} element={<Textbook />} />
+    <ThemeProvider theme={theme}>
+      <UserContext.Provider value={{ user, dispatchUserEvent }}>
+        <div className="App">
+          <PersistentDrawerRight />
+          <div id="mainContainer">
+            <Routes>
+              <Route path={APP_ROUTES.MAIN} element={<Landing />} />
+              <Route path={APP_ROUTES.SIGNIN} element={<SignInForm />} />
+              <Route path={APP_ROUTES.REGFORM} element={<RegForm />} />
+              <Route path={APP_ROUTES.TEXTBOOK} element={<Textbook />} />
 
-            <Route path={`${APP_ROUTES.TEXTBOOK}/:part`} element={<Textbook />} />
-            <Route path={`${APP_ROUTES.TEXTBOOK}/:part/:page`} element={<Textbook />} />
+              <Route path={`${APP_ROUTES.TEXTBOOK}/:part`} element={<Textbook />} />
+              <Route path={`${APP_ROUTES.TEXTBOOK}/:part/:page`} element={<Textbook />} />
 
-            <Route path={APP_ROUTES.SPRINT} element={<Sprint />} />
-            <Route path={APP_ROUTES.AUDIOCALL} element={<Audiocall />} />
-            <Route path={APP_ROUTES.STATISTICS} element={<Stat />} />
+              <Route path={APP_ROUTES.SPRINT} element={<Sprint />} />
+              <Route path={APP_ROUTES.AUDIOCALL} element={<Audiocall />} />
+              <Route path={APP_ROUTES.STATISTICS} element={<Stat />} />
 
-            <Route path="*" element={<Landing />} />
-          </Routes>
+              <Route path="*" element={<Landing />} />
+            </Routes>
+          </div>
+          <Footer />
         </div>
-        <Footer />
-      </div>
-    </UserContext.Provider>
+      </UserContext.Provider>
+    </ThemeProvider>
   );
 }
 

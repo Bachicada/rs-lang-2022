@@ -2,7 +2,7 @@ import * as React from 'react';
 import type {} from '@mui/lab/themeAugmentation';
 
 import { createTheme, styled, ThemeProvider, useTheme } from '@mui/material/styles';
-
+import logoImg from '../../assets/rs-logo1.svg';
 import Drawer from '@mui/material/Drawer';
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
@@ -19,18 +19,13 @@ import LogOutBtn from '../autorisation/LogOutBtn';
 import { SignInBtn } from '../autorisation/SignInBtn';
 import { UserContext } from '../../App';
 import { CurUser } from '../../types';
+import { Button } from '@mui/material';
 
 const drawerWidth = 280;
 
 interface AppBarProps extends MuiAppBarProps {
   open?: boolean;
 }
-
-const style = {
-  innerHeight: '40',
-  bgcolor: '#5393E1',
-  textAlign: 'right',
-};
 
 const AppBar = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== 'open',
@@ -81,34 +76,32 @@ export function PersistentDrawerRight() {
   }, [userContext]);
 
   return (
-    <div>
-      <AppBar sx={style} position="fixed" open={open}>
-        <Toolbar>
-          {userContext.user.name ? <LogOutBtn /> : <SignInBtn />}
+    <>
+      <AppBar position="fixed" open={open}>
+        <Toolbar sx={{ justifyContent: 'space-between' }}>
+          {/* {userContext.user.name ? <LogOutBtn /> : <SignInBtn />} */}
+          <img style={{ maxWidth: '125px' }} src={logoImg} alt="app top banner" />
 
-          <Typography variant="h6" noWrap sx={{ flexGrow: 2 }} component="div">
+          {/* <Typography variant="h6" noWrap sx={{ flexGrow: 2 }} component="div">
             Здравствуй, {userName}
-          </Typography>
-          <Typography variant="h6" noWrap sx={{ flexGrow: 1 }} component="div">
-            Меню
-          </Typography>
-
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            edge="end"
-            onClick={handleDrawerOpen}
-            sx={{ ...(open && { display: 'none' }) }}
-          >
-            <MenuIcon />
-          </IconButton>
+          </Typography> */}
+          <div>
+            <Button variant="outlined">Войти</Button>
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              edge="end"
+              onClick={handleDrawerOpen}
+              sx={{ ...(open && { display: 'none' }) }}
+            >
+              <MenuIcon />
+            </IconButton>
+          </div>
         </Toolbar>
       </AppBar>
 
       <Drawer
         sx={{
-          width: drawerWidth,
-          flexShrink: 0,
           '& .MuiDrawer-paper': {
             backgroundColor: '#171F2B',
             color: '#ffff',
@@ -127,6 +120,6 @@ export function PersistentDrawerRight() {
         </DrawerHeader>
         <BurgerMenu onClick={handleDrawerClose} />
       </Drawer>
-    </div>
+    </>
   );
 }
