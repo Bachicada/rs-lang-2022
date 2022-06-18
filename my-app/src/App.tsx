@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './App.css';
 import Header from './components/REFACTORING/Header/Header';
-import { Footer } from './components/shared/Footer';
+import { Footer } from './components/REFACTORING/Footer/Footer';
 import Landing from './components/start-page/Landing';
 import { Routes, Route } from 'react-router-dom';
 import { APP_ROUTES } from './utils/Constants';
