@@ -31,11 +31,17 @@ const Header = () => {
 
   return (
     <>
-      <AppBar open={open} handleDrawerOpen={handleDrawerOpen} drawerWidth={drawerWidth} />
-      <DrawerComponent
-        drawerWidth={drawerWidth}
-        handleDrawerClose={handleDrawerClose}
+      <AppBar
         open={open}
+        drawerWidth={drawerWidth}
+        userName={userContext.user.name}
+        handleDrawerOpen={handleDrawerOpen}
+      />
+      <DrawerComponent
+        open={open}
+        drawerWidth={drawerWidth}
+        userName={userName}
+        handleDrawerClose={handleDrawerClose}
       />
     </>
   );

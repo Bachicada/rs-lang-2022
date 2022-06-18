@@ -9,10 +9,11 @@ import DrawerContent from './DrawerContent';
 interface Props {
   drawerWidth: number;
   open: boolean;
+  userName: string;
   handleDrawerClose: () => void;
 }
 
-const DrawerComponent = ({ drawerWidth, handleDrawerClose, open }: Props) => {
+const DrawerComponent = ({ drawerWidth, userName, open, handleDrawerClose }: Props) => {
   return (
     <Drawer
       sx={{
@@ -33,7 +34,7 @@ const DrawerComponent = ({ drawerWidth, handleDrawerClose, open }: Props) => {
         </IconButton>
       </DrawerHeader>
 
-      <DrawerContent onClick={handleDrawerClose} />
+      <DrawerContent onClick={handleDrawerClose} userName={userName} />
     </Drawer>
   );
 };
