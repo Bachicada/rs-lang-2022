@@ -43,7 +43,7 @@ function App() {
         return;
     }
   };
-
+  // https://icons8.com/illustrations/illustration/bubble-gum-head-of-boy-in-graduation-cap
   return (
     <ThemeProvider theme={theme}>
       <UserContext.Provider value={{ user, dispatchUserEvent }}>
