@@ -8,8 +8,8 @@ export default function Landing() {
   return (
     <div className={styles.landing}>
       <AboutApp />
-      {/* <Benefits /> */}
-      {/* <Team /> */}
+      <Benefits />
+      <Team />
     </div>
   );
 }

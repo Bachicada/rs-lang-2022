@@ -11,6 +11,7 @@ const StyledSection = styled('section')`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  min-height: calc(100vh - 64px);
 
   @media (max-width: 900px) {
     flex-direction: column;
@@ -19,6 +20,9 @@ const StyledSection = styled('section')`
 
 const ImgContainer = styled('div')`
   flex: 1 1 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
 
 const StyledImg = styled('img')`
