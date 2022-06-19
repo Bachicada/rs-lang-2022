@@ -38,8 +38,8 @@ export class Team extends React.Component {
             <p className={styles.devStatus}>Team leader, frontend developer</p>
             <p>Разработал:</p>
             <ul>
-              <li>Мини-игру "Спринт"</li>
-              <li>Мини-игру "Аудиовызов"</li>
+              <li>Мини-игру Спринт</li>
+              <li>Мини-игру Аудиовызов</li>
               <li>Компоненты и логику Статистики</li>
             </ul>
             <div className={styles.gitLink}>

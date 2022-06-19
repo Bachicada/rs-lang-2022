@@ -18,7 +18,7 @@ const StyledBox = styled('div')`
   align-items: flex-end;
   // box-shadow: 3px 3px 4px rgb(161 160 160 / 22%);
   box-shadow: 5px 5px 5px rgb(0 0 0 / 14%);
-  background-color: #fff;
+  background-color: #ffffffd6;
   width: 100%;
   min-height: 100px;
   width: 200px;
@@ -28,7 +28,7 @@ const StyledBox = styled('div')`
   transition: all 0.2s ease-in-out;
 
   &:hover {
-    background: #f5f5f5;
+    background: #f5f5f5d6;
   }
 
   @media (min-width: 600px) {

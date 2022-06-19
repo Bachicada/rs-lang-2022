@@ -5,7 +5,7 @@ import sprintIcon from '../../assets/sprintIcon.svg';
 import audioIcon from '../../assets/audioIcon.svg';
 import statIcon from '../../assets/statIcon1.svg';
 import { APP_ROUTES } from '../../utils/Constants';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Stack, styled, Typography } from '@mui/material';
 import bookImg from '../../assets/benefits/book.png';
 import joystickImg from '../../assets/benefits/joystick.png';
@@ -21,11 +21,13 @@ const StyledItem = styled('div')`
   height: 200px;
   border-radius: 45px;
   box-shadow: 5px 5px 5px rgb(0 0 0 / 14%);
-  background-color: #fff;
+  background-color: #ffffffd6;
   cursor: pointer;
+  transition: all 0.2s ease-in-out;
 
   &:hover {
-    background: #f5f5f5;
+    background: #f5f5f5d6;
+    transform: scale(1.1);
   }
 
   @media (min-width: 600px) and (max-width: 900px) {
@@ -44,6 +46,8 @@ const StyledStack = styled(Stack)`
 `;
 
 export function Benefits() {
+  const navigate = useNavigate();
+
   return (
     <section>
       <Typography sx={{ mb: 3 }} variant="h4">
@@ -65,7 +69,11 @@ export function Benefits() {
           <Typography variant="h6">Учебник</Typography>
           <Typography variant="body1">Содержит более 3000 слов</Typography>
         </StyledItem>
-        <StyledItem>
+        <StyledItem
+          onClick={() => {
+            navigate('/sprint');
+          }}
+        >
           <img src={controllerImg} alt="controller" />
           <Typography variant="h6">Спринт</Typography>
           <Typography variant="body1">Угадывай слова на время</Typography>
