@@ -53,7 +53,7 @@ const initialState: InitialState = {
   isGameReady: false,
   isGameFinished: false,
   isLoading: false,
-  seconds: 60,
+  seconds: 1000,
   timerActive: false,
 };
 

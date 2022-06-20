@@ -7,8 +7,10 @@ import { QuizContext } from './Sprint';
 import VolumeUpIcon from '@mui/icons-material/VolumeUp';
 import Button from '@mui/material/Button';
 
-const correctAudio = new Audio(require('../../assets/correct.mp3'));
-const incorrectAudio = new Audio(require('../../assets/incorrect.mp3'));
+// const correctAudio = new Audio(require('../../assets/correct.mp3'));
+const correctAudio = new Audio();
+// const incorrectAudio = new Audio(require('../../assets/incorrect.mp3'));
+const incorrectAudio = new Audio();
 
 const SprintGame = () => {
   const [quizState, dispatch] = useContext(QuizContext);
@@ -81,7 +83,6 @@ const SprintGame = () => {
     <Container
       maxWidth="md"
       style={{
-        border: '1px solid black',
         borderRadius: '5px',
         display: 'flex',
         alignItems: 'center',
@@ -103,12 +104,24 @@ const SprintGame = () => {
           audio.play();
         }}
       />
+      <div style={{ background: 'purple', height: '30px' }}></div>
       <div style={{ textAlign: 'center' }}>
-        <h2 style={{ color: '#5393E1' }}>{item.word}</h2>
-        <h2>{obj.correct ? item.wordTranslate : obj.incorrect}</h2>
+        <h2 style={{ color: '#fff', fontSize: '4em' }}>{item.word}</h2>
+        <h2 style={{ fontSize: '4em', marginTop: '-45px' }}>
+          {obj.correct ? item.wordTranslate : obj.incorrect}
+        </h2>
       </div>
-      <div>
+      <div
+        style={{
+          width: '100%',
+          display: 'flex',
+          justifyContent: 'space-around',
+          alignItems: 'center',
+        }}
+      >
+        {/* #02722b #a10d0d */}
         <Button
+          sx={{ color: '#a10d0d !important' }}
           variant="outlined"
           color="error"
           style={{ width: '200px', height: '70px' }}
@@ -120,6 +133,7 @@ const SprintGame = () => {
           Неверно
         </Button>
         <Button
+          sx={{ color: '#02722b !important' }}
           variant="outlined"
           color="success"
           style={{ width: '200px', height: '70px' }}

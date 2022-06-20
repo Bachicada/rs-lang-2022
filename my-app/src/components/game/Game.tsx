@@ -23,7 +23,7 @@ interface GameProps {
 
 const Game = (props: GameProps) => {
   const [quizState, dispatch] = useContext(QuizContext);
-  const [seconds, setSeconds] = React.useState(60);
+  const [seconds, setSeconds] = React.useState(1000);
   const [timeId, setTimeId] = React.useState<number>();
   const navigate = useNavigate();
 
@@ -45,7 +45,7 @@ const Game = (props: GameProps) => {
   // }, [ quizState.timerActive ,seconds, quizState.isGameFinished ]);
 
   useEffect(() => {
-    setSeconds(60);
+    setSeconds(1000);
   }, [quizState.level]);
 
   useEffect(() => {
