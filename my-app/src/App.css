@@ -59,14 +59,19 @@
 .menuList,
 .menuBook {
     list-style-position: inside;
+    list-style: none;
 }
 
 
 .menuItem,
 .bookItem {
- cursor: pointer;
- height: 20px;
- color: whitesmoke;
+    cursor: pointer;
+    color: whitesmoke;
+    padding: 11px 40px 11px 20px;
+    font-size: 26px;
+    font-weight: 500;
+    letter-spacing: -.2px;
+    text-transform: lowercase;
 }
 .menuList {
     padding: 10px 0px;

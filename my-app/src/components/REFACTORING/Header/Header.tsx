@@ -6,7 +6,7 @@ import { CurUser } from '../../../types';
 import AppBar from './AppBar';
 import DrawerComponent from './DrawerComponent';
 
-const drawerWidth = 280;
+const drawerWidth = 330;
 
 const Header = () => {
   // const theme = useTheme();
