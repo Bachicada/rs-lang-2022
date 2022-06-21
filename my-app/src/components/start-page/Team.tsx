@@ -13,8 +13,10 @@ const StyledWrapper = styled('div')`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 45%;
-  height: 300px;
+  // width: 45%;
+  width: 100%;
+  max-width: 650px;
+  height: 330px;
   border-radius: 50px;
   box-shadow: 5px 5px 5px rgb(0 0 0 / 14%);
   background-color: #ffffffd6;

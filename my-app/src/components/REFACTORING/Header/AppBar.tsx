@@ -12,17 +12,19 @@ interface Props {
   open: boolean;
   drawerWidth: number;
   userName: string | undefined;
+  scrollTrigger: boolean;
   handleDrawerOpen: () => void;
 }
 
 interface AppBarProps extends MuiAppBarProps {
   open?: boolean;
   drawerwidth?: number;
+  scrollTrigger?: boolean;
 }
 
 const AppBarComponent = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== 'open',
-})<AppBarProps>(({ theme, open, drawerwidth }) => ({
+})<AppBarProps>(({ theme, open, drawerwidth, scrollTrigger }) => ({
   transition: theme.transitions.create(['margin', 'width'], {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
@@ -38,11 +40,20 @@ const AppBarComponent = styled(MuiAppBar, {
     }),
     marginRight: drawerwidth,
   }),
+  ...(scrollTrigger && {
+    transition: '.3s',
+    background: '#ffffffad',
+  }),
 }));
 
-const AppBar = ({ open, drawerWidth, userName, handleDrawerOpen }: Props) => {
+const AppBar = ({ open, drawerWidth, userName, scrollTrigger, handleDrawerOpen }: Props) => {
   return (
-    <AppBarComponent position="fixed" open={open} drawerwidth={drawerWidth}>
+    <AppBarComponent
+      position="fixed"
+      open={open}
+      drawerwidth={drawerWidth}
+      scrollTrigger={scrollTrigger}
+    >
       <Toolbar sx={{ justifyContent: 'space-between' }}>
         <img style={{ maxWidth: '125px' }} src={logoImg} alt="app top banner" />
 
