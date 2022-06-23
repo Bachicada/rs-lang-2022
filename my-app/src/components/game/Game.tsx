@@ -16,6 +16,7 @@ import Utils from '../../utils/Utils';
 import { getPartOfTextbook } from '../../services/WordService';
 import { getHardWords } from '../../services/UserWordService';
 import CircularProgress from '@mui/material/CircularProgress';
+import GameTableControls from './GameTableControls';
 
 interface GameProps {
   type: GAME_TYPE;
@@ -90,6 +91,27 @@ const Game = (props: GameProps) => {
     }
   }, []);
 
+  if (quizState.isLoading) {
+    return (
+      <div className={styles.gameLoadingIcon}>
+        <CircularProgress />
+      </div>
+    );
+  }
+
+  if (quizState.level === null) {
+    return <LevelModal />;
+  }
+
+  if (quizState.isGameFinished) {
+    return (
+      <>
+        <GameTableResult />
+        <GameTableControls dispatch={dispatch} />
+      </>
+    );
+  }
+
   return (
     <Box
       sx={{
@@ -101,13 +123,6 @@ const Game = (props: GameProps) => {
         position: 'relative',
       }}
     >
-      {quizState.level !== null ? null : <LevelModal />}
-      {quizState.isLoading && (
-        <div className={styles.gameLoadingIcon}>
-          <CircularProgress />
-          {/* <LoadingIcon /> */}
-        </div>
-      )}
       {quizState.isGameReady && (
         <div className={styles.game}>
           {!quizState.isGameFinished && <Timer time={seconds} max={60} />}
@@ -115,25 +130,6 @@ const Game = (props: GameProps) => {
           {props.type === GAME_TYPE.SPRINT
             ? quizState.isGameReady && !quizState.isGameFinished && <SprintGame />
             : null}
-          {quizState.isGameFinished && <GameTableResult />}
-          {quizState.isGameFinished && (
-            <div style={{ display: 'flex', flexDirection: 'column' }}>
-              <CloseIcon
-                style={{ cursor: 'pointer' }}
-                onClick={() => {
-                  navigate(`${APP_ROUTES.MAIN}`);
-                }}
-                sx={{ fontSize: 80 }}
-              />
-              <RestartAltIcon
-                style={{ cursor: 'pointer' }}
-                onClick={() => {
-                  dispatch({ type: 'RESTART' });
-                }}
-                sx={{ fontSize: 80 }}
-              />
-            </div>
-          )}
         </div>
       )}
     </Box>

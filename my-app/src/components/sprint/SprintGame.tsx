@@ -1,4 +1,4 @@
-import { Container } from '@mui/material';
+import { Container, styled } from '@mui/material';
 import { useContext, useEffect, useState } from 'react';
 import { updateUserWord } from '../../services/UserWordService';
 import { API_URL, GAME_TYPE, WORD_STATUS } from '../../utils/Constants';
@@ -11,6 +11,44 @@ import Button from '@mui/material/Button';
 const correctAudio = new Audio();
 // const incorrectAudio = new Audio(require('../../assets/incorrect.mp3'));
 const incorrectAudio = new Audio();
+
+const TestDiv = styled('div')`
+  height: 15px;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  transform: translateY(-120%);
+  border-radius: 10px;
+  border: 1px solid;
+  background: linear-gradient(to right, #faa5a7 0%, #467dfb 50%, white 0%);
+`;
+
+const HeartIcon = styled('div')`
+  width: 100px;
+  height: 100px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  background: url(https://cssanimation.rocks/images/posts/steps/heart.png) no-repeat;
+  background-position: 0 0;
+  cursor: pointer;
+  animation: fave-heart;
+
+  &:hover {
+    background-position: -2800px 0;
+    transition: background 1s steps(28);
+  }
+
+  @keyframes fave-heart {
+    0% {
+      background-position: 0 0;
+    }
+    100% {
+      background-position: -2800px 0;
+    }
+  }
+`;
 
 const SprintGame = () => {
   const [quizState, dispatch] = useContext(QuizContext);
@@ -91,20 +129,25 @@ const SprintGame = () => {
         justifyContent: 'space-between',
       }}
     >
-      {
-        <GameScore
-          correctAnswersCount={quizState.correctAnswersCount}
-          isCorrect={isAnswerCorrect}
-          type={GAME_TYPE.SPRINT}
-        />
-      }
+      <TestDiv></TestDiv>
+      <div>
+        <HeartIcon />
+        <HeartIcon />
+        <HeartIcon />
+        <HeartIcon />
+      </div>
+
+      <GameScore
+        correctAnswersCount={quizState.correctAnswersCount}
+        isCorrect={isAnswerCorrect}
+        type={GAME_TYPE.SPRINT}
+      />
       <VolumeUpIcon
         style={{ marginTop: '10px', width: '50px', height: '50px' }}
         onClick={() => {
           audio.play();
         }}
       />
-      <div style={{ background: 'purple', height: '30px' }}></div>
       <div style={{ textAlign: 'center' }}>
         <h2 style={{ color: '#fff', fontSize: '4em' }}>{item.word}</h2>
         <h2 style={{ fontSize: '4em', marginTop: '-45px' }}>

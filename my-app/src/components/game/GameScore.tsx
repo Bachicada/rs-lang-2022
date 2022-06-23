@@ -1,4 +1,4 @@
-import { Paper } from '@mui/material';
+import { Paper, styled } from '@mui/material';
 import React from 'react';
 import { useEffect, useState } from 'react';
 import { GAME_TYPE } from '../../utils/Constants';
@@ -11,6 +11,22 @@ interface GameScoreProps {
   isCorrect: boolean;
   type: GAME_TYPE;
 }
+
+type StarProps = {
+  clicked?: boolean;
+};
+
+const StyledStar = styled('div')(({ clicked }: StarProps) => ({
+  width: 'fit-content',
+  transition: '0.3s ease-out',
+  opacity: 1,
+
+  '&:hover': {
+    // transform: scale(2);
+    // opacity: 0;
+    animation: 'stretch-bounce 0.5s ease-in-out',
+  },
+}));
 
 const GameScore = (props: GameScoreProps) => {
   const [quizState, dispatch] = React.useContext(QuizContext);
@@ -49,11 +65,11 @@ const GameScore = (props: GameScoreProps) => {
         {props.type === GAME_TYPE.SPRINT
           ? stars.map((item, idx) => {
               return props.correctAnswersCount > idx ? (
-                <span key={idx}>{item}</span>
+                <StyledStar key={idx}>{item}</StyledStar>
               ) : (
-                <span key={idx} style={{ filter: 'grayscale(1)' }}>
+                <StyledStar key={idx} style={{ filter: 'grayscale(1)' }}>
                   {item}
-                </span>
+                </StyledStar>
               );
             })
           : null}
