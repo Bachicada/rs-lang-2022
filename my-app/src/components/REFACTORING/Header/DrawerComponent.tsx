@@ -34,7 +34,7 @@ const DrawerComponent = ({ drawerWidth, userName, open, handleDrawerClose }: Pro
         </IconButton>
       </DrawerHeader>
 
-      <DrawerContent onClick={handleDrawerClose} userName={userName} />
+      <DrawerContent handleDrawerClose={handleDrawerClose} userName={userName} />
     </Drawer>
   );
 };
