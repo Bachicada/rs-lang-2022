@@ -12,14 +12,10 @@ interface TimerProps {
 function CircularProgressWithLabel(props: CircularProgressProps & { value: number; max: number }) {
   const percent = 100 / (props.max / props.value);
   return (
-    <Box className={styles.timer} sx={{ position: 'absolute', display: 'inline-flex' }}>
+    <Box className={styles.timer} sx={{ display: 'inline-flex' }}>
       <CircularProgress variant="determinate" {...props} value={percent} />
       <Box
         sx={{
-          top: 0,
-          left: 0,
-          bottom: 0,
-          right: 0,
           position: 'absolute',
           display: 'flex',
           alignItems: 'center',
@@ -31,6 +27,25 @@ function CircularProgressWithLabel(props: CircularProgressProps & { value: numbe
         )}`}</Typography>
       </Box>
     </Box>
+    // <Box className={styles.timer} sx={{ position: 'absolute', display: 'inline-flex' }}>
+    //   <CircularProgress variant="determinate" {...props} value={percent} />
+    //   <Box
+    //     sx={{
+    //       top: 0,
+    //       left: 0,
+    //       bottom: 0,
+    //       right: 0,
+    //       position: 'absolute',
+    //       display: 'flex',
+    //       alignItems: 'center',
+    //       justifyContent: 'center',
+    //     }}
+    //   >
+    //     <Typography variant="caption" component="div" color="text.secondary">{`${Math.round(
+    //       props.value
+    //     )}`}</Typography>
+    //   </Box>
+    // </Box>
   );
 }
 

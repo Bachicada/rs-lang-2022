@@ -1,4 +1,4 @@
-import { Box } from '@mui/material';
+import { Box, Container } from '@mui/material';
 import React, { useContext, useEffect } from 'react';
 import { APP_ROUTES, GAME_TYPE } from '../../utils/Constants';
 import LevelModal from './LevelModal';
@@ -125,11 +125,21 @@ const Game = (props: GameProps) => {
     >
       {quizState.isGameReady && (
         <div className={styles.game}>
-          {!quizState.isGameFinished && <Timer time={seconds} max={60} />}
-          {props.type === GAME_TYPE.AUDIOCALL ? <AudioGame /> : null}
-          {props.type === GAME_TYPE.SPRINT
-            ? quizState.isGameReady && !quizState.isGameFinished && <SprintGame />
-            : null}
+          <Container
+            maxWidth="md"
+            style={{
+              borderRadius: '5px',
+              display: 'flex',
+              alignItems: 'center',
+              flexDirection: 'column',
+              minHeight: '400px',
+              justifyContent: 'space-between',
+            }}
+          >
+            {/* {!quizState.isGameFinished && <Timer time={seconds} max={60} />} */}
+            {props.type === GAME_TYPE.AUDIOCALL ? <AudioGame /> : null}
+            {props.type === GAME_TYPE.SPRINT ? <SprintGame /> : null}
+          </Container>
         </div>
       )}
     </Box>
