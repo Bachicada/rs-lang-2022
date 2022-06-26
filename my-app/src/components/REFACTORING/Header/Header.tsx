@@ -2,7 +2,7 @@ import { useScrollTrigger } from '@mui/material';
 import * as React from 'react';
 import { useState, useEffect, useContext } from 'react';
 import { UserContext } from '../../../App';
-import { CurUser } from '../../../types';
+import { CurUser } from '../../../types/types';
 import AppBar from './AppBar';
 import DrawerComponent from './DrawerComponent';
 

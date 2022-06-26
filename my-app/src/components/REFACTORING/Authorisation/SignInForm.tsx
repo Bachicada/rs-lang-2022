@@ -12,7 +12,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useEffect, useState } from 'react';
 import { APP_ROUTES } from '../../../utils/Constants';
 import { loginUser } from '../../../services/UserService';
-import { CurUser, NewUser } from '../../../types';
+import { CurUser, NewUser } from '../../../types/types';
 import { Link, useNavigate } from 'react-router-dom';
 import { LoadingIcon } from '../../shared/LoadingIcon';
 

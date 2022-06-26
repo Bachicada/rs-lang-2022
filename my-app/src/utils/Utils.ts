@@ -1,4 +1,4 @@
-import { WordItem } from '../types';
+import { WordItem } from '../types/types';
 
 const Utils = {
   params: { part: null, page: null },

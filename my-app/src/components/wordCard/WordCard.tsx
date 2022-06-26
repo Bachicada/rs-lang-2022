@@ -7,7 +7,7 @@ import CardActions from '@mui/material/CardActions';
 import Collapse from '@mui/material/Collapse';
 import IconButton, { IconButtonProps } from '@mui/material/IconButton';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { CurUser, WordCardProp, WordItem } from '../../types';
+import { CurUser, WordCardProp, WordItem } from '../../types/types';
 import { API_URL, APP_ROUTES } from '../../utils/Constants';
 import styles from './WordCard.module.css';
 import { Chip } from '@mui/material';

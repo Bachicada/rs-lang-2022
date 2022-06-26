@@ -1,7 +1,7 @@
 import { RawOff, RawOffRounded } from '@mui/icons-material';
 import { useContext } from 'react';
 import { UserContext } from '../App';
-import { CurUser, PartProps, WordItem } from '../types';
+import { CurUser, PartProps, WordItem } from '../types/types';
 import { API_URL, ENDPOINTS, WORD_STATUS } from '../utils/Constants';
 
 const user = JSON.stringify(localStorage.getItem('CurrentUser'));

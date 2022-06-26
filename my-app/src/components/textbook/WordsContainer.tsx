@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useState, useEffect, useContext } from 'react';
-import { CurUser, PageProps, WordItem } from '../../types';
+import { CurUser, PageProps, WordItem } from '../../types/types';
 import styles from './textbook.module.css';
 import {
   getHardWords,

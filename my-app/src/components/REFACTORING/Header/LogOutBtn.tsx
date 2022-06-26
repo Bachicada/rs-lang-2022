@@ -1,7 +1,7 @@
 import { Button } from '@mui/material';
 import React, { useContext } from 'react';
 import { UserContext } from '../../../App';
-import { CurUser } from '../../../types';
+import { CurUser } from '../../../types/types';
 
 const LogOutBtn = () => {
   const { dispatchUserEvent } = useContext<{

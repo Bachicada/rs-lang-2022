@@ -13,7 +13,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { createUser, loginUser } from '../../../services/UserService';
 import { useContext, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { CurUser, NewUser } from '../../../types';
+import { CurUser, NewUser } from '../../../types/types';
 import { APP_ROUTES } from '../../../utils/Constants';
 import styles from './autorisation.module.css';
 import { UserContext } from '../../../App';

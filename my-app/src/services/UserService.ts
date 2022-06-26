@@ -1,5 +1,5 @@
 import { API_URL, ENDPOINTS } from '../utils/Constants';
-import { NewUser } from '../types';
+import { NewUser } from '../types/types';
 
 export async function createUser(user: NewUser) {
   const data = await fetch(`${API_URL}${ENDPOINTS.USERS}`, {

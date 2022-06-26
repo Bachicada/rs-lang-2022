@@ -9,7 +9,7 @@ import {
   getUserId,
   getUserToken,
 } from '../../services/WordService';
-import { CurUser, OptionBtnsProp, WordItem } from '../../types';
+import { CurUser, OptionBtnsProp, WordItem } from '../../types/types';
 import { API_URL, APP_ROUTES, ENDPOINTS, WORD_STATUS } from '../../utils/Constants';
 import styles from './WordCard.module.css';
 import Snackbar from '@mui/material/Snackbar';

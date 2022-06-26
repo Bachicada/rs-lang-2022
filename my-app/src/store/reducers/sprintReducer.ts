@@ -1,76 +1,17 @@
-import { Dispatch, Reducer } from 'react';
-import { createContext, FC, useReducer } from 'react';
-import { WordItem } from '../../types/types';
-import { GAME_TYPE } from '../../utils/Constants';
-import Game from '../game/Game';
+import { Reducer } from 'react';
+import { InitialState, ReducerAction, SprintActionTypes } from '../../types/sprintTypes';
+import { initialState } from '../sprintContext';
 
-export interface GameAnswers {
-  item: WordItem;
-  answer: boolean;
-  failCounter?: number;
-  successCounter?: number;
-}
-
-export interface IWords {
-  item: WordItem;
-  correct: boolean;
-  incorrect: string;
-}
-
-export interface InitialState {
-  level: number | null;
-  questions: any[];
-  answers: any[];
-  new: any[];
-  currentQuestionIndex: number;
-  correctAnswersCount: number;
-  maxAnswersCount: number;
-  score: number;
-  allIncorrectCount: number;
-  allCorrectCount: number;
-  showModal: boolean;
-  showResults: boolean;
-  isGameReady: boolean;
-  isGameFinished: boolean;
-  isLoading: boolean;
-  seconds: number;
-  timerActive: boolean;
-}
-
-const initialState: InitialState = {
-  level: null,
-  questions: [],
-  answers: [],
-  new: [],
-  currentQuestionIndex: 0,
-  correctAnswersCount: 0,
-  maxAnswersCount: 0,
-  score: 0,
-  allIncorrectCount: 0,
-  allCorrectCount: 0,
-  showModal: true,
-  showResults: false,
-  isGameReady: false,
-  isGameFinished: false,
-  isLoading: false,
-  seconds: 1000,
-  timerActive: false,
-};
-
-interface ReducerAction {
-  type: any;
-  payload?: any;
-}
-
-const reducer: Reducer<InitialState, ReducerAction> = (state, action) => {
+const sprintReducer: Reducer<InitialState, ReducerAction> = (state, action) => {
   switch (action.type) {
-    case 'LOADING': {
+    case SprintActionTypes.LOADING: {
       return {
         ...state,
         isLoading: true,
       };
     }
-    case 'PRELOAD': {
+
+    case SprintActionTypes.PRELOAD: {
       return {
         ...state,
         level: action.payload.level,
@@ -80,13 +21,15 @@ const reducer: Reducer<InitialState, ReducerAction> = (state, action) => {
         timerActive: true,
       };
     }
-    case 'SET_RECORD': {
+
+    case SprintActionTypes.SET_RECORD: {
       return {
         ...state,
         score: state.score + action.payload,
       };
     }
-    case 'CHANGE_LEVEL': {
+
+    case SprintActionTypes.CHANGE_LEVEL: {
       const { level, result } = action.payload;
       return {
         ...state,
@@ -97,7 +40,8 @@ const reducer: Reducer<InitialState, ReducerAction> = (state, action) => {
         timerActive: true,
       };
     }
-    case 'CORRECT_ANSWER': {
+
+    case SprintActionTypes.CORRECT_ANSWER: {
       const answers = [...state.answers, action.payload];
       const correctAnswersCount = state.correctAnswersCount + 1;
       const currentQuestionIndex = state.currentQuestionIndex + 1;
@@ -114,7 +58,8 @@ const reducer: Reducer<InitialState, ReducerAction> = (state, action) => {
         allCorrectCount: state.allCorrectCount + 1,
       };
     }
-    case 'INCORRECT_ANSWER': {
+
+    case SprintActionTypes.INCORRECT_ANSWER: {
       const answers = [...state.answers, action.payload];
       const correctAnswersCount = 0;
       const currentQuestionIndex = state.currentQuestionIndex + 1;
@@ -128,14 +73,16 @@ const reducer: Reducer<InitialState, ReducerAction> = (state, action) => {
         allIncorrectCount: state.allIncorrectCount + 1,
       };
     }
-    case 'ADD_NEW': {
+
+    case SprintActionTypes.ADD_NEW: {
       const newArr = [...state.new, action.payload];
       return {
         ...state,
         new: newArr,
       };
     }
-    case 'SET_SCORE': {
+
+    case SprintActionTypes.SET_SCORE: {
       const answer = [...state.answers];
       state.new.map((item, id) => {
         item.then((res: any) => {
@@ -149,33 +96,23 @@ const reducer: Reducer<InitialState, ReducerAction> = (state, action) => {
         isLoading: false,
       };
     }
-    case 'FINISH_GAME': {
+
+    case SprintActionTypes.FINISH_GAME: {
       return {
         ...state,
         isGameFinished: true,
       };
     }
-    case 'RESTART': {
+
+    case SprintActionTypes.RESTART: {
       return {
         ...initialState,
-        isGameFinished: false,
       };
     }
+
     default:
       return state;
   }
 };
 
-type IQuizContext = [InitialState, Dispatch<{ type: string; payload?: any }>];
-export const QuizContext = createContext<IQuizContext>([initialState, () => null]);
-
-const Sprint: FC = () => {
-  const value = useReducer(reducer, initialState);
-  return (
-    <QuizContext.Provider value={value}>
-      <Game type={GAME_TYPE.SPRINT} />
-    </QuizContext.Provider>
-  );
-};
-
-export default Sprint;
+export default sprintReducer;

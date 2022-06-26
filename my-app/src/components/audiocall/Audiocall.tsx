@@ -1,7 +1,7 @@
 import { Dispatch, Reducer, useEffect } from 'react';
 import { createContext, FC, useReducer } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { WordItem } from '../../types';
+import { WordItem } from '../../types/types';
 import { APP_ROUTES, GAME_TYPE } from '../../utils/Constants';
 import Game from './Game';
 

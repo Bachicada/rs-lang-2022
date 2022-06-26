@@ -6,7 +6,7 @@ import { APP_ROUTES } from '../../utils/Constants';
 import { useParams, useNavigate } from 'react-router-dom';
 import PartOfTextBook from './PartOfTextbook';
 import { UserContext } from '../../App';
-import { CurUser } from '../../types';
+import { CurUser } from '../../types/types';
 
 export default function Textbook() {
   const userContext = useContext<{

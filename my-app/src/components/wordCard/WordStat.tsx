@@ -7,7 +7,7 @@ import CardContent from '@mui/material/CardContent';
 import CardActions from '@mui/material/CardActions';
 import Collapse from '@mui/material/Collapse';
 import IconButton, { IconButtonProps } from '@mui/material/IconButton';
-import { UserWordItem, WordItem, WordStatProp } from '../../types';
+import { UserWordItem, WordItem, WordStatProp } from '../../types/types';
 
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;

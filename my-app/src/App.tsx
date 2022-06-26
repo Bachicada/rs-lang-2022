@@ -12,7 +12,7 @@ import Stat from './components/statistics/Stat';
 import SignInForm from './components/REFACTORING/Authorisation/SignInForm';
 import RegForm from './components/REFACTORING/Authorisation/RegisterForm';
 import { createContext } from 'react';
-import { CurUser } from './types';
+import { CurUser } from './types/types';
 import { ThemeProvider } from '@mui/material';
 import theme from './theme';
 
