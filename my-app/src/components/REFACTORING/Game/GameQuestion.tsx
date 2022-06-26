@@ -1,17 +1,30 @@
+import { Typography, TypographyVariant } from '@mui/material';
+
 type Props = {
   question: any;
   item: any;
 };
 
+const BIG = 14;
+
+const getVariant = (isBig: boolean): TypographyVariant => {
+  return isBig ? 'h3' : 'h4';
+};
+
 const GameQuestion = ({ question, item }: Props) => {
+  const questionWord = item.word;
+  const questionAnswer = question.correct ? item.wordTranslate : question.incorrect;
+
+  const isBigQuestion = questionWord.length > BIG;
+  const isBigAnswer = questionAnswer.length > BIG;
+
   return (
     <>
-      <div style={{ textAlign: 'center' }}>
-        <h2 style={{ color: '#fff', fontSize: '4em' }}>{item.word}</h2>
-        <h2 style={{ fontSize: '4em', marginTop: '-45px' }}>
-          {question.correct ? item.wordTranslate : question.incorrect}
-        </h2>
-      </div>
+      <Typography variant={getVariant(isBigQuestion)} color="primary">
+        {questionWord}
+      </Typography>
+
+      <Typography variant={getVariant(isBigAnswer)}>{questionAnswer}</Typography>
     </>
   );
 };

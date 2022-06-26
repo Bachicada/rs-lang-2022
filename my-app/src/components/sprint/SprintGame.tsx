@@ -1,32 +1,18 @@
-import { Container, Stack, styled } from '@mui/material';
-import { useContext, useEffect, useState } from 'react';
+import { useCallback, useContext, useEffect, useState } from 'react';
 import { updateUserWord } from '../../services/UserWordService';
 import { API_URL, GAME_TYPE, WORD_STATUS } from '../../utils/Constants';
-import GameScore from '../game/GameScore';
 import { QuizContext } from './Sprint';
-import VolumeUpIcon from '@mui/icons-material/VolumeUp';
-import Button from '@mui/material/Button';
-import Timer from '../game/Timer';
-import ProgressBar from '../REFACTORING/Game/ProgressBar';
 import GameControls from '../REFACTORING/Game/GameControls';
 import GameQuestion from '../REFACTORING/Game/GameQuestion';
 import GameBtns from '../REFACTORING/Game/GameBtns';
+import { StyledStack } from '../REFACTORING/Game/styles';
+import correctAudioSrc from '../../assets/correct.mp3';
+import incorrectAudioSrc from '../../assets/incorrect.mp3';
 
 // const correctAudio = new Audio(require('../../assets/correct.mp3'));
-const correctAudio = new Audio();
+const correctAudio = new Audio(correctAudioSrc);
 // const incorrectAudio = new Audio(require('../../assets/incorrect.mp3'));
-const incorrectAudio = new Audio();
-
-// const TestDiv = styled('div')`
-//   height: 15px;
-//   width: 100%;
-//   position: absolute;
-//   top: 0;
-//   transform: translateY(-120%);
-//   border-radius: 10px;
-//   border: 1px solid;
-//   background: linear-gradient(to right, #faa5a7 0%, #467dfb 50%, white 0%);
-// `;
+const incorrectAudio = new Audio(incorrectAudioSrc);
 
 const SprintGame = () => {
   const [quizState, dispatch] = useContext(QuizContext);
@@ -36,10 +22,13 @@ const SprintGame = () => {
   useEffect(() => {
     if (isAnswered) {
       const updAnswer = async () => {
+        correctAudio.load();
+        incorrectAudio.load();
         isAnswerCorrect ? correctAudio.play() : incorrectAudio.play();
 
         const item = quizState.questions[quizState.currentQuestionIndex].item;
         const [failCounter, successCounter] = [+!isAnswerCorrect, +isAnswerCorrect];
+
         const content = updateUserWord({
           wordId: `${item.id}`,
           word: {
@@ -50,16 +39,16 @@ const SprintGame = () => {
             },
           },
         });
-        dispatch({ type: 'ADD_NEW', payload: content });
-        const answer = {
-          item,
-          answer: isAnswerCorrect,
-        };
 
+        dispatch({ type: 'ADD_NEW', payload: content });
         dispatch({
           type: isAnswerCorrect ? 'CORRECT_ANSWER' : 'INCORRECT_ANSWER',
-          payload: answer,
+          payload: {
+            item,
+            answer: isAnswerCorrect,
+          },
         });
+
         setIsAnswered(false);
       };
 
@@ -71,14 +60,15 @@ const SprintGame = () => {
   const { item } = question;
   const audio = new Audio(`${API_URL}/${item.audio}`);
 
-  const correctClicked = () => {
+  const correctClicked = useCallback(() => {
     setIsAnswerCorrect(question.correct ? true : false);
     setIsAnswered(true);
-  };
-  const notCorrectClicked = () => {
+  }, [question.correct]);
+
+  const incorrectClicked = useCallback(() => {
     setIsAnswerCorrect(question.correct ? false : true);
     setIsAnswered(true);
-  };
+  }, [question.correct]);
 
   useEffect(() => {
     const keyDown = (ev: KeyboardEvent) => {
@@ -86,118 +76,33 @@ const SprintGame = () => {
         correctClicked();
       }
       if (ev.key === 'ArrowLeft') {
-        notCorrectClicked();
+        incorrectClicked();
       }
     };
     document.addEventListener('keydown', keyDown);
     return () => {
       document.removeEventListener('keydown', keyDown);
     };
-  }, [quizState.currentQuestionIndex]);
+  }, [correctClicked, incorrectClicked, quizState.currentQuestionIndex]);
 
   return (
     <>
-      {/* <ProgressBar
-        correctAnswersCount={quizState.correctAnswersCount}
-        isCorrect={isAnswerCorrect}
-      /> */}
-
-      <Stack
-        sx={{
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          textAlign: 'center',
-        }}
-        direction={{ xs: 'column', sm: 'row' }}
-        spacing={1}
-      >
+      <StyledStack direction="column" spacing={2}>
         <GameControls
           audio={audio}
           correctAnswersCount={quizState.correctAnswersCount}
           isCorrect={isAnswerCorrect}
           type={GAME_TYPE.SPRINT}
         />
+
         <GameQuestion question={question} item={item} />
+
         <GameBtns
           question={question}
           setIsAnswered={setIsAnswered}
           setIsAnswerCorrect={setIsAnswerCorrect}
         />
-        {/* {stackContent.map(({ img, title, subtitle, link }, idx) => (
-          <StyledItem key={idx} onClick={() => navigate(link)}>
-            <img src={img} alt="controller" />
-
-            <Typography variant="h6">{title}</Typography>
-
-            <Typography variant="body1">{subtitle}</Typography>
-          </StyledItem>
-        ))} */}
-
-        {/* <Stack
-          sx={{
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            textAlign: 'center',
-          }}
-          direction={{ xs: 'column', sm: 'row' }}
-          spacing={1}
-        >
-          <GameScore
-            correctAnswersCount={quizState.correctAnswersCount}
-            isCorrect={isAnswerCorrect}
-            type={GAME_TYPE.SPRINT}
-          />
-
-          <VolumeUpIcon
-            style={{ marginTop: '10px', width: '50px', height: '50px' }}
-            onClick={() => {
-              audio.play();
-            }}
-          />
-        </Stack> */}
-
-        {/* <Timer time={seconds} max={60} /> */}
-        {/* <div style={{ textAlign: 'center' }}>
-          <h2 style={{ color: '#fff', fontSize: '4em' }}>{item.word}</h2>
-          <h2 style={{ fontSize: '4em', marginTop: '-45px' }}>
-            {obj.correct ? item.wordTranslate : obj.incorrect}
-          </h2>
-        </div>
-        <div
-          style={{
-            width: '100%',
-            display: 'flex',
-            justifyContent: 'space-around',
-            alignItems: 'center',
-          }}
-        >
-          {/* #02722b #a10d0d */}
-        {/* <Button
-            sx={{ color: '#a10d0d !important' }}
-            variant="outlined"
-            color="error"
-            style={{ width: '200px', height: '70px' }}
-            onClick={() => { */}
-        {/* //       setIsAnswerCorrect(obj.correct ? false : true);
-        //       setIsAnswered(true);
-        //     }}
-        //   >
-        //     Неверно
-        //   </Button>
-        //   <Button
-        //     sx={{ color: '#02722b !important' }}
-        //     variant="outlined"
-        //     color="success"
-        //     style={{ width: '200px', height: '70px' }}
-        //     onClick={() => {
-        //       setIsAnswerCorrect(obj.correct ? true : false);
-        //       setIsAnswered(true);
-        //     }}
-        //   >
-        //     Верно
-        //   </Button>
-        // </div> */}
-      </Stack>
+      </StyledStack>
     </>
   );
 };

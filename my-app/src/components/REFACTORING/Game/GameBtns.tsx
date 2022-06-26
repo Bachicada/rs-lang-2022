@@ -1,5 +1,5 @@
-import { Button } from '@mui/material';
 import React, { Dispatch, SetStateAction } from 'react';
+import { BtnsWrapper, StyledBtn } from './styles';
 
 type Props = {
   question: any;
@@ -8,42 +8,26 @@ type Props = {
 };
 
 const GameBtns = ({ question, setIsAnswered, setIsAnswerCorrect }: Props) => {
-  return (
-    <div
-      style={{
-        width: '100%',
-        display: 'flex',
-        justifyContent: 'space-around',
-        alignItems: 'center',
-      }}
-    >
-      {/* #02722b #a10d0d */}
-      <Button
-        sx={{ color: '#a10d0d !important' }}
-        variant="outlined"
-        color="error"
-        style={{ width: '200px', height: '70px' }}
-        onClick={() => {
-          setIsAnswerCorrect(question.correct ? false : true);
-          setIsAnswered(true);
-        }}
-      >
-        Неверно
-      </Button>
+  const handleIncorrect = () => {
+    setIsAnswerCorrect(question.correct ? false : true);
+    setIsAnswered(true);
+  };
 
-      <Button
-        sx={{ color: '#02722b !important' }}
-        variant="outlined"
-        color="success"
-        style={{ width: '200px', height: '70px' }}
-        onClick={() => {
-          setIsAnswerCorrect(question.correct ? true : false);
-          setIsAnswered(true);
-        }}
-      >
+  const handleCorrect = () => {
+    setIsAnswerCorrect(question.correct ? true : false);
+    setIsAnswered(true);
+  };
+
+  return (
+    <BtnsWrapper>
+      <StyledBtn variant="outlined" color="error" onClick={handleIncorrect}>
+        Неверно
+      </StyledBtn>
+
+      <StyledBtn variant="outlined" color="success" onClick={handleCorrect}>
         Верно
-      </Button>
-    </div>
+      </StyledBtn>
+    </BtnsWrapper>
   );
 };
 

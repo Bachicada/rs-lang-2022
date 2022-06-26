@@ -1,11 +1,12 @@
-import { Stack, styled } from '@mui/material';
+import { Stack, Typography } from '@mui/material';
 import React from 'react';
 import { useEffect, useState } from 'react';
 import { GAME_TYPE } from '../../utils/Constants';
 import { AudioContext } from '../audiocall/Audiocall';
 import GameLife from '../audiocall/GameLife';
+import { ScoreWrapper, StarsWrapper, StyledStar } from '../REFACTORING/Game/styles';
 import { QuizContext } from '../sprint/Sprint';
-import Timer from './Timer';
+import TextTimer from './TextTimer';
 
 interface GameScoreProps {
   correctAnswersCount: number;
@@ -13,24 +14,15 @@ interface GameScoreProps {
   type: GAME_TYPE;
 }
 
-type StarProps = {
-  correct?: boolean;
-};
-
-const StyledStar = styled('div')(({ correct }: StarProps) => ({
-  width: 'fit-content',
-  opacity: 1,
-  animation: `${correct ? 'stretch-bounce 0.5s ease-in-out' : null}`,
-  transition: '0.3s ease-out',
-  fontSize: '2rem',
-}));
+const points = [10, 20, 40, 80];
+const stars = ['⭐', '⭐', '⭐', '⭐'];
 
 const GameScore = (props: GameScoreProps) => {
   const [quizState, dispatch] = React.useContext(QuizContext);
   const [audioState] = React.useContext(AudioContext);
+
   const [score, setScore] = useState(0);
-  const points = [10, 20, 40, 80];
-  const stars = ['⭐', '⭐', '⭐', '⭐'];
+
   const id =
     props.correctAnswersCount > points.length - 1 ? points.length - 1 : props.correctAnswersCount;
 
@@ -40,38 +32,36 @@ const GameScore = (props: GameScoreProps) => {
       dispatch({ type: 'SET_RECORD', payload: score });
     }
   }, [quizState.currentQuestionIndex]);
+
+  const plusScore = props.isCorrect ? points[id] : points[0];
+
   return (
-    <Stack>
-      <div style={{ display: 'flex', justifyContent: 'space-around' }}>
+    <Stack sx={{ width: '100%' }}>
+      <ScoreWrapper>
+        <Typography>
+          {score} баллов (+{plusScore})
+        </Typography>
+
+        <TextTimer quizState={quizState} dispatch={dispatch} />
+      </ScoreWrapper>
+
+      <StarsWrapper>
         {props.type === GAME_TYPE.SPRINT
           ? stars.map((item, idx) => {
-              return props.correctAnswersCount > idx ? (
-                <StyledStar key={idx} correct={true}>
-                  {item}
-                </StyledStar>
-              ) : (
-                <StyledStar key={idx} style={{ filter: 'grayscale(1)' }}>
+              const isCorrect = props.correctAnswersCount > idx;
+
+              return (
+                <StyledStar key={idx} isCorrect={isCorrect}>
                   {item}
                 </StyledStar>
               );
             })
           : null}
-        {props.type === GAME_TYPE.AUDIOCALL ? (
-          <GameLife count={audioState.currentLifeIndex} />
-        ) : null}
-      </div>
-      <div>
-        <div>
-          <p>
-            {props.isCorrect
-              ? `+${points[id]} очков за правильный ответ`
-              : `+${points[0]} очков за правильный ответ`}
-          </p>
-          <p>Всего {score} баллов!</p>
-        </div>
 
-        <Timer time={quizState.seconds} max={60} />
-      </div>
+        {/* {props.type === GAME_TYPE.AUDIOCALL ? (
+          <GameLife count={audioState.currentLifeIndex} />
+        ) : null} */}
+      </StarsWrapper>
     </Stack>
   );
 };

@@ -1,8 +1,7 @@
-import { Stack } from '@mui/material';
-import React from 'react';
 import GameScore from '../../game/GameScore';
-import VolumeUpIcon from '@mui/icons-material/VolumeUp';
+import volumeUpIcon from '../../../assets/soundIcon.png';
 import { GAME_TYPE } from '../../../utils/Constants';
+import { StyledStack } from './styles';
 
 type Props = {
   correctAnswersCount: number;
@@ -12,25 +11,16 @@ type Props = {
 };
 
 const GameControls = ({ correctAnswersCount, isCorrect, type, audio }: Props) => {
+  const handleClick = () => {
+    audio.play();
+  };
+
   return (
-    <Stack
-      sx={{
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        textAlign: 'center',
-      }}
-      direction={{ xs: 'column', sm: 'row' }}
-      spacing={1}
-    >
+    <StyledStack direction="column" spacing={1}>
       <GameScore correctAnswersCount={correctAnswersCount} isCorrect={isCorrect} type={type} />
 
-      <VolumeUpIcon
-        style={{ marginTop: '10px', width: '50px', height: '50px', cursor: 'pointer' }}
-        onClick={() => {
-          audio.play();
-        }}
-      />
-    </Stack>
+      <img onClick={handleClick} src={volumeUpIcon} alt="volume up" style={{ cursor: 'pointer' }} />
+    </StyledStack>
   );
 };
 
