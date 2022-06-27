@@ -3,9 +3,10 @@ import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import CloseIcon from '@mui/icons-material/Close';
 import { useNavigate } from 'react-router';
 import { APP_ROUTES } from '../../utils/Constants';
+import { ReducerAction, SprintActionTypes } from '../../types/sprintTypes';
 
 type Props = {
-  dispatch: Dispatch<{ type: string; payload?: any }>;
+  dispatch: Dispatch<ReducerAction>;
 };
 
 const GameTableControls = ({ dispatch }: Props) => {
@@ -14,18 +15,17 @@ const GameTableControls = ({ dispatch }: Props) => {
   return (
     <div style={{ display: 'flex', flexDirection: 'column' }}>
       <CloseIcon
-        style={{ cursor: 'pointer' }}
+        sx={{ fontSize: 80, cursor: 'pointer' }}
         onClick={() => {
           navigate(`${APP_ROUTES.MAIN}`);
         }}
-        sx={{ fontSize: 80 }}
       />
+
       <RestartAltIcon
-        style={{ cursor: 'pointer' }}
+        sx={{ fontSize: 80, cursor: 'pointer' }}
         onClick={() => {
-          dispatch({ type: 'RESTART' });
+          dispatch({ type: SprintActionTypes.RESTART });
         }}
-        sx={{ fontSize: 80 }}
       />
     </div>
   );

@@ -3,7 +3,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { APP_ROUTES, GAME_TYPE } from '../../utils/Constants';
 import LevelModal from './LevelModal';
 import { QuizContext } from '../sprint/Sprint';
-import SprintGame from '../sprint/SprintGame';
+import SprintGame from '../sprint/SprintGameContent';
 // import Timer from './Timer';
 import Timer from '../game/Timer';
 import { LoadingIcon } from '../shared/LoadingIcon';

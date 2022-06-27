@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { styled } from '@mui/material/styles';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -7,14 +6,22 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import { QuizContext } from '../sprint/Sprint';
-import { useEffect } from 'react';
+import { Dispatch, forwardRef, useEffect, useState } from 'react';
 import { Skeleton } from '@mui/material';
 import { createUserStatistics, getUserStatistics } from '../../services/UserStatisticsService';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
+import { GameAnswers, ReducerAction, SprintActionTypes } from '../../types/sprintTypes';
+import { WordItem } from '../../types/types';
 
-const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(props, ref) {
+type Props = {
+  answers: GameAnswers[];
+  isGameFinished: boolean;
+  newWords: Promise<WordItem>[];
+  dispatch: Dispatch<ReducerAction>;
+};
+
+const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
@@ -29,9 +36,6 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 }));
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
-  // '&:nth-of-type(odd)': {
-  //   backgroundColor: theme.palette.action.hover,
-  // },
   '&.fail': {
     backgroundColor: theme.palette.error.main,
   },
@@ -44,10 +48,9 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-export default function GameTableResult() {
-  const [quizState, dispatch] = React.useContext(QuizContext);
-  const [score, setScore] = React.useState(quizState.answers);
-  const [open, setOpen] = React.useState(false);
+export default function GameTableResult({ answers, isGameFinished, newWords, dispatch }: Props) {
+  const [score, setScore] = useState(answers);
+  const [open, setOpen] = useState(false);
 
   const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
     if (reason === 'clickaway') {
@@ -58,15 +61,15 @@ export default function GameTableResult() {
   };
 
   useEffect(() => {
-    if (quizState.isGameFinished) {
+    if (isGameFinished) {
       const getScores = async () => {
         const data = await (
-          await Promise.allSettled(quizState.new)
+          await Promise.allSettled(newWords)
         ).map((item: any) => item.value.optional);
-        dispatch({ type: 'SET_SCORE', payload: data });
+        dispatch({ type: SprintActionTypes.SET_SCORE, payload: data });
       };
 
-      getScores().then(() => setScore([...quizState.answers]));
+      getScores().then(() => setScore([...answers]));
 
       // const obj = [{
       //   maxAnswersCount: quizState.maxAnswersCount,
@@ -75,11 +78,10 @@ export default function GameTableResult() {
       //   date: new Date().toLocaleDateString(),
       // }];
     }
-  }, [quizState.isGameFinished]);
+  }, [answers, dispatch, isGameFinished, newWords]);
 
   useEffect(() => {
     const userJSON = localStorage.getItem('CurrentUser');
-    console.log('NUUU?', userJSON);
     if (!userJSON) {
       setOpen(true);
     }
@@ -118,7 +120,8 @@ export default function GameTableResult() {
                 <StyledTableCell align="right">{row.item.wordTranslate}</StyledTableCell>
                 <StyledTableCell align="right">{row.answer ? `✅` : `❌`}</StyledTableCell>
                 <StyledTableCell align="right">
-                  {row.successCounter || row.successCounter === 0 ? (
+                  {(row.failCounter || row.failCounter === 0) &&
+                  (row.successCounter || row.successCounter === 0) ? (
                     `${row.successCounter}/${row.successCounter + row.failCounter}`
                   ) : (
                     <Skeleton variant="text" />

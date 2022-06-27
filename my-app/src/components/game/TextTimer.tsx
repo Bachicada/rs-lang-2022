@@ -1,35 +1,40 @@
 import { Typography } from '@mui/material';
-import React, { Dispatch, useEffect, useState } from 'react';
-import { InitialState } from '../sprint/Sprint';
+import { Dispatch, useEffect, useState } from 'react';
+import { InitialState, ReducerAction, SprintActionTypes } from '../../types/sprintTypes';
 
 type Props = {
   quizState: InitialState;
-  dispatch: Dispatch<{ type: string; payload?: any }>;
+  dispatch: Dispatch<ReducerAction>;
 };
 
-const TextTimer = ({ quizState, dispatch }: Props) => {
-  const [seconds, setSeconds] = useState(quizState.seconds);
-  const [timeId, setTimeId] = useState<number>();
+const TextTimer = ({
+  quizState: { isGameFinished, isGameReady, isTimerActive, seconds },
+  dispatch,
+}: Props) => {
+  const [timerSeconds, setTimerSeconds] = useState(seconds);
+  const [timeId, setTimeId] = useState<ReturnType<typeof setTimeout>>();
 
   useEffect(() => {
-    let cleanupFunction = false;
-
-    if (!cleanupFunction) {
-      if (seconds > 0 && quizState.timerActive && !quizState.isGameFinished) {
-        const id = window.setTimeout(setSeconds, 1000, seconds - 1);
-        setTimeId(id);
-      } else if (seconds <= 0 && quizState.isGameReady) {
-        dispatch({ type: 'FINISH_GAME' });
-      }
+    if (timerSeconds > 0 && isTimerActive && !isGameFinished) {
+      const id = setTimeout(setTimerSeconds, 1000, timerSeconds - 1);
+      setTimeId(id);
+    } else if (timerSeconds <= 0 || seconds <= 0) {
+      dispatch({ type: SprintActionTypes.FINISH_GAME });
     }
 
     return () => {
-      if (timeId) window.clearTimeout(timeId);
-      cleanupFunction = true;
+      if (timeId) {
+        clearTimeout(timeId);
+      }
     };
-  }, [dispatch, quizState.isGameFinished, quizState.timerActive, seconds]);
+    // Can't add timeId variable because this will trigger maximum update depth.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dispatch, isGameFinished, isTimerActive, seconds, timerSeconds]);
+  if (!isGameReady) {
+    return null;
+  }
 
-  return <Typography>{seconds}с</Typography>;
+  return <Typography>{timerSeconds}с</Typography>;
 };
 
 export default TextTimer;

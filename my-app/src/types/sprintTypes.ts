@@ -14,24 +14,30 @@ export interface IWords {
   incorrect: string;
 }
 
+export type Question = {
+  item: WordItem;
+  correct: boolean;
+  incorrect: string;
+};
+
 export interface InitialState {
+  questions: Question[];
+  answers: GameAnswers[];
+  newWords: Promise<WordItem>[];
+
   level: number | null;
-  questions: any[];
-  answers: any[];
-  new: any[];
   currentQuestionIndex: number;
   correctAnswersCount: number;
   maxAnswersCount: number;
   score: number;
-  allIncorrectCount: number;
   allCorrectCount: number;
-  showModal: boolean;
-  showResults: boolean;
+  allIncorrectCount: number;
+  seconds: number;
+
   isGameReady: boolean;
   isGameFinished: boolean;
   isLoading: boolean;
-  seconds: number;
-  timerActive: boolean;
+  isTimerActive: boolean;
 }
 
 export interface ReducerAction {
@@ -39,7 +45,7 @@ export interface ReducerAction {
   payload?: any;
 }
 
-export type SprintContext = [InitialState, Dispatch<ReducerAction>];
+export type ISprintContext = [InitialState, Dispatch<ReducerAction>];
 
 export enum SprintActionTypes {
   LOADING = 'LOADING',

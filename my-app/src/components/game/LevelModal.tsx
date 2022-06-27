@@ -1,4 +1,4 @@
-import { Box, Container, Grid, styled, Typography } from '@mui/material';
+import { Container, styled, Typography } from '@mui/material';
 import LevelButton from './LevelButton';
 import imgHappy from '../../assets/illustrations/manHappy.png';
 import imgIdea from '../../assets/illustrations/manIdea.png';
@@ -6,6 +6,10 @@ import imgLaptop from '../../assets/illustrations/manLaptop.png';
 import imgHurry from '../../assets/illustrations/womanHurry.png';
 import imgPuzzle from '../../assets/illustrations/womanPuzzle.png';
 import imgTablet from '../../assets/illustrations/womanTablet.png';
+import { Dispatch, useEffect, useState } from 'react';
+import { ReducerAction, SprintActionTypes } from '../../types/sprintTypes';
+import { getPartOfTextbook } from '../../services/WordService';
+import Utils from '../../utils/Utils';
 
 const ARR = [
   {
@@ -39,38 +43,6 @@ const ARR = [
     img: imgIdea,
   },
 ];
-// const ARR = [
-//   {
-//     level: 1,
-//     name: 'A1',
-//     img: imgHappy,
-//   },
-//   {
-//     level: 2,
-//     name: 'A2',
-//     img: imgTablet,
-//   },
-//   {
-//     level: 3,
-//     name: 'B1',
-//     img: imgPuzzle,
-//   },
-//   {
-//     level: 4,
-//     name: 'B2',
-//     img: imgLaptop,
-//   },
-//   {
-//     level: 5,
-//     name: 'C1',
-//     img: imgHurry,
-//   },
-//   {
-//     level: 6,
-//     name: 'C2',
-//     img: imgIdea,
-//   },
-// ];
 
 const FlexContainer = styled('div')`
   display: grid;
@@ -88,22 +60,34 @@ const FlexContainer = styled('div')`
     grid-template-columns: repeat(auto-fit, 300px);
   }
 `;
-// const FlexContainer = styled('div')`
-//   display: flex;
-//   justify-content: space-between;
-//   align-items: center;
-//   flex-wrap: wrap;
-//   align-content: center;
-// `;
 
-const StyledItem = styled('div')`
-  background: purple;
-`;
+type Props = {
+  dispatch: Dispatch<ReducerAction>;
+};
 
-const LevelModal = () => {
-  const LEVELS = [1, 2, 3, 4, 5, 6];
-  const NAMES = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
-  // const NAMES = ['Elem', 'Elem', 'Elem', 'Upper Intermediate', 'Hard', 'Hard'];
+const LevelModal = ({ dispatch }: Props) => {
+  const [level, setLevel] = useState<number>();
+
+  useEffect(() => {
+    if (level || level === 0) {
+      const fetchData = async () => {
+        dispatch({ type: SprintActionTypes.LOADING });
+        try {
+          const data = [
+            await getPartOfTextbook(`${Utils.random(0, 29)}`, `${level}`),
+            await getPartOfTextbook(`${Utils.random(0, 29)}`, `${level}`),
+            await getPartOfTextbook(`${Utils.random(0, 29)}`, `${level}`),
+          ];
+          const result = Utils.getRandomWords(data);
+          dispatch({ type: SprintActionTypes.CHANGE_LEVEL, payload: { result, level } });
+        } catch (err) {
+          alert('Oops! Something goes wrong.');
+        }
+      };
+
+      fetchData();
+    }
+  }, [dispatch, level]);
 
   return (
     <>
@@ -118,25 +102,21 @@ const LevelModal = () => {
           alignItems: 'flex-start',
         }}
       >
-        {/* <h2 style={{ textAlign: 'center' }}>Выбери свой уровень</h2> */}
         <Typography sx={{ marginBottom: '30px' }} textAlign="center" variant="h3" component="h2">
           Выбери уровень
         </Typography>
 
         <FlexContainer>
           {ARR.map((item, index) => (
-            // <StyledItem key={index}>
-            <LevelButton item={item.level} name={item.name} content={item} key={index} />
-            // </StyledItem>
+            <LevelButton
+              key={index}
+              item={item.level}
+              name={item.name}
+              content={item}
+              setLevel={setLevel}
+            />
           ))}
         </FlexContainer>
-        {/* <Grid container spacing={2}>
-          {ARR.map((item, index) => (
-            <Grid item key={index} xs={6} sm={6} md={4}>
-              <LevelButton item={item.level} name={item.name} content={item} />
-            </Grid>
-          ))}
-        </Grid> */}
       </Container>
     </>
   );

@@ -18,7 +18,7 @@ const sprintReducer: Reducer<InitialState, ReducerAction> = (state, action) => {
         questions: action.payload.randomData,
         isLoading: false,
         isGameReady: true,
-        timerActive: true,
+        isTimerActive: true,
       };
     }
 
@@ -37,7 +37,7 @@ const sprintReducer: Reducer<InitialState, ReducerAction> = (state, action) => {
         questions: result,
         isLoading: false,
         isGameReady: true,
-        timerActive: true,
+        isTimerActive: true,
       };
     }
 
@@ -75,7 +75,7 @@ const sprintReducer: Reducer<InitialState, ReducerAction> = (state, action) => {
     }
 
     case SprintActionTypes.ADD_NEW: {
-      const newArr = [...state.new, action.payload];
+      const newArr = [...state.newWords, action.payload];
       return {
         ...state,
         new: newArr,
@@ -84,12 +84,13 @@ const sprintReducer: Reducer<InitialState, ReducerAction> = (state, action) => {
 
     case SprintActionTypes.SET_SCORE: {
       const answer = [...state.answers];
-      state.new.map((item, id) => {
+      state.newWords.map((item, id) => {
         item.then((res: any) => {
           answer[id].failCounter = res.optional.failCounter;
           answer[id].successCounter = res.optional.successCounter;
         });
       });
+
       return {
         ...state,
         answer,

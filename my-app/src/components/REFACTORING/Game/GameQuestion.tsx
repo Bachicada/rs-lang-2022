@@ -1,30 +1,35 @@
-import { Typography, TypographyVariant } from '@mui/material';
+import { styled, Typography, TypographyVariant } from '@mui/material';
 
 type Props = {
   question: any;
   item: any;
 };
 
-const BIG = 14;
+const BIG = 10;
 
 const getVariant = (isBig: boolean): TypographyVariant => {
-  return isBig ? 'h3' : 'h4';
+  return isBig ? 'h4' : 'h3';
 };
+
+const StyledTypography = styled(Typography)`
+  max-width: 100vw;
+  overflow: auto;
+`;
 
 const GameQuestion = ({ question, item }: Props) => {
   const questionWord = item.word;
   const questionAnswer = question.correct ? item.wordTranslate : question.incorrect;
 
-  const isBigQuestion = questionWord.length > BIG;
-  const isBigAnswer = questionAnswer.length > BIG;
+  const isBigQuestion = questionWord.length >= BIG;
+  const isBigAnswer = questionAnswer.length >= BIG;
 
   return (
     <>
-      <Typography variant={getVariant(isBigQuestion)} color="primary">
+      <StyledTypography variant={getVariant(isBigQuestion)} color="primary">
         {questionWord}
-      </Typography>
+      </StyledTypography>
 
-      <Typography variant={getVariant(isBigAnswer)}>{questionAnswer}</Typography>
+      <StyledTypography variant={getVariant(isBigAnswer)}>{questionAnswer}</StyledTypography>
     </>
   );
 };

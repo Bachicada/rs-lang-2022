@@ -1,11 +1,11 @@
 import { Stack, Typography } from '@mui/material';
-import React from 'react';
 import { useEffect, useState } from 'react';
+import { useSprintContext } from '../../store/hooks';
+import { SprintActionTypes } from '../../types/sprintTypes';
 import { GAME_TYPE } from '../../utils/Constants';
 import { AudioContext } from '../audiocall/Audiocall';
 import GameLife from '../audiocall/GameLife';
 import { ScoreWrapper, StarsWrapper, StyledStar } from '../REFACTORING/Game/styles';
-import { QuizContext } from '../sprint/Sprint';
 import TextTimer from './TextTimer';
 
 interface GameScoreProps {
@@ -17,23 +17,26 @@ interface GameScoreProps {
 const points = [10, 20, 40, 80];
 const stars = ['⭐', '⭐', '⭐', '⭐'];
 
-const GameScore = (props: GameScoreProps) => {
-  const [quizState, dispatch] = React.useContext(QuizContext);
-  const [audioState] = React.useContext(AudioContext);
+const GameScore = ({ correctAnswersCount, isCorrect, type }: GameScoreProps) => {
+  const [sprintContext, dispatch] = useSprintContext();
 
+  // const [audioState] = React.useContext(AudioContext);
   const [score, setScore] = useState(0);
 
-  const id =
-    props.correctAnswersCount > points.length - 1 ? points.length - 1 : props.correctAnswersCount;
+  const correctCount = correctAnswersCount !== 0 ? correctAnswersCount - 1 : 0;
+  const id = correctAnswersCount >= points.length ? points.length - 1 : correctCount;
 
   useEffect(() => {
-    if (quizState.currentQuestionIndex && props.isCorrect) {
-      setScore((prev) => prev + points[id - 1]);
-      dispatch({ type: 'SET_RECORD', payload: score });
-    }
-  }, [quizState.currentQuestionIndex]);
+    if (isCorrect) {
+      const newScore = score + points[id];
 
-  const plusScore = props.isCorrect ? points[id] : points[0];
+      setScore(newScore);
+      dispatch({ type: SprintActionTypes.SET_RECORD, payload: newScore });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dispatch, correctCount, id, isCorrect]);
+
+  const plusScore = isCorrect ? points[id + 1] || points.at(-1) : points[0];
 
   return (
     <Stack sx={{ width: '100%' }}>
@@ -42,13 +45,13 @@ const GameScore = (props: GameScoreProps) => {
           {score} баллов (+{plusScore})
         </Typography>
 
-        <TextTimer quizState={quizState} dispatch={dispatch} />
+        <TextTimer quizState={sprintContext} dispatch={dispatch} />
       </ScoreWrapper>
 
       <StarsWrapper>
-        {props.type === GAME_TYPE.SPRINT
+        {type === GAME_TYPE.SPRINT
           ? stars.map((item, idx) => {
-              const isCorrect = props.correctAnswersCount > idx;
+              const isCorrect = correctAnswersCount > idx;
 
               return (
                 <StyledStar key={idx} isCorrect={isCorrect}>
