@@ -1,15 +1,15 @@
 import { Container, styled, Typography } from '@mui/material';
 import LevelButton from './LevelButton';
-import imgHappy from '../../assets/illustrations/manHappy.png';
-import imgIdea from '../../assets/illustrations/manIdea.png';
-import imgLaptop from '../../assets/illustrations/manLaptop.png';
-import imgHurry from '../../assets/illustrations/womanHurry.png';
-import imgPuzzle from '../../assets/illustrations/womanPuzzle.png';
-import imgTablet from '../../assets/illustrations/womanTablet.png';
+import imgHappy from '../../../assets/illustrations/manHappy.png';
+import imgIdea from '../../../assets/illustrations/manIdea.png';
+import imgLaptop from '../../../assets/illustrations/manLaptop.png';
+import imgHurry from '../../../assets/illustrations/womanHurry.png';
+import imgPuzzle from '../../../assets/illustrations/womanPuzzle.png';
+import imgTablet from '../../../assets/illustrations/womanTablet.png';
 import { Dispatch, useEffect, useState } from 'react';
-import { ReducerAction, SprintActionTypes } from '../../types/sprintTypes';
-import { getPartOfTextbook } from '../../services/WordService';
-import Utils from '../../utils/Utils';
+import { ReducerAction, SprintActionTypes } from '../../../types/sprintTypes';
+import { getPartOfTextbook } from '../../../services/WordService';
+import Utils from '../../../utils/Utils';
 
 const ARR = [
   {

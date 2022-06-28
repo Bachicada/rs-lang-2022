@@ -1,5 +1,5 @@
 import React, { Dispatch, SetStateAction } from 'react';
-import { BtnsWrapper, StyledBtn } from './styles';
+import { BtnsWrapper, StyledBtn } from '../Game/styles';
 
 type Props = {
   question: any;

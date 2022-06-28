@@ -8,11 +8,11 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { Dispatch, forwardRef, useEffect, useState } from 'react';
 import { Skeleton } from '@mui/material';
-import { createUserStatistics, getUserStatistics } from '../../services/UserStatisticsService';
+import { createUserStatistics, getUserStatistics } from '../../../services/UserStatisticsService';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
-import { GameAnswers, ReducerAction, SprintActionTypes } from '../../types/sprintTypes';
-import { WordItem } from '../../types/types';
+import { GameAnswers, ReducerAction, SprintActionTypes } from '../../../types/sprintTypes';
+import { WordItem } from '../../../types/types';
 
 type Props = {
   answers: GameAnswers[];

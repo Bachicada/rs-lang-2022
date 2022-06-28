@@ -2,8 +2,8 @@ import React, { Dispatch } from 'react';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import CloseIcon from '@mui/icons-material/Close';
 import { useNavigate } from 'react-router';
-import { APP_ROUTES } from '../../utils/Constants';
-import { ReducerAction, SprintActionTypes } from '../../types/sprintTypes';
+import { APP_ROUTES } from '../../../utils/Constants';
+import { ReducerAction, SprintActionTypes } from '../../../types/sprintTypes';
 
 type Props = {
   dispatch: Dispatch<ReducerAction>;

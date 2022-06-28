@@ -1,7 +1,7 @@
-import GameScore from '../../game/GameScore';
+import GameScore from '../Game/GameScore';
 import volumeUpIcon from '../../../assets/soundIcon.png';
 import { GAME_TYPE } from '../../../utils/Constants';
-import { StyledStack } from './styles';
+import { StyledStack } from '../Game/styles';
 
 type Props = {
   correctAnswersCount: number;

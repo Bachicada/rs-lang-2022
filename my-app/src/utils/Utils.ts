@@ -1,3 +1,5 @@
+import { getHardWords } from '../services/UserWordService';
+import { getPartOfTextbook } from '../services/WordService';
 import { WordItem } from '../types/types';
 
 const Utils = {
@@ -25,22 +27,6 @@ const Utils = {
   },
 
   getRandomWords: (arr: WordItem[][]) => {
-    const idxArr: number[] = [];
-    //Get random idx
-    for (let i = 0; i < 3; i++) {
-      if (i === 0) idxArr.push(Utils.random(0, 29));
-      else {
-        let rand = Utils.random(0, 29);
-        while (rand === idxArr[i - 1]) {
-          rand = Utils.random(0, 29);
-        }
-        idxArr.push(rand);
-      }
-    }
-    //Get an arr of words by idx
-    // const piece = idxArr.map((id) => {
-    //   return arr[id]
-    // }).flat();
     const piece = [...arr].flat();
 
     const result = piece.map((item) => {
@@ -57,22 +43,6 @@ const Utils = {
   },
 
   getAudioWords: (arr: WordItem[][]) => {
-    const idxArr: number[] = [];
-    //Get random idx
-    for (let i = 0; i < 3; i++) {
-      if (i === 0) idxArr.push(Utils.random(0, 29));
-      else {
-        let rand = Utils.random(0, 29);
-        while (rand === idxArr[i - 1]) {
-          rand = Utils.random(0, 29);
-        }
-        idxArr.push(rand);
-      }
-    }
-    //Get an arr of words by idx
-    // const piece = idxArr.map((id) => {
-    //   return arr[id]
-    // }).flat();
     const piece = [...arr].flat();
 
     const result = piece.map((item) => {
@@ -109,6 +79,31 @@ const Utils = {
       .map((a) => ({ sort: Math.random(), value: a }))
       .sort((a, b) => a.sort - b.sort)
       .map((a) => a.value);
+  },
+
+  getHardQuestions: async () => {
+    const prom = await getHardWords();
+    const data = prom[0].paginatedResults;
+    const formatData = Utils.getSprintWords(data.flat());
+    const randomData = Utils.shuffleAnswers(formatData);
+
+    randomData.forEach((item, idx) => {
+      randomData[idx].item.id = randomData[idx].item._id;
+    });
+    return randomData;
+  },
+
+  getPreparedQuestions: async (page: number, part: number) => {
+    const idArr: any[] = [];
+    for (let i = page; i >= 0; i--) {
+      idArr.push(i);
+    }
+
+    const prom = idArr.map((page) => getPartOfTextbook(`${page}`, `${part}`));
+    const data = (await Promise.allSettled(prom)).map((item: any) => item.value);
+    const formatData = Utils.getSprintWords(data.flat());
+    const randomData = Utils.shuffleAnswers(formatData);
+    return randomData;
   },
 };
 

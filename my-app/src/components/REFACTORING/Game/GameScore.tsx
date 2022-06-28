@@ -1,11 +1,11 @@
 import { Stack, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
-import { useSprintContext } from '../../store/hooks';
-import { SprintActionTypes } from '../../types/sprintTypes';
-import { GAME_TYPE } from '../../utils/Constants';
-import { AudioContext } from '../audiocall/Audiocall';
-import GameLife from '../audiocall/GameLife';
-import { ScoreWrapper, StarsWrapper, StyledStar } from '../REFACTORING/Game/styles';
+import { useSprintContext } from '../../../store/hooks';
+import { SprintActionTypes } from '../../../types/sprintTypes';
+import { GAME_TYPE } from '../../../utils/Constants';
+import { AudioContext } from '../../audiocall/Audiocall';
+import GameLife from '../../audiocall/GameLife';
+import { ScoreWrapper, StarsWrapper, StyledStar } from './styles';
 import TextTimer from './TextTimer';
 
 interface GameScoreProps {
