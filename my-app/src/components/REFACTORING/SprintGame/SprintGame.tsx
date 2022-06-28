@@ -24,14 +24,14 @@ const SprintGame = () => {
     if (level || level === 0) {
       const fetchData = async () => {
         dispatch({ type: SprintActionTypes.LOADING });
-        console.log('SEARCH', level);
+
         try {
           const data = [
             await getPartOfTextbook(`${Utils.random(0, 29)}`, `${level}`),
             await getPartOfTextbook(`${Utils.random(0, 29)}`, `${level}`),
             await getPartOfTextbook(`${Utils.random(0, 29)}`, `${level}`),
           ];
-          const result = Utils.getAudioWords(data);
+          const result = Utils.getRandomWords(data);
           dispatch({ type: SprintActionTypes.CHANGE_LEVEL, payload: { result, level } });
         } catch (err) {
           alert('Oops! Something goes wrong.');
