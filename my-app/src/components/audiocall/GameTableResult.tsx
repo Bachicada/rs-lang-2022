@@ -7,7 +7,6 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import { AudioContext } from './Audiocall';
 import VolumeUpIcon from '@mui/icons-material/VolumeUp';
 import { Skeleton } from '@mui/material';
 import { useEffect } from 'react';
@@ -15,6 +14,7 @@ import Tooltip from '@mui/material/Tooltip';
 import QuestionMarkIcon from '@mui/icons-material/QuestionMark';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
+import { useAudiocallContext } from '../../store/hooks';
 
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -47,7 +47,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 export default function GameTableResult() {
-  const [quizState, dispatch] = React.useContext(AudioContext);
+  const [quizState, dispatch] = useAudiocallContext();
   const [score, setScore] = React.useState(quizState.answers);
   const [open, setOpen] = React.useState(false);
 
@@ -63,9 +63,9 @@ export default function GameTableResult() {
     if (quizState.isGameFinished) {
       const getScores = async () => {
         const data = await (
-          await Promise.allSettled(quizState.new)
+          await Promise.allSettled(quizState.newWords)
         ).map((item: any) => item.value.optional);
-        dispatch({ type: 'SET_SCORE', payload: data });
+        // dispatch({ type: 'SET_SCORE', payload: data });
       };
 
       getScores().then(() => setScore([...quizState.answers]));
@@ -140,7 +140,7 @@ export default function GameTableResult() {
                 {/* <StyledTableCell align="right">{row.successCounter}/{row.successCounter + row.failCounter}</StyledTableCell> */}
                 <StyledTableCell align="right">
                   {row.successCounter || row.successCounter === 0 ? (
-                    `${row.successCounter}/${row.successCounter + row.failCounter}`
+                    `${row.successCounter}/${row.successCounter + (row.failCounter ?? 0)}`
                   ) : (
                     <Skeleton variant="text" />
                   )}

@@ -1,3 +1,10 @@
+import imgHappy from '../assets/illustrations/manHappy.png';
+import imgIdea from '../assets/illustrations/manIdea.png';
+import imgLaptop from '../assets/illustrations/manLaptop.png';
+import imgHurry from '../assets/illustrations/womanHurry.png';
+import imgPuzzle from '../assets/illustrations/womanPuzzle.png';
+import imgTablet from '../assets/illustrations/womanTablet.png';
+
 export const APP_ROUTES = {
   MAIN: '/',
   SIGNIN: '/signIn',
@@ -81,5 +88,38 @@ export const DRAWER_LINKS = [
     link: APP_ROUTES.STATISTICS,
     name: 'Статистика',
     collapse: null,
+  },
+];
+
+export const LEVEL_CARDS = [
+  {
+    level: 1,
+    name: 'Elementary',
+    img: imgHappy,
+  },
+  {
+    level: 2,
+    name: 'Pre Intermediate',
+    img: imgTablet,
+  },
+  {
+    level: 3,
+    name: 'Intermediate',
+    img: imgPuzzle,
+  },
+  {
+    level: 4,
+    name: 'Upper Intermediate',
+    img: imgLaptop,
+  },
+  {
+    level: 5,
+    name: 'Advanced',
+    img: imgHurry,
+  },
+  {
+    level: 6,
+    name: 'Proficient',
+    img: imgIdea,
   },
 ];

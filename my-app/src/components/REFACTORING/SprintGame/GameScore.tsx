@@ -3,10 +3,10 @@ import { useEffect, useState } from 'react';
 import { useSprintContext } from '../../../store/hooks';
 import { SprintActionTypes } from '../../../types/sprintTypes';
 import { GAME_TYPE } from '../../../utils/Constants';
-import { AudioContext } from '../../audiocall/Audiocall';
-import GameLife from '../../audiocall/GameLife';
-import { ScoreWrapper, StarsWrapper, StyledStar } from './styles';
-import TextTimer from './TextTimer';
+// import { AudioContext } from '../../../pages/audiocall/Audiocall';
+// import GameLife from '../../audiocall/GameLife';
+import { ScoreWrapper, StarsWrapper, StyledStar } from '../Game/styles';
+import TextTimer from '../Game/TextTimer';
 
 interface GameScoreProps {
   correctAnswersCount: number;

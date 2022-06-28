@@ -1,8 +1,12 @@
 import { Reducer } from 'react';
-import { InitialState, ReducerAction, SprintActionTypes } from '../../types/sprintTypes';
-import { initialState } from '../sprintContext';
+import {
+  InitialSprintState,
+  SprintReducerAction,
+  SprintActionTypes,
+} from '../../types/sprintTypes';
+import { initialSprintState } from '../sprintContext';
 
-const sprintReducer: Reducer<InitialState, ReducerAction> = (state, action) => {
+const sprintReducer: Reducer<InitialSprintState, SprintReducerAction> = (state, action) => {
   switch (action.type) {
     case SprintActionTypes.LOADING: {
       return {
@@ -107,7 +111,7 @@ const sprintReducer: Reducer<InitialState, ReducerAction> = (state, action) => {
 
     case SprintActionTypes.RESTART: {
       return {
-        ...initialState,
+        ...initialSprintState,
       };
     }
 

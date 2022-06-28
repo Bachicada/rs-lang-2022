@@ -4,35 +4,31 @@ import { WordItem } from './types';
 export interface GameAnswers {
   item: WordItem;
   answer: boolean;
+  audio: HTMLAudioElement;
   failCounter?: number;
   successCounter?: number;
 }
 
-export interface IWords {
+export interface AudioWords {
   item: WordItem;
-  correct: boolean;
-  incorrect: string;
+  incorrect: string[];
 }
 
-export type Question = {
+export interface Questions {
   item: WordItem;
-  correct: boolean;
-  incorrect: string;
-};
+  incorrect: string[];
+}
 
-export interface InitialSprintState {
-  questions: Question[];
+export interface InitialAudiocallState {
+  questions: Questions[];
   answers: GameAnswers[];
   newWords: Promise<WordItem>[];
 
   level: number | null;
   currentQuestionIndex: number;
+  currentLifeIndex: number;
   correctAnswersCount: number;
-  maxAnswersCount: number;
-  score: number;
-  allCorrectCount: number;
-  allIncorrectCount: number;
-  seconds: number;
+  secondsPerQuestion: number;
 
   isGameReady: boolean;
   isGameFinished: boolean;
@@ -40,22 +36,21 @@ export interface InitialSprintState {
   isTimerActive: boolean;
 }
 
-export interface SprintReducerAction {
-  type: SprintActionTypes;
+export interface AudiocallReducerAction {
+  type: AudiocallActionTypes;
   payload?: any;
 }
 
-export type ISprintContext = [InitialSprintState, Dispatch<SprintReducerAction>];
+export type IAudiocallContext = [InitialAudiocallState, Dispatch<AudiocallReducerAction>];
 
-export enum SprintActionTypes {
+export enum AudiocallActionTypes {
   LOADING = 'LOADING',
-  PRELOAD = 'PRELOAD',
   SET_RECORD = 'SET_RECORD',
   CHANGE_LEVEL = 'CHANGE_LEVEL',
   CORRECT_ANSWER = 'CORRECT_ANSWER',
   INCORRECT_ANSWER = 'INCORRECT_ANSWER',
   ADD_NEW = 'ADD_NEW',
-  SET_SCORE = 'SET_SCORE',
-  FINISH_GAME = 'FINISH_GAME',
+  SECOND = 'SECOND',
+  OUT_OF_TIME = 'OUT_OF_TIME',
   RESTART = 'RESTART',
 }

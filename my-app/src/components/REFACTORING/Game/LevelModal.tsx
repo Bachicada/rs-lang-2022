@@ -1,48 +1,11 @@
 import { Container, styled, Typography } from '@mui/material';
 import LevelButton from './LevelButton';
-import imgHappy from '../../../assets/illustrations/manHappy.png';
-import imgIdea from '../../../assets/illustrations/manIdea.png';
-import imgLaptop from '../../../assets/illustrations/manLaptop.png';
-import imgHurry from '../../../assets/illustrations/womanHurry.png';
-import imgPuzzle from '../../../assets/illustrations/womanPuzzle.png';
-import imgTablet from '../../../assets/illustrations/womanTablet.png';
-import { Dispatch, useEffect, useState } from 'react';
-import { ReducerAction, SprintActionTypes } from '../../../types/sprintTypes';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { SprintReducerAction, SprintActionTypes } from '../../../types/sprintTypes';
+import { AudiocallReducerAction } from '../../../types/audiocallTypes';
 import { getPartOfTextbook } from '../../../services/WordService';
 import Utils from '../../../utils/Utils';
-
-const ARR = [
-  {
-    level: 1,
-    name: 'Elementary',
-    img: imgHappy,
-  },
-  {
-    level: 2,
-    name: 'Pre Intermediate',
-    img: imgTablet,
-  },
-  {
-    level: 3,
-    name: 'Intermediate',
-    img: imgPuzzle,
-  },
-  {
-    level: 4,
-    name: 'Upper Intermediate',
-    img: imgLaptop,
-  },
-  {
-    level: 5,
-    name: 'Advanced',
-    img: imgHurry,
-  },
-  {
-    level: 6,
-    name: 'Proficient',
-    img: imgIdea,
-  },
-];
+import { LEVEL_CARDS } from '../../../utils/Constants';
 
 const FlexContainer = styled('div')`
   display: grid;
@@ -62,32 +25,31 @@ const FlexContainer = styled('div')`
 `;
 
 type Props = {
-  dispatch: Dispatch<ReducerAction>;
+  setLevel: Dispatch<SetStateAction<number | null>>;
+  // dispatch: Dispatch<SprintReducerAction>;
 };
 
-const LevelModal = ({ dispatch }: Props) => {
-  const [level, setLevel] = useState<number>();
+const LevelModal = ({ setLevel }: Props) => {
+  // useEffect(() => {
+  //   if (level || level === 0) {
+  //     const fetchData = async () => {
+  //       dispatch({ type: SprintActionTypes.LOADING });
+  //       try {
+  //         const data = [
+  //           await getPartOfTextbook(`${Utils.random(0, 29)}`, `${level}`),
+  //           await getPartOfTextbook(`${Utils.random(0, 29)}`, `${level}`),
+  //           await getPartOfTextbook(`${Utils.random(0, 29)}`, `${level}`),
+  //         ];
+  //         const result = Utils.getRandomWords(data);
+  //         dispatch({ type: SprintActionTypes.CHANGE_LEVEL, payload: { result, level } });
+  //       } catch (err) {
+  //         alert('Oops! Something goes wrong.');
+  //       }
+  //     };
 
-  useEffect(() => {
-    if (level || level === 0) {
-      const fetchData = async () => {
-        dispatch({ type: SprintActionTypes.LOADING });
-        try {
-          const data = [
-            await getPartOfTextbook(`${Utils.random(0, 29)}`, `${level}`),
-            await getPartOfTextbook(`${Utils.random(0, 29)}`, `${level}`),
-            await getPartOfTextbook(`${Utils.random(0, 29)}`, `${level}`),
-          ];
-          const result = Utils.getRandomWords(data);
-          dispatch({ type: SprintActionTypes.CHANGE_LEVEL, payload: { result, level } });
-        } catch (err) {
-          alert('Oops! Something goes wrong.');
-        }
-      };
-
-      fetchData();
-    }
-  }, [dispatch, level]);
+  //     fetchData();
+  //   }
+  // }, [dispatch, level]);
 
   return (
     <>
@@ -107,7 +69,7 @@ const LevelModal = ({ dispatch }: Props) => {
         </Typography>
 
         <FlexContainer>
-          {ARR.map((item, index) => (
+          {LEVEL_CARDS.map((item, index) => (
             <LevelButton
               key={index}
               item={item.level}

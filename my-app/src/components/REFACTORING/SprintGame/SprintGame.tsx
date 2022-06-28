@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import LevelModal from '../Game/LevelModal';
 import SprintGameContent from './SprintGameContent';
 import styles from './Game.module.css';
@@ -13,13 +13,32 @@ import { SprintActionTypes } from '../../../types/sprintTypes';
 import { StyledBox, StyledContainer } from './styles';
 
 const SprintGame = () => {
-  const [{ isLoading, level, newWords, isGameFinished, isGameReady, answers }, dispatch] =
-    useSprintContext();
+  const [
+    { isLoading, level: initialLevel, newWords, isGameFinished, isGameReady, answers },
+    dispatch,
+  ] = useSprintContext();
+  const [level, setLevel] = useState(initialLevel);
 
   useEffect(() => {
     const { page, part } = Utils.params;
     if (level || level === 0) {
-      return;
+      const fetchData = async () => {
+        dispatch({ type: SprintActionTypes.LOADING });
+        console.log('SEARCH', level);
+        try {
+          const data = [
+            await getPartOfTextbook(`${Utils.random(0, 29)}`, `${level}`),
+            await getPartOfTextbook(`${Utils.random(0, 29)}`, `${level}`),
+            await getPartOfTextbook(`${Utils.random(0, 29)}`, `${level}`),
+          ];
+          const result = Utils.getAudioWords(data);
+          dispatch({ type: SprintActionTypes.CHANGE_LEVEL, payload: { result, level } });
+        } catch (err) {
+          alert('Oops! Something goes wrong.');
+        }
+      };
+
+      fetchData();
     }
 
     if (part) {
@@ -50,7 +69,7 @@ const SprintGame = () => {
   }
 
   if (level === null) {
-    return <LevelModal dispatch={dispatch} />;
+    return <LevelModal setLevel={setLevel} />;
   }
 
   if (isGameFinished) {

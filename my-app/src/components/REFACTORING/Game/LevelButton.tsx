@@ -6,7 +6,7 @@ interface LevelButtonProps {
   item: number;
   name: string;
   content: { level: number; name: string; img: string };
-  setLevel: Dispatch<SetStateAction<number | undefined>>;
+  setLevel: Dispatch<SetStateAction<number | null>>;
 }
 
 const StyledBox = styled('div')`
@@ -14,7 +14,6 @@ const StyledBox = styled('div')`
   display: flex;
   justify-content: center;
   align-items: flex-end;
-  // box-shadow: 3px 3px 4px rgb(161 160 160 / 22%);
   box-shadow: 5px 5px 5px rgb(0 0 0 / 14%);
   background-color: #ffffffd6;
   width: 100%;

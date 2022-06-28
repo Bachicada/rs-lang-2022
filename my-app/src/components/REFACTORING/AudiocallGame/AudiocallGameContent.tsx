@@ -1,23 +1,27 @@
 import { Container } from '@mui/material';
 import { Dispatch, SetStateAction, useContext, useEffect, useState } from 'react';
-import { updateUserWord } from '../../services/UserWordService';
-import { API_URL, GAME_TYPE, WORD_STATUS } from '../../utils/Constants';
-import GameScore from '../REFACTORING/Game/GameScore';
-import { GameAnswers } from '../../pages/sprint/Sprint';
-import { AudioWords, AudioContext } from './Audiocall';
+import { updateUserWord } from '../../../services/UserWordService';
+import { API_URL, GAME_TYPE, WORD_STATUS } from '../../../utils/Constants';
+import GameScore from '../SprintGame/GameScore';
+// import { GameAnswers } from '../../pages/sprint/Sprint';
+// import { AudioWords, AudioContext } from '../../pages/audiocall/Audiocall';
 import VolumeUpIcon from '@mui/icons-material/VolumeUp';
 import Button from '@mui/material/Button';
+import { useAudiocallContext } from '../../../store/hooks';
+import { AudiocallActionTypes } from '../../../types/audiocallTypes';
 
-const AudioGame = () => {
-  const [quizState, dispatch] = useContext(AudioContext);
+const AudiocallGameContent = () => {
+  const [{ questions, currentQuestionIndex, correctAnswersCount }, dispatch] =
+    useAudiocallContext();
+
   const [isAnswered, setIsAnswered] = useState(false);
-  const [isAnswerCorrect, setIsAnswerCorrect] = useState<boolean>(false);
+  const [isAnswerCorrect, setIsAnswerCorrect] = useState(false);
 
   useEffect(() => {
     let cleanupFunction = false;
     if (!cleanupFunction && isAnswered) {
       const updAnswer = async () => {
-        const item = quizState.questions[quizState.currentQuestionIndex].item;
+        const item = questions[currentQuestionIndex].item;
         const [failCounter, successCounter] = [+!isAnswerCorrect, +isAnswerCorrect];
         const content = updateUserWord({
           wordId: `${item.id}`,
@@ -29,7 +33,7 @@ const AudioGame = () => {
             },
           },
         });
-        dispatch({ type: 'ADD_NEW', payload: content });
+        dispatch({ type: AudiocallActionTypes.ADD_NEW, payload: content });
         const answer = {
           item,
           answer: isAnswerCorrect,
@@ -37,7 +41,9 @@ const AudioGame = () => {
         };
 
         dispatch({
-          type: isAnswerCorrect ? 'CORRECT_ANSWER' : 'INCORRECT_ANSWER',
+          type: isAnswerCorrect
+            ? AudiocallActionTypes.CORRECT_ANSWER
+            : AudiocallActionTypes.INCORRECT_ANSWER,
           payload: answer,
         });
         setIsAnswered(false);
@@ -49,15 +55,34 @@ const AudioGame = () => {
     };
   }, [isAnswered]);
 
-  const obj = quizState.questions[quizState.currentQuestionIndex];
+  const obj = questions[currentQuestionIndex];
   const { item } = obj;
   const audio = new Audio(`${API_URL}/${item.audio}`);
 
   useEffect(() => {
     audio.play();
-  }, [quizState.currentQuestionIndex]);
+  }, [currentQuestionIndex]);
 
   return (
+    //   <>
+    //   <StyledStack direction="column" spacing={2}>
+    //     <GameControls
+    //       audio={audio}
+    //       correctAnswersCount={correctAnswersCount}
+    //       isCorrect={isAnswerCorrect}
+    //       type={GAME_TYPE.SPRINT}
+    //     />
+
+    //     <GameQuestion question={question} item={item} />
+
+    //     <GameBtns
+    //       question={question}
+    //       setIsAnswered={setIsAnswered}
+    //       setIsAnswerCorrect={setIsAnswerCorrect}
+    //     />
+    //   </StyledStack>
+    // </>
+
     <Container
       maxWidth="md"
       style={{
@@ -72,7 +97,7 @@ const AudioGame = () => {
     >
       {
         <GameScore
-          correctAnswersCount={quizState.correctAnswersCount}
+          correctAnswersCount={correctAnswersCount}
           isCorrect={isAnswerCorrect}
           type={GAME_TYPE.AUDIOCALL}
         />
@@ -111,4 +136,4 @@ const AudioGame = () => {
   );
 };
 
-export default AudioGame;
+export default AudiocallGameContent;

@@ -11,14 +11,14 @@ import { Skeleton } from '@mui/material';
 import { createUserStatistics, getUserStatistics } from '../../../services/UserStatisticsService';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
-import { GameAnswers, ReducerAction, SprintActionTypes } from '../../../types/sprintTypes';
+import { GameAnswers, SprintReducerAction, SprintActionTypes } from '../../../types/sprintTypes';
 import { WordItem } from '../../../types/types';
 
 type Props = {
   answers: GameAnswers[];
   isGameFinished: boolean;
   newWords: Promise<WordItem>[];
-  dispatch: Dispatch<ReducerAction>;
+  dispatch: Dispatch<SprintReducerAction>;
 };
 
 const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alert(props, ref) {

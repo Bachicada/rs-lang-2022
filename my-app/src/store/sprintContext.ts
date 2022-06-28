@@ -1,7 +1,7 @@
 import { createContext } from 'react';
-import { InitialState, ISprintContext } from '../types/sprintTypes';
+import { InitialSprintState, ISprintContext } from '../types/sprintTypes';
 
-export const initialState: InitialState = {
+export const initialSprintState: InitialSprintState = {
   questions: [],
   answers: [],
   newWords: [],
@@ -21,6 +21,6 @@ export const initialState: InitialState = {
   isTimerActive: false,
 };
 
-const SprintContext = createContext<ISprintContext>([initialState, () => null]);
+const SprintContext = createContext<ISprintContext>([initialSprintState, () => null]);
 
 export default SprintContext;

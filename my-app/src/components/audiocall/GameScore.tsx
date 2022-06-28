@@ -1,6 +1,7 @@
 import React from 'react';
 import { useEffect, useState } from 'react';
-import { AudioContext } from './Audiocall';
+import { useAudiocallContext } from '../../store/hooks';
+import { AudiocallActionTypes } from '../../types/audiocallTypes';
 
 interface GameScoreProps {
   correctAnswersCount: number;
@@ -8,7 +9,7 @@ interface GameScoreProps {
 }
 
 const GameScore = (props: GameScoreProps) => {
-  const [quizState, dispatch] = React.useContext(AudioContext);
+  const [quizState, dispatch] = useAudiocallContext();
   const [score, setScore] = useState(0);
   const points = [10, 20, 40, 80];
   const id =
@@ -17,7 +18,7 @@ const GameScore = (props: GameScoreProps) => {
   useEffect(() => {
     if (quizState.currentQuestionIndex && props.isCorrect) {
       setScore((prev) => prev + points[id - 1]);
-      dispatch({ type: 'SET_RECORD', payload: score });
+      dispatch({ type: AudiocallActionTypes.SET_RECORD, payload: score });
     }
   }, [quizState.currentQuestionIndex]);
   return (

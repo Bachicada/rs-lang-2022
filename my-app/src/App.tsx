@@ -7,7 +7,7 @@ import { Routes, Route } from 'react-router-dom';
 import { APP_ROUTES } from './utils/Constants';
 import Textbook from './components/textbook/Textbook';
 import Sprint from './pages/sprint/Sprint';
-import Audiocall from './components/audiocall/Audiocall';
+import Audiocall from './pages/audiocall/Audiocall';
 import Stat from './components/statistics/Stat';
 import SignInForm from './components/REFACTORING/Authorisation/SignInForm';
 import RegForm from './components/REFACTORING/Authorisation/RegisterForm';

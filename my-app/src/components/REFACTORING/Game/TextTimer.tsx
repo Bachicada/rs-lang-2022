@@ -1,10 +1,14 @@
 import { Typography } from '@mui/material';
 import { Dispatch, useEffect, useState } from 'react';
-import { InitialState, ReducerAction, SprintActionTypes } from '../../../types/sprintTypes';
+import {
+  InitialSprintState,
+  SprintReducerAction,
+  SprintActionTypes,
+} from '../../../types/sprintTypes';
 
 type Props = {
-  quizState: InitialState;
-  dispatch: Dispatch<ReducerAction>;
+  quizState: InitialSprintState;
+  dispatch: Dispatch<SprintReducerAction>;
 };
 
 const TextTimer = ({

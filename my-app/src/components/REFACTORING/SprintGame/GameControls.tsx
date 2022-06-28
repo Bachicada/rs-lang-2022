@@ -1,4 +1,4 @@
-import GameScore from '../Game/GameScore';
+import GameScore from './GameScore';
 import volumeUpIcon from '../../../assets/soundIcon.png';
 import { GAME_TYPE } from '../../../utils/Constants';
 import { StyledStack } from '../Game/styles';
