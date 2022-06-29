@@ -8,16 +8,22 @@ type Props = {
   isCorrect: boolean;
   type: GAME_TYPE;
   audio: HTMLAudioElement;
+  currentLifeIndex?: number;
 };
 
-const GameControls = ({ correctAnswersCount, isCorrect, type, audio }: Props) => {
+const GameControls = ({ correctAnswersCount, isCorrect, type, audio, currentLifeIndex }: Props) => {
   const handleClick = () => {
     audio.play();
   };
 
   return (
     <StyledStack direction="column" spacing={1}>
-      <GameScore correctAnswersCount={correctAnswersCount} isCorrect={isCorrect} type={type} />
+      <GameScore
+        correctAnswersCount={correctAnswersCount}
+        isCorrect={isCorrect}
+        type={type}
+        currentLifeIndex={currentLifeIndex}
+      />
 
       <img onClick={handleClick} src={volumeUpIcon} alt="volume up" style={{ cursor: 'pointer' }} />
     </StyledStack>
