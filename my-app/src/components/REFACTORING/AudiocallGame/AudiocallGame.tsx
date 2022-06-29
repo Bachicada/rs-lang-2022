@@ -116,30 +116,6 @@ const AudiocallGame = () => {
         </StyledContainer>
       )}
     </StyledBox>
-    // {/* {!quizState.isGameFinished &&
-    //         <GameLife count={quizState.currentLifeIndex}/>} */}
-    //     {/* {!quizState.isGameFinished && <Timer time={seconds} max={12} />} */}
-    //     {/* {quizState.isGameReady && !quizState.isGameFinished && <AudioGame />} */}
-
-    //     {/* {quizState.isGameFinished && <GameTableResult />} */}
-    //     {/* {quizState.isGameFinished && (
-    //       <div style={{ display: 'flex', flexDirection: 'column' }}>
-    //         <CloseIcon
-    //           style={{ cursor: 'pointer' }}
-    //           onClick={() => {
-    //             navigate(`${APP_ROUTES.MAIN}`);
-    //           }}
-    //           sx={{ fontSize: 80 }}
-    //         />
-    //         <RestartAltIcon
-    //           style={{ cursor: 'pointer' }}
-    //           onClick={() => {
-    //             dispatch({ type: 'RESTART' });
-    //           }}
-    //           sx={{ fontSize: 80 }}
-    //         />
-    //       </div>
-    //     )} */}
   );
 };
 

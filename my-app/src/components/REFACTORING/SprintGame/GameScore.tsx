@@ -21,10 +21,8 @@ const stars = ['⭐', '⭐', '⭐', '⭐'];
 
 const GameScore = ({ correctAnswersCount, isCorrect, type, currentLifeIndex }: GameScoreProps) => {
   const [sprintContext, dispatch] = useSprintContext();
-
-  // const [audioState] = React.useContext(AudioContext);
   const [score, setScore] = useState(0);
-  console.log('CURR', currentLifeIndex);
+
   const correctCount = correctAnswersCount !== 0 ? correctAnswersCount - 1 : 0;
   const id = correctAnswersCount >= points.length ? points.length - 1 : correctCount;
 
