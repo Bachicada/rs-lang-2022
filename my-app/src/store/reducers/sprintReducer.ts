@@ -58,7 +58,8 @@ const sprintReducer: Reducer<InitialSprintState, SprintReducerAction> = (state, 
         correctAnswersCount >= POINTS.length ? POINTS.length - 1 : correctAnswersCount - 1;
       const score = state.score + POINTS[pointsId];
 
-      const isGameFinished = state.questions.length === currentQuestionIndex;
+      const isGameFinished = state.questions.length <= currentQuestionIndex;
+
       return {
         ...state,
         answers,
@@ -75,7 +76,7 @@ const sprintReducer: Reducer<InitialSprintState, SprintReducerAction> = (state, 
       const answers = [...state.answers, action.payload];
       const correctAnswersCount = 0;
       const currentQuestionIndex = state.currentQuestionIndex + 1;
-      const isGameFinished = state.questions.length === currentQuestionIndex;
+      const isGameFinished = state.questions.length <= currentQuestionIndex;
 
       return {
         ...state,
@@ -91,22 +92,22 @@ const sprintReducer: Reducer<InitialSprintState, SprintReducerAction> = (state, 
       const newArr = [...state.newWords, action.payload];
       return {
         ...state,
-        new: newArr,
+        newWords: newArr,
       };
     }
 
     case SprintActionTypes.SET_SCORE: {
-      const answer = [...state.answers];
+      const answers = [...state.answers];
       state.newWords.map((item, id) => {
         item.then((res: any) => {
-          answer[id].failCounter = res.optional.failCounter;
-          answer[id].successCounter = res.optional.successCounter;
+          answers[id].failCounter = res.optional.failCounter;
+          answers[id].successCounter = res.optional.successCounter;
         });
       });
 
       return {
         ...state,
-        answer,
+        answers,
         isLoading: false,
       };
     }

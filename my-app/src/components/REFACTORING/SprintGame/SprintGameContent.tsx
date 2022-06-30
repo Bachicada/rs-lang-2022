@@ -15,6 +15,10 @@ const SprintGameContent = () => {
   ] = useSprintContext();
 
   const question = questions[currentQuestionIndex];
+  if (!question) {
+    return null;
+  }
+
   const { item } = question;
   const audio = new Audio(`${API_URL}/${item.audio}`);
 
@@ -31,6 +35,7 @@ const SprintGameContent = () => {
         },
       },
     });
+
     dispatch({ type: SprintActionTypes.ADD_NEW, payload: content });
 
     const answer = {

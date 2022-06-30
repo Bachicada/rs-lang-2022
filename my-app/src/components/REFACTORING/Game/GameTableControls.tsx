@@ -1,15 +1,13 @@
-import React, { Dispatch } from 'react';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import CloseIcon from '@mui/icons-material/Close';
 import { useNavigate } from 'react-router';
 import { APP_ROUTES } from '../../../utils/Constants';
-import { SprintReducerAction, SprintActionTypes } from '../../../types/sprintTypes';
 
 type Props = {
-  dispatch: Dispatch<SprintReducerAction>;
+  restartGame: () => void;
 };
 
-const GameTableControls = ({ dispatch }: Props) => {
+const GameTableControls = ({ restartGame }: Props) => {
   const navigate = useNavigate();
 
   return (
@@ -24,7 +22,7 @@ const GameTableControls = ({ dispatch }: Props) => {
       <RestartAltIcon
         sx={{ fontSize: 80, cursor: 'pointer' }}
         onClick={() => {
-          dispatch({ type: SprintActionTypes.RESTART });
+          restartGame();
         }}
       />
     </div>

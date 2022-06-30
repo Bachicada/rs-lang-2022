@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { BtnsWrapper, StyledBtn } from '../Game/styles';
 import correctAudioSrc from '../../../assets/correct.mp3';
 import incorrectAudioSrc from '../../../assets/incorrect.mp3';
@@ -12,6 +12,8 @@ type Props = {
 };
 
 const GameBtns = ({ isCorrect, dispatchAnswer }: Props) => {
+  const [isPressed, setIsPressed] = useState(false);
+
   const handleClick = useCallback(
     (btnValue: boolean) => {
       const isAnswerCorrect = btnValue === isCorrect;
@@ -23,12 +25,28 @@ const GameBtns = ({ isCorrect, dispatchAnswer }: Props) => {
   );
 
   useEffect(() => {
+    if (isPressed) {
+      const timeId = setTimeout(setIsPressed, 700, false);
+
+      return () => {
+        clearTimeout(timeId);
+      };
+    }
+  }, [isPressed]);
+
+  useEffect(() => {
     const keyDown = (e: KeyboardEvent) => {
+      if (isPressed) {
+        return;
+      }
+
       if (e.key === 'ArrowRight') {
         handleClick(true);
+        setIsPressed(true);
       }
       if (e.key === 'ArrowLeft') {
         handleClick(false);
+        setIsPressed(true);
       }
     };
 
@@ -36,7 +54,7 @@ const GameBtns = ({ isCorrect, dispatchAnswer }: Props) => {
     return () => {
       document.removeEventListener('keydown', keyDown);
     };
-  }, [handleClick]);
+  }, [handleClick, isPressed]);
 
   return (
     <BtnsWrapper>

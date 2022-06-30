@@ -60,6 +60,14 @@ const SprintGame = () => {
     }
   }, [dispatch, level]);
 
+  const restartGame = () => {
+    dispatch({ type: SprintActionTypes.RESTART });
+  };
+
+  const setScore = (data: any) => {
+    dispatch({ type: SprintActionTypes.SET_SCORE, payload: data });
+  };
+
   if (isLoading) {
     return (
       <div className={styles.gameLoadingIcon}>
@@ -75,13 +83,8 @@ const SprintGame = () => {
   if (isGameFinished) {
     return (
       <>
-        <GameTableResult
-          answers={answers}
-          isGameFinished={isGameFinished}
-          newWords={newWords}
-          dispatch={dispatch}
-        />
-        <GameTableControls dispatch={dispatch} />
+        <GameTableResult answers={answers} newWords={newWords} setScore={setScore} />
+        <GameTableControls restartGame={restartGame} />
       </>
     );
   }

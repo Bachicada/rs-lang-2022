@@ -82,6 +82,23 @@ const audiocallReducer: Reducer<InitialAudiocallState, AudiocallReducerAction> =
         secondsPerQuestion: 12,
       };
     }
+
+    case AudiocallActionTypes.SET_SCORE: {
+      const answers = [...state.answers];
+
+      state.newWords.map((item, id) => {
+        item.then((res: any) => {
+          answers[id].failCounter = res.optional.failCounter;
+          answers[id].successCounter = res.optional.successCounter;
+        });
+      });
+
+      return {
+        ...state,
+        answers,
+        isLoading: false,
+      };
+    }
     case AudiocallActionTypes.TIME_TICK: {
       const secondsPerQuestion = state.secondsPerQuestion - 1;
 
