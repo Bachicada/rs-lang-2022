@@ -20,7 +20,7 @@ const GameScore = ({
   onTimeTick,
   onTimeOver,
 }: GameScoreProps) => {
-  const pointsId = correctAnswersCount > POINTS.length ? POINTS.length - 1 : correctAnswersCount;
+  const pointsId = correctAnswersCount >= POINTS.length ? POINTS.length - 1 : correctAnswersCount;
   const plusScore = POINTS[pointsId];
 
   return (

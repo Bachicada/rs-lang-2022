@@ -13,7 +13,7 @@ export const initialSprintState: InitialSprintState = {
   score: 0,
   allIncorrectCount: 0,
   allCorrectCount: 0,
-  seconds: 1000,
+  seconds: 60,
 
   isGameReady: false,
   isGameFinished: false,

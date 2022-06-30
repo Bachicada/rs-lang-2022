@@ -4,6 +4,7 @@ import {
   SprintReducerAction,
   SprintActionTypes,
 } from '../../types/sprintTypes';
+import { POINTS } from '../../utils/Constants';
 import { initialSprintState } from '../sprintContext';
 
 const sprintReducer: Reducer<InitialSprintState, SprintReducerAction> = (state, action) => {
@@ -47,14 +48,21 @@ const sprintReducer: Reducer<InitialSprintState, SprintReducerAction> = (state, 
 
     case SprintActionTypes.CORRECT_ANSWER: {
       const answers = [...state.answers, action.payload];
+
       const correctAnswersCount = state.correctAnswersCount + 1;
       const currentQuestionIndex = state.currentQuestionIndex + 1;
       const maxAnswersCount =
         correctAnswersCount > state.maxAnswersCount ? correctAnswersCount : state.maxAnswersCount;
-      const isGameFinished = state.questions.length === currentQuestionIndex ? true : false;
+
+      const pointsId =
+        correctAnswersCount >= POINTS.length ? POINTS.length - 1 : correctAnswersCount - 1;
+      const score = state.score + POINTS[pointsId];
+
+      const isGameFinished = state.questions.length === currentQuestionIndex;
       return {
         ...state,
         answers,
+        score,
         correctAnswersCount,
         currentQuestionIndex,
         isGameFinished,
@@ -67,7 +75,8 @@ const sprintReducer: Reducer<InitialSprintState, SprintReducerAction> = (state, 
       const answers = [...state.answers, action.payload];
       const correctAnswersCount = 0;
       const currentQuestionIndex = state.currentQuestionIndex + 1;
-      const isGameFinished = state.questions.length === currentQuestionIndex ? true : false;
+      const isGameFinished = state.questions.length === currentQuestionIndex;
+
       return {
         ...state,
         answers,

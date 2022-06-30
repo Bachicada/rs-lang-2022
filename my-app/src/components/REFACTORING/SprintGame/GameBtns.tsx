@@ -12,34 +12,23 @@ type Props = {
 };
 
 const GameBtns = ({ isCorrect, dispatchAnswer }: Props) => {
-  const handleCorrectClick = useCallback(() => {
-    const isAnswerCorrect = isCorrect ? true : false;
-    isAnswerCorrect ? correctAudio.play() : incorrectAudio.play();
+  const handleClick = useCallback(
+    (btnValue: boolean) => {
+      const isAnswerCorrect = btnValue === isCorrect;
+      isAnswerCorrect ? correctAudio.play() : incorrectAudio.play();
 
-    dispatchAnswer(isAnswerCorrect);
-  }, [dispatchAnswer, isCorrect]);
-
-  const handleIncorrectClick = useCallback(() => {
-    const isAnswerCorrect = !isCorrect ? true : false;
-    isAnswerCorrect ? correctAudio.play() : incorrectAudio.play();
-
-    dispatchAnswer(isAnswerCorrect);
-  }, [dispatchAnswer, isCorrect]);
-
-  const handleClick = useCallback((btnValue: boolean) => {
-    const isAnswerCorrect = btnValue === isCorrect;
-    isAnswerCorrect ? correctAudio.play() : incorrectAudio.play();
-
-    dispatchAnswer(isAnswerCorrect);
-  }, []);
+      dispatchAnswer(isAnswerCorrect);
+    },
+    [dispatchAnswer, isCorrect]
+  );
 
   useEffect(() => {
     const keyDown = (e: KeyboardEvent) => {
       if (e.key === 'ArrowRight') {
-        handleCorrectClick();
+        handleClick(true);
       }
       if (e.key === 'ArrowLeft') {
-        handleIncorrectClick();
+        handleClick(false);
       }
     };
 
@@ -47,15 +36,15 @@ const GameBtns = ({ isCorrect, dispatchAnswer }: Props) => {
     return () => {
       document.removeEventListener('keydown', keyDown);
     };
-  }, [handleCorrectClick, handleIncorrectClick]);
+  }, [handleClick]);
 
   return (
     <BtnsWrapper>
-      <StyledBtn variant="outlined" color="error" onClick={handleIncorrectClick}>
+      <StyledBtn variant="outlined" color="error" onClick={() => handleClick(false)}>
         Неверно
       </StyledBtn>
 
-      <StyledBtn variant="outlined" color="success" onClick={handleCorrectClick}>
+      <StyledBtn variant="outlined" color="success" onClick={() => handleClick(true)}>
         Верно
       </StyledBtn>
     </BtnsWrapper>
