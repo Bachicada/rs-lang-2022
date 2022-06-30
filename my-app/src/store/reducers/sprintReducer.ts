@@ -102,6 +102,15 @@ const sprintReducer: Reducer<InitialSprintState, SprintReducerAction> = (state, 
       };
     }
 
+    case SprintActionTypes.TIME_TICK: {
+      const seconds = state.seconds - 1;
+
+      return {
+        ...state,
+        seconds,
+      };
+    }
+
     case SprintActionTypes.FINISH_GAME: {
       return {
         ...state,

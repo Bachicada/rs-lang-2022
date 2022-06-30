@@ -5,107 +5,70 @@ import GameControls from '../Game/GameControls';
 import GameQuestion from './GameQuestion';
 import GameBtns from './GameBtns';
 import { StyledStack } from '../Game/styles';
-import correctAudioSrc from '../../../assets/correct.mp3';
-import incorrectAudioSrc from '../../../assets/incorrect.mp3';
 import { useSprintContext } from '../../../store/hooks';
 import { SprintActionTypes } from '../../../types/sprintTypes';
 
-const correctAudio = new Audio(correctAudioSrc);
-const incorrectAudio = new Audio(incorrectAudioSrc);
-
 const SprintGameContent = () => {
-  const [{ correctAnswersCount, questions, currentQuestionIndex }, dispatch] = useSprintContext();
-
-  const [isAnswered, setIsAnswered] = useState(false);
-  const [isAnswerCorrect, setIsAnswerCorrect] = useState(false);
-
-  useEffect(() => {
-    if (isAnswered) {
-      const updAnswer = async () => {
-        correctAudio.load();
-        incorrectAudio.load();
-        isAnswerCorrect ? correctAudio.play() : incorrectAudio.play();
-
-        const item = questions[currentQuestionIndex].item;
-        const [failCounter, successCounter] = [+!isAnswerCorrect, +isAnswerCorrect];
-
-        const content = updateUserWord({
-          wordId: `${item.id}`,
-          word: {
-            difficulty: WORD_STATUS.NEW,
-            optional: {
-              failCounter,
-              successCounter,
-            },
-          },
-        });
-
-        dispatch({ type: SprintActionTypes.ADD_NEW, payload: content });
-        dispatch({
-          type: isAnswerCorrect
-            ? SprintActionTypes.CORRECT_ANSWER
-            : SprintActionTypes.INCORRECT_ANSWER,
-          payload: {
-            item,
-            answer: isAnswerCorrect,
-          },
-        });
-
-        setIsAnswered(false);
-      };
-
-      updAnswer();
-    }
-  }, [currentQuestionIndex, dispatch, isAnswerCorrect, isAnswered, questions]);
-  // }, [dispatch, isAnswerCorrect, isAnswered, quizState.currentQuestionIndex, quizState.questions]);
+  const [
+    { correctAnswersCount, questions, currentQuestionIndex, score, seconds, isTimerActive },
+    dispatch,
+  ] = useSprintContext();
 
   const question = questions[currentQuestionIndex];
   const { item } = question;
   const audio = new Audio(`${API_URL}/${item.audio}`);
 
-  const correctClicked = useCallback(() => {
-    setIsAnswerCorrect(question.correct ? true : false);
-    setIsAnswered(true);
-  }, [question.correct]);
+  const dispatchAnswer = (isAnswerCorrect: boolean) => {
+    const [failCounter, successCounter] = [+!isAnswerCorrect, +isAnswerCorrect];
 
-  const incorrectClicked = useCallback(() => {
-    setIsAnswerCorrect(question.correct ? false : true);
-    setIsAnswered(true);
-  }, [question.correct]);
+    const content = updateUserWord({
+      wordId: `${item.id}`,
+      word: {
+        difficulty: WORD_STATUS.NEW,
+        optional: {
+          failCounter,
+          successCounter,
+        },
+      },
+    });
+    dispatch({ type: SprintActionTypes.ADD_NEW, payload: content });
 
-  useEffect(() => {
-    const keyDown = (ev: KeyboardEvent) => {
-      if (ev.key === 'ArrowRight') {
-        correctClicked();
-      }
-      if (ev.key === 'ArrowLeft') {
-        incorrectClicked();
-      }
+    const answer = {
+      item,
+      answer: isAnswerCorrect,
     };
-    document.addEventListener('keydown', keyDown);
-    return () => {
-      document.removeEventListener('keydown', keyDown);
-    };
-  }, [correctClicked, incorrectClicked]);
-  // }, [correctClicked, incorrectClicked, quizState.currentQuestionIndex]);
+
+    dispatch({
+      type: isAnswerCorrect ? SprintActionTypes.CORRECT_ANSWER : SprintActionTypes.INCORRECT_ANSWER,
+      payload: answer,
+    });
+  };
+
+  const onTimeOver = () => {
+    dispatch({ type: SprintActionTypes.FINISH_GAME });
+  };
+
+  const onTimeTick = () => {
+    dispatch({ type: SprintActionTypes.TIME_TICK });
+  };
 
   return (
     <>
       <StyledStack direction="column" spacing={2}>
         <GameControls
-          audio={audio}
-          correctAnswersCount={correctAnswersCount}
-          isCorrect={isAnswerCorrect}
           type={GAME_TYPE.SPRINT}
+          audio={audio}
+          score={score}
+          correctAnswersCount={correctAnswersCount}
+          seconds={seconds}
+          isTimerActive={isTimerActive}
+          onTimeTick={onTimeTick}
+          onTimeOver={onTimeOver}
         />
 
         <GameQuestion question={question} item={item} />
 
-        <GameBtns
-          question={question}
-          setIsAnswered={setIsAnswered}
-          setIsAnswerCorrect={setIsAnswerCorrect}
-        />
+        <GameBtns isCorrect={question.correct} dispatchAnswer={dispatchAnswer} />
       </StyledStack>
     </>
   );

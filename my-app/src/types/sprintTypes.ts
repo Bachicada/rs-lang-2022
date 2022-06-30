@@ -58,4 +58,5 @@ export enum SprintActionTypes {
   SET_SCORE = 'SET_SCORE',
   FINISH_GAME = 'FINISH_GAME',
   RESTART = 'RESTART',
+  TIME_TICK = 'TIME_TICK',
 }
