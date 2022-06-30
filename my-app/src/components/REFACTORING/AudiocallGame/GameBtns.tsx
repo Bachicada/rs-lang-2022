@@ -4,8 +4,7 @@ import { Dispatch, SetStateAction } from 'react';
 type Props = {
   answers: string[];
   correctAnswer: string;
-  setIsAnswered: Dispatch<SetStateAction<boolean>>;
-  setIsAnswerCorrect: Dispatch<SetStateAction<boolean>>;
+  dispatchAnswer: (isAnswerCorrect: boolean) => void;
 };
 
 const StyledStack = styled(Stack)`
@@ -14,22 +13,18 @@ const StyledStack = styled(Stack)`
   }
 `;
 
-const GameBtns = ({ answers, correctAnswer, setIsAnswered, setIsAnswerCorrect }: Props) => {
-  const handleClick = (isCorrect: boolean) => {
-    setIsAnswerCorrect(isCorrect);
-    setIsAnswered(true);
-  };
-
+const GameBtns = ({ answers, correctAnswer, dispatchAnswer }: Props) => {
   return (
     <StyledStack direction={{ xs: 'column', sm: 'row' }} spacing={1}>
       {answers.map((word: string, id: number) => {
         const isCorrect = word === correctAnswer;
+
         return (
           <Button
             key={id}
             variant="outlined"
             color="secondary"
-            onClick={() => handleClick(isCorrect)}
+            onClick={() => dispatchAnswer(isCorrect)}
           >
             {word}
           </Button>

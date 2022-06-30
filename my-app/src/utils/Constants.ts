@@ -123,3 +123,5 @@ export const LEVEL_CARDS = [
     img: imgIdea,
   },
 ];
+
+export const POINTS = [10, 20, 40, 80];

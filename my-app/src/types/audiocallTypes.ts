@@ -24,6 +24,7 @@ export interface InitialAudiocallState {
   answers: GameAnswers[];
   newWords: Promise<WordItem>[];
 
+  score: number;
   level: number | null;
   currentQuestionIndex: number;
   currentLifeIndex: number;
@@ -51,6 +52,7 @@ export enum AudiocallActionTypes {
   INCORRECT_ANSWER = 'INCORRECT_ANSWER',
   ADD_NEW = 'ADD_NEW',
   SECOND = 'SECOND',
+  TIME_TICK = 'TIME_TICK',
   OUT_OF_TIME = 'OUT_OF_TIME',
   RESTART = 'RESTART',
 }

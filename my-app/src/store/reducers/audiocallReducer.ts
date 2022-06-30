@@ -4,6 +4,7 @@ import {
   InitialAudiocallState,
   AudiocallReducerAction,
 } from '../../types/audiocallTypes';
+import { POINTS } from '../../utils/Constants';
 import { initialAudiocallState } from '../audiocallContext';
 
 const audiocallReducer: Reducer<InitialAudiocallState, AudiocallReducerAction> = (
@@ -42,24 +43,35 @@ const audiocallReducer: Reducer<InitialAudiocallState, AudiocallReducerAction> =
     }
     case AudiocallActionTypes.CORRECT_ANSWER: {
       const answers = [...state.answers, action.payload];
+
       const correctAnswersCount = state.correctAnswersCount + 1;
       const currentQuestionIndex = state.currentQuestionIndex + 1;
-      const isGameFinished = state.questions.length === currentQuestionIndex ? true : false;
+      const isGameFinished = state.questions.length === currentQuestionIndex;
+
+      const pointsId =
+        correctAnswersCount >= POINTS.length ? POINTS.length - 1 : correctAnswersCount;
+      const score = state.score + POINTS[pointsId];
+
       return {
         ...state,
         answers,
+        score,
         correctAnswersCount,
         currentQuestionIndex,
         isGameFinished,
+        secondsPerQuestion: 12,
       };
     }
     case AudiocallActionTypes.INCORRECT_ANSWER: {
       const answers = [...state.answers, action.payload];
+
       const correctAnswersCount = 0;
       const currentQuestionIndex = state.currentQuestionIndex + 1;
       const currentLifeIndex = state.currentLifeIndex - 1;
+
       const isGameFinished =
-        state.questions.length === currentQuestionIndex || currentLifeIndex === 0 ? true : false;
+        state.questions.length === currentQuestionIndex || currentLifeIndex === 0;
+
       return {
         ...state,
         answers,
@@ -67,27 +79,33 @@ const audiocallReducer: Reducer<InitialAudiocallState, AudiocallReducerAction> =
         currentQuestionIndex,
         isGameFinished,
         currentLifeIndex,
+        secondsPerQuestion: 12,
       };
     }
-    case AudiocallActionTypes.SECOND: {
+    case AudiocallActionTypes.TIME_TICK: {
       const secondsPerQuestion = state.secondsPerQuestion - 1;
+
       return {
-        ...initialAudiocallState,
+        ...state,
         secondsPerQuestion,
       };
     }
     case AudiocallActionTypes.OUT_OF_TIME: {
+      const correctAnswersCount = 0;
       const currentLifeIndex = state.currentLifeIndex - 1;
       const currentQuestionIndex = state.currentQuestionIndex + 1;
+
       const isGameFinished =
-        currentLifeIndex === 0 || currentQuestionIndex >= state.questions.length ? true : false;
+        state.questions.length === currentQuestionIndex || currentLifeIndex === 0;
       const secondsPerQuestion = currentLifeIndex === 0 ? 0 : 12;
+
       return {
         ...state,
         currentLifeIndex,
         isGameFinished,
         secondsPerQuestion,
         currentQuestionIndex,
+        correctAnswersCount,
       };
     }
     case AudiocallActionTypes.RESTART: {

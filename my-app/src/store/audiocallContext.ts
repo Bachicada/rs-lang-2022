@@ -6,6 +6,7 @@ export const initialAudiocallState: InitialAudiocallState = {
   answers: [],
   newWords: [],
 
+  score: 0,
   level: null,
   currentQuestionIndex: 0,
   currentLifeIndex: 5,

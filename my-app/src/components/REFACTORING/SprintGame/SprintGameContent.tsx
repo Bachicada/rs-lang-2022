@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { updateUserWord } from '../../../services/UserWordService';
 import { API_URL, GAME_TYPE, WORD_STATUS } from '../../../utils/Constants';
-import GameControls from './GameControls';
+import GameControls from '../Game/GameControls';
 import GameQuestion from './GameQuestion';
 import GameBtns from './GameBtns';
 import { StyledStack } from '../Game/styles';

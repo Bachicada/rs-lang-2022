@@ -1,44 +1,33 @@
 import { Typography } from '@mui/material';
-import { Dispatch, useEffect, useState } from 'react';
-import {
-  InitialSprintState,
-  SprintReducerAction,
-  SprintActionTypes,
-} from '../../../types/sprintTypes';
+import { useEffect } from 'react';
 
 type Props = {
-  quizState: InitialSprintState;
-  dispatch: Dispatch<SprintReducerAction>;
+  seconds: number;
+  isTimerActive: boolean;
+  onTimeTick: () => void;
+  onTimeOver: () => void;
 };
 
-const TextTimer = ({
-  quizState: { isGameFinished, isGameReady, isTimerActive, seconds },
-  dispatch,
-}: Props) => {
-  const [timerSeconds, setTimerSeconds] = useState(seconds);
-  const [timeId, setTimeId] = useState<ReturnType<typeof setTimeout>>();
-
+const TextTimer = ({ seconds, isTimerActive, onTimeOver, onTimeTick }: Props) => {
   useEffect(() => {
-    if (timerSeconds > 0 && isTimerActive && !isGameFinished) {
-      const id = setTimeout(setTimerSeconds, 1000, timerSeconds - 1);
-      setTimeId(id);
-    } else if (timerSeconds <= 0 || seconds <= 0) {
-      dispatch({ type: SprintActionTypes.FINISH_GAME });
+    if (!isTimerActive) {
+      return;
     }
+
+    if (seconds <= 0) {
+      onTimeOver();
+    }
+
+    const timeId = setTimeout(onTimeTick, 1000);
 
     return () => {
       if (timeId) {
         clearTimeout(timeId);
       }
     };
-    // Can't add timeId variable because this will trigger maximum update depth.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch, isGameFinished, isTimerActive, seconds, timerSeconds]);
-  if (!isGameReady) {
-    return null;
-  }
+  }, [isTimerActive, onTimeOver, onTimeTick, seconds]);
 
-  return <Typography>{timerSeconds}с</Typography>;
+  return <Typography>{seconds}с</Typography>;
 };
 
 export default TextTimer;

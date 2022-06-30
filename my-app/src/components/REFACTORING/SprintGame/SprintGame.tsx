@@ -21,6 +21,7 @@ const SprintGame = () => {
 
   useEffect(() => {
     const { page, part } = Utils.params;
+
     if (level || level === 0) {
       const fetchData = async () => {
         dispatch({ type: SprintActionTypes.LOADING });
@@ -50,7 +51,6 @@ const SprintGame = () => {
           });
         } else if (page !== null) {
           Utils.getPreparedQuestions(page, part).then((randomData) => {
-            console.log('PREPARED', randomData);
             dispatch({ type: SprintActionTypes.PRELOAD, payload: { randomData, level: part } });
           });
         }
@@ -68,7 +68,7 @@ const SprintGame = () => {
     );
   }
 
-  if (level === null) {
+  if (initialLevel === null) {
     return <LevelModal setLevel={setLevel} />;
   }
 
