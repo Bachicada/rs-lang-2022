@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { updateUserWord } from '../../../services/UserWordService';
 import { API_URL, GAME_TYPE, WORD_STATUS } from '../../../utils/Constants';
 import GameControls from '../Game/GameControls';
@@ -13,11 +13,19 @@ const SprintGameContent = () => {
     { correctAnswersCount, questions, currentQuestionIndex, score, seconds, isTimerActive },
     dispatch,
   ] = useSprintContext();
-  console.log('RE', seconds);
-  // NEW TIMER
+
   useEffect(() => {
-    setTimeout(dispatch, 1000, { type: SprintActionTypes.TIME_TICK });
+    if (seconds <= 0) {
+      dispatch({ type: SprintActionTypes.FINISH_GAME });
+    }
+
+    const timerId = setTimeout(dispatch, 1000, { type: SprintActionTypes.TIME_TICK });
+
+    return () => {
+      clearTimeout(timerId);
+    };
   }, [seconds, dispatch]);
+
   const question = questions[currentQuestionIndex];
   if (!question) {
     return null;
@@ -53,14 +61,6 @@ const SprintGameContent = () => {
     });
   };
 
-  const onTimeOver = () => {
-    dispatch({ type: SprintActionTypes.FINISH_GAME });
-  };
-
-  const onTimeTick = () => {
-    dispatch({ type: SprintActionTypes.TIME_TICK });
-  };
-
   return (
     <>
       <StyledStack direction="column" spacing={2}>
@@ -71,8 +71,6 @@ const SprintGameContent = () => {
           correctAnswersCount={correctAnswersCount}
           seconds={seconds}
           isTimerActive={isTimerActive}
-          onTimeTick={onTimeTick}
-          onTimeOver={onTimeOver}
         />
 
         <GameQuestion question={question} item={item} />

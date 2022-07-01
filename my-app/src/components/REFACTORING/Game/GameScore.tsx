@@ -8,18 +8,9 @@ interface GameScoreProps {
   correctAnswersCount: number;
   seconds: number;
   isTimerActive: boolean;
-  onTimeTick: () => void;
-  onTimeOver: () => void;
 }
 
-const GameScore = ({
-  score,
-  correctAnswersCount,
-  seconds,
-  isTimerActive,
-  onTimeTick,
-  onTimeOver,
-}: GameScoreProps) => {
+const GameScore = ({ score, correctAnswersCount, seconds, isTimerActive }: GameScoreProps) => {
   const pointsId = correctAnswersCount >= POINTS.length ? POINTS.length - 1 : correctAnswersCount;
   const plusScore = POINTS[pointsId];
 
@@ -29,12 +20,14 @@ const GameScore = ({
         {score} баллов (+{plusScore})
       </Typography>
 
-      <TextTimer
-        seconds={seconds}
-        isTimerActive={isTimerActive}
-        onTimeTick={onTimeTick}
-        onTimeOver={onTimeOver}
-      />
+      {isTimerActive && (
+        <TextTimer
+          seconds={seconds}
+          // isTimerActive={isTimerActive}
+          // onTimeTick={onTimeTick}
+          // onTimeOver={onTimeOver}
+        />
+      )}
     </ScoreWrapper>
   );
 };

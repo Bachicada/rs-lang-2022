@@ -14,8 +14,6 @@ type Props = {
   seconds: number;
   isTimerActive: boolean;
   currentLifeIndex?: number;
-  onTimeTick: () => void;
-  onTimeOver: () => void;
 };
 
 const GameControls = ({
@@ -26,8 +24,6 @@ const GameControls = ({
   seconds,
   isTimerActive,
   currentLifeIndex,
-  onTimeOver,
-  onTimeTick,
 }: Props) => {
   const handleClick = () => {
     audio.play();
@@ -41,8 +37,8 @@ const GameControls = ({
           correctAnswersCount={correctAnswersCount}
           isTimerActive={isTimerActive}
           seconds={seconds}
-          onTimeOver={onTimeOver}
-          onTimeTick={onTimeTick}
+          // onTimeOver={onTimeOver}
+          // onTimeTick={onTimeTick}
         />
 
         <Stars correctAnswersCount={correctAnswersCount} />

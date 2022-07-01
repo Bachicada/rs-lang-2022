@@ -26,6 +26,18 @@ const AudiocallGameContent = () => {
   const { item } = question;
   const audio = new Audio(`${API_URL}/${item.audio}`);
 
+  useEffect(() => {
+    if (seconds <= 0) {
+      dispatch({ type: AudiocallActionTypes.OUT_OF_TIME });
+    }
+
+    const timerId = setTimeout(dispatch, 1000, { type: AudiocallActionTypes.TIME_TICK });
+
+    return () => {
+      clearTimeout(timerId);
+    };
+  }, [seconds, dispatch]);
+
   const dispatchAnswer = (isAnswerCorrect: boolean) => {
     const [failCounter, successCounter] = [+!isAnswerCorrect, +isAnswerCorrect];
 
@@ -55,14 +67,6 @@ const AudiocallGameContent = () => {
     });
   };
 
-  const onTimeOver = () => {
-    dispatch({ type: AudiocallActionTypes.OUT_OF_TIME });
-  };
-
-  const onTimeTick = () => {
-    dispatch({ type: AudiocallActionTypes.TIME_TICK });
-  };
-
   useEffect(() => {
     audio.play();
   }, [currentQuestionIndex]);
@@ -78,8 +82,6 @@ const AudiocallGameContent = () => {
           seconds={seconds}
           isTimerActive={isTimerActive}
           currentLifeIndex={currentLifeIndex}
-          onTimeTick={onTimeTick}
-          onTimeOver={onTimeOver}
         />
 
         <GameQuestion question={item} />
