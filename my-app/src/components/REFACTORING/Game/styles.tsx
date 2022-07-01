@@ -1,7 +1,7 @@
 import { Button, Stack, styled } from '@mui/material';
 
 type StarProps = {
-  isCorrect?: boolean;
+  correct?: string | undefined;
 };
 
 export const StyledStack = styled(Stack)`
@@ -37,12 +37,12 @@ export const StarsWrapper = styled('div')`
 `;
 
 export const StyledStar = styled('div')(
-  ({ isCorrect }: StarProps) => `
+  ({ correct }: StarProps) => `
   width: fit-content;
   opacity: 1;
-  animation: ${isCorrect ? 'stretch-bounce 0.5s ease-in-out' : null};
+  animation: ${correct ? 'stretch-bounce 0.5s ease-in-out' : null};
   transition: 0.3s ease-out;
-  filter: ${isCorrect ? 'none' : 'grayscale(1)'};
+  filter: ${!correct ? 'grayscale(1)' : 'none'};
   font-size: 2rem;
 `
 );

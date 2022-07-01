@@ -14,7 +14,7 @@ const Stars = ({ correctAnswersCount }: Props) => {
         const isCorrect = correctAnswersCount > idx;
 
         return (
-          <StyledStar key={idx} isCorrect={isCorrect}>
+          <StyledStar key={idx} correct={isCorrect ? 'true' : undefined}>
             {item}
           </StyledStar>
         );
