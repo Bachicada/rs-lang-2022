@@ -13,7 +13,11 @@ const SprintGameContent = () => {
     { correctAnswersCount, questions, currentQuestionIndex, score, seconds, isTimerActive },
     dispatch,
   ] = useSprintContext();
-
+  console.log('RE', seconds);
+  // NEW TIMER
+  useEffect(() => {
+    setTimeout(dispatch, 1000, { type: SprintActionTypes.TIME_TICK });
+  }, [seconds, dispatch]);
   const question = questions[currentQuestionIndex];
   if (!question) {
     return null;

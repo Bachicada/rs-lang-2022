@@ -45,7 +45,6 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 export default function GameTableResult({ answers, newWords, setScore }: Props) {
-  const [scoreAnsw, setScoreAnsw] = useState(answers);
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
@@ -55,28 +54,28 @@ export default function GameTableResult({ answers, newWords, setScore }: Props) 
     }
   }, []);
 
-  // useEffect(() => {
-  //   const getScores = async () => {
-  //     const promiseData = await Promise.allSettled(newWords);
-  //     console.log('NEW', newWords);
-  //     console.log('NEW ALL SETTLED', promiseData);
+  useEffect(() => {
+    const getScores = async () => {
+      const promiseData = await Promise.allSettled(newWords);
+      console.log('NEW', newWords);
+      console.log('NEW ALL SETTLED', promiseData);
 
-  //     const data = promiseData.map((item: any) => item.value.optional);
-  //     console.log('DATA TO SET', data);
-  //     setScore(data);
-  //     // dispatch({ type: SprintActionTypes.SET_SCORE, payload: data });
-  //   };
+      const data = promiseData.map((item: any) => item.value.optional);
+      console.log('DATA TO SET', data);
+      setScore(data);
+      // dispatch({ type: SprintActionTypes.SET_SCORE, payload: data });
+    };
 
-  //   getScores();
-  //   // getScores().then(() => setScoreAnsw([...answers]));
+    getScores();
+    // getScores().then(() => setScoreAnsw([...answers]));
 
-  //   // const obj = [{
-  //   //   maxAnswersCount: quizState.maxAnswersCount,
-  //   //   allCorrectCount: quizState.allCorrectCount,
-  //   //   allIncorrectCount: quizState.allIncorrectCount,
-  //   //   date: new Date().toLocaleDateString(),
-  //   // }];
-  // }, [answers, newWords, setScore]);
+    // const obj = [{
+    //   maxAnswersCount: quizState.maxAnswersCount,
+    //   allCorrectCount: quizState.allCorrectCount,
+    //   allIncorrectCount: quizState.allIncorrectCount,
+    //   date: new Date().toLocaleDateString(),
+    // }];
+  }, [answers, newWords, setScore]);
 
   return (
     <>
