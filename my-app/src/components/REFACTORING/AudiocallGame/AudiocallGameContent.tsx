@@ -40,9 +40,14 @@ const AudiocallGameContent = () => {
 
   const dispatchAnswer = (isAnswerCorrect: boolean) => {
     const [failCounter, successCounter] = [+!isAnswerCorrect, +isAnswerCorrect];
+    const answer = {
+      item,
+      answer: isAnswerCorrect,
+      audio: new Audio(`${API_URL}/${item.audio}`),
+    };
 
     const content = updateUserWord({
-      wordId: `${item.id}`,
+      wordId: item.id + '',
       word: {
         difficulty: WORD_STATUS.NEW,
         optional: {
@@ -51,20 +56,12 @@ const AudiocallGameContent = () => {
         },
       },
     });
+
     dispatch({ type: AudiocallActionTypes.ADD_NEW, payload: content });
 
-    const answer = {
-      item,
-      answer: isAnswerCorrect,
-      audio: new Audio(`${API_URL}/${item.audio}`),
-    };
-
-    dispatch({
-      type: isAnswerCorrect
-        ? AudiocallActionTypes.CORRECT_ANSWER
-        : AudiocallActionTypes.INCORRECT_ANSWER,
-      payload: answer,
-    });
+    isAnswerCorrect
+      ? dispatch({ type: AudiocallActionTypes.CORRECT_ANSWER, payload: answer })
+      : dispatch({ type: AudiocallActionTypes.INCORRECT_ANSWER, payload: answer });
   };
 
   useEffect(() => {

@@ -168,7 +168,7 @@ export const getUserAggrWord = async (wordId: string) => {
 export const updateUserWord = async ({ wordId, word }: ICreateUserWord) => {
   const userJSON = localStorage.getItem('CurrentUser');
   if (!userJSON) {
-    return 'no info';
+    return null;
   }
   const { userId, token } = JSON.parse(userJSON);
   const options = {
