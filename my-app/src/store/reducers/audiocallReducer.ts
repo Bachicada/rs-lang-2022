@@ -84,13 +84,23 @@ const audiocallReducer: Reducer<InitialAudiocallState, AudiocallReducerAction> =
     }
 
     case AudiocallActionTypes.SET_SCORE: {
+      type Counter =
+        | {
+            failCounter: number;
+            successCounter: number;
+          }
+        | undefined
+        | null;
+      const counters: Counter[] = action.payload;
       const answers = [...state.answers];
 
-      state.newWords.map((item, id) => {
-        item.then((res: any) => {
-          answers[id].failCounter = res.optional.failCounter;
-          answers[id].successCounter = res.optional.successCounter;
-        });
+      counters.forEach((counter, id) => {
+        if (!counter) {
+          return;
+        }
+
+        answers[id].failCounter = counter.failCounter;
+        answers[id].successCounter = counter.successCounter;
       });
 
       return {

@@ -6,7 +6,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import { Dispatch, forwardRef, useEffect, useState } from 'react';
+import { Dispatch, forwardRef, memo, useEffect, useMemo, useState } from 'react';
 import { Skeleton } from '@mui/material';
 import { createUserStatistics, getUserStatistics } from '../../../services/UserStatisticsService';
 import Snackbar from '@mui/material/Snackbar';
@@ -44,8 +44,9 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-export default function GameTableResult({ answers, newWords, setScore }: Props) {
+const GameTableResultComponent = ({ answers, newWords, setScore }: Props) => {
   const [open, setOpen] = useState(false);
+  const [isMutated, setIsMutated] = useState(false);
 
   useEffect(() => {
     const userJSON = localStorage.getItem('CurrentUser');
@@ -55,19 +56,18 @@ export default function GameTableResult({ answers, newWords, setScore }: Props) 
   }, []);
 
   useEffect(() => {
+    if (isMutated) {
+      return;
+    }
+
     const getScores = async () => {
       const promiseData = await Promise.allSettled(newWords);
-      console.log('NEW', newWords);
-      console.log('NEW ALL SETTLED', promiseData);
-
-      const data = promiseData.map((item: any) => item.value.optional);
-      console.log('DATA TO SET', data);
+      const data = promiseData.map((item: any) => item.value?.optional);
       setScore(data);
-      // dispatch({ type: SprintActionTypes.SET_SCORE, payload: data });
+      setIsMutated(true);
     };
 
     getScores();
-    // getScores().then(() => setScoreAnsw([...answers]));
 
     // const obj = [{
     //   maxAnswersCount: quizState.maxAnswersCount,
@@ -75,7 +75,7 @@ export default function GameTableResult({ answers, newWords, setScore }: Props) 
     //   allIncorrectCount: quizState.allIncorrectCount,
     //   date: new Date().toLocaleDateString(),
     // }];
-  }, [answers, newWords, setScore]);
+  }, [newWords, setScore]);
 
   return (
     <>
@@ -96,7 +96,8 @@ export default function GameTableResult({ answers, newWords, setScore }: Props) 
           </TableHead>
 
           <TableBody>
-            {answers.map(({ answer, item, failCounter, successCounter }) => {
+            {answers.map(({ answer, item, failCounter, successCounter }, idx) => {
+              console.log(failCounter, successCounter);
               const isFailCounter = failCounter || failCounter === 0;
               const isSuccessCounter = successCounter || successCounter === 0;
 
@@ -123,4 +124,7 @@ export default function GameTableResult({ answers, newWords, setScore }: Props) 
       </TableContainer>
     </>
   );
-}
+};
+
+const GameTableResult = memo(GameTableResultComponent);
+export default GameTableResult;
