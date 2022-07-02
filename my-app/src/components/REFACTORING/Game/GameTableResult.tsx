@@ -33,10 +33,12 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
   '&.fail': {
-    backgroundColor: theme.palette.error.main,
+    // backgroundColor: theme.palette.error.main,
+    backgroundColor: 'rgb(255 240 240)',
   },
   '&.success': {
-    backgroundColor: theme.palette.success.main,
+    // backgroundColor: theme.palette.success.main,
+    backgroundColor: 'rgb(240 255 240)',
   },
   // hide last border
   '&:last-child td, &:last-child th': {
@@ -102,8 +104,8 @@ const GameTableResultComponent = ({ answers, newWords, setScore }: Props) => {
               const isSuccessCounter = successCounter || successCounter === 0;
 
               return (
-                // <StyledTableRow key={item.id} className={row.answer ? 'success' : 'fail'}>
-                <StyledTableRow key={item.id}>
+                <StyledTableRow key={item.id} className={answer ? 'success' : 'fail'}>
+                  {/* // <StyledTableRow key={item.id}> */}
                   <StyledTableCell component="th" scope="row" align="left">
                     {item.word}
                   </StyledTableCell>

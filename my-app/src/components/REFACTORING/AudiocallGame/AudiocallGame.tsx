@@ -56,8 +56,8 @@ const AudiocallGame = () => {
   if (isGameFinished) {
     return (
       <>
-        <GameTableResult answers={answers} newWords={newWords} setScore={setScore} />
         <GameTableControls restartGame={restartGame} />
+        <GameTableResult answers={answers} newWords={newWords} setScore={setScore} />
       </>
     );
   }

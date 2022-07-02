@@ -11,16 +11,16 @@ const GameTableControls = ({ restartGame }: Props) => {
   const navigate = useNavigate();
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column' }}>
+    <div style={{ display: 'flex', flexDirection: 'row-reverse' }}>
       <CloseIcon
-        sx={{ fontSize: 80, cursor: 'pointer' }}
+        sx={{ fontSize: 45, cursor: 'pointer' }}
         onClick={() => {
           navigate(`${APP_ROUTES.MAIN}`);
         }}
       />
 
       <RestartAltIcon
-        sx={{ fontSize: 80, cursor: 'pointer' }}
+        sx={{ fontSize: 45, cursor: 'pointer' }}
         onClick={() => {
           restartGame();
         }}
