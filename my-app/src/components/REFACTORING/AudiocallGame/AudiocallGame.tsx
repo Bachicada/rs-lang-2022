@@ -1,14 +1,5 @@
-import { Box } from '@mui/material';
-import React, { useContext, useEffect, useState } from 'react';
-import { APP_ROUTES, GAME_TYPE } from '../../../utils/Constants';
-// import Timer from './Timer';
-import { LoadingIcon } from '../../shared/LoadingIcon';
+import React, { useEffect, useState } from 'react';
 import styles from './Game.module.css';
-import RestartAltIcon from '@mui/icons-material/RestartAlt';
-import CloseIcon from '@mui/icons-material/Close';
-import { useNavigate } from 'react-router';
-// import AudioGame from '../../audiocall/AudioGame';
-// import GameLife from '../../audiocall/GameLife';
 import CircularProgress from '@mui/material/CircularProgress';
 import { useAudiocallContext } from '../../../store/hooks';
 import { StyledBox, StyledContainer } from './styles';
@@ -17,12 +8,7 @@ import LevelModal from '../Game/LevelModal';
 import GameTableResult from '../Game/GameTableResult';
 import AudiocallGameContent from './AudiocallGameContent';
 import { AudiocallActionTypes } from '../../../types/audiocallTypes';
-import { getPartOfTextbook } from '../../../services/WordService';
-import Utils from '../../../utils/Utils';
-
-// interface Props {
-//   type: GAME_TYPE;
-// }
+import { useGetAudioWords } from '../../../hooks/useGetAudioWords';
 
 const AudiocallGame = () => {
   const [
@@ -31,28 +17,21 @@ const AudiocallGame = () => {
   ] = useAudiocallContext();
 
   const [level, setLevel] = useState(initialLevel);
+  const { response, error, isLoading: requestLoading } = useGetAudioWords({ level });
 
   useEffect(() => {
-    if (level || level === 0) {
-      const fetchData = async () => {
-        dispatch({ type: AudiocallActionTypes.LOADING });
-
-        try {
-          const data = [
-            await getPartOfTextbook(`${Utils.random(0, 29)}`, `${level}`),
-            await getPartOfTextbook(`${Utils.random(0, 29)}`, `${level}`),
-            await getPartOfTextbook(`${Utils.random(0, 29)}`, `${level}`),
-          ];
-          const result = Utils.getAudioWords(data);
-          dispatch({ type: AudiocallActionTypes.CHANGE_LEVEL, payload: { result, level } });
-        } catch (err) {
-          alert('Oops! Something goes wrong.');
-        }
-      };
-
-      fetchData();
+    if ((level || level === 0) && requestLoading) {
+      dispatch({ type: AudiocallActionTypes.LOADING });
     }
-  }, [dispatch, level]);
+
+    if (error) {
+      alert(error);
+    }
+
+    if (response && response.length > 0) {
+      dispatch({ type: AudiocallActionTypes.CHANGE_LEVEL, payload: { result: response, level } });
+    }
+  }, [dispatch, error, level, requestLoading, response]);
 
   const restartGame = () => {
     dispatch({ type: AudiocallActionTypes.RESTART });
