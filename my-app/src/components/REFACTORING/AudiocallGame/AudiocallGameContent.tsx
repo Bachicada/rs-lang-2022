@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { updateUserWord } from '../../../services/UserWordService';
 import { API_URL, GAME_TYPE, WORD_STATUS } from '../../../utils/Constants';
 import { useAudiocallContext } from '../../../store/hooks';
@@ -24,7 +24,7 @@ const AudiocallGameContent = () => {
 
   const question = questions[currentQuestionIndex];
   const { item } = question;
-  const audio = new Audio(`${API_URL}/${item.audio}`);
+  const audio = useMemo(() => new Audio(`${API_URL}/${item.audio}`), [item.audio]);
 
   useEffect(() => {
     if (seconds <= 0) {
@@ -69,7 +69,7 @@ const AudiocallGameContent = () => {
 
   useEffect(() => {
     audio.play();
-  }, [currentQuestionIndex]);
+  }, [audio]);
 
   return (
     <>
