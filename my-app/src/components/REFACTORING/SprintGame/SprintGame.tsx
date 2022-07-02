@@ -11,54 +11,34 @@ import GameTableControls from '../Game/GameTableControls';
 import { useSprintContext } from '../../../store/hooks';
 import { SprintActionTypes } from '../../../types/sprintTypes';
 import { StyledBox, StyledContainer } from './styles';
+import { useGetSprintWords } from '../../../hooks/useGetSprintWords';
 
 const SprintGame = () => {
   const [
     { isLoading, level: initialLevel, newWords, isGameFinished, isGameReady, answers },
     dispatch,
   ] = useSprintContext();
+
   const [level, setLevel] = useState(initialLevel);
+  const {
+    response,
+    error,
+    isLoading: requestLoading,
+  } = useGetSprintWords({ level, part: Utils.params.part, page: Utils.params.page });
 
   useEffect(() => {
-    const { page, part } = Utils.params;
-
-    if (level || level === 0) {
-      const fetchData = async () => {
-        dispatch({ type: SprintActionTypes.LOADING });
-
-        try {
-          const data = [
-            await getPartOfTextbook(`${Utils.random(0, 29)}`, `${level}`),
-            await getPartOfTextbook(`${Utils.random(0, 29)}`, `${level}`),
-            await getPartOfTextbook(`${Utils.random(0, 29)}`, `${level}`),
-          ];
-          const result = Utils.getRandomWords(data);
-          dispatch({ type: SprintActionTypes.CHANGE_LEVEL, payload: { result, level } });
-        } catch (err) {
-          alert('Oops! Something goes wrong.');
-        }
-      };
-
-      fetchData();
+    if ((level || level === 0) && requestLoading) {
+      dispatch({ type: SprintActionTypes.LOADING });
     }
 
-    if (part) {
-      try {
-        dispatch({ type: SprintActionTypes.LOADING });
-        if (part === 'hardwords') {
-          Utils.getHardQuestions().then((randomData) => {
-            dispatch({ type: SprintActionTypes.PRELOAD, payload: { randomData, level: part } });
-          });
-        } else if (page !== null) {
-          Utils.getPreparedQuestions(page, part).then((randomData) => {
-            dispatch({ type: SprintActionTypes.PRELOAD, payload: { randomData, level: part } });
-          });
-        }
-      } catch (e) {
-        alert('Oops! Something went wrong');
-      }
+    if (error) {
+      alert(error);
     }
-  }, [dispatch, level]);
+
+    if (response && response.length > 0) {
+      dispatch({ type: SprintActionTypes.CHANGE_LEVEL, payload: { result: response, level } });
+    }
+  }, [dispatch, error, level, requestLoading, response]);
 
   const restartGame = () => {
     dispatch({ type: SprintActionTypes.RESTART });

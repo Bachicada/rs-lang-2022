@@ -70,7 +70,7 @@ const Utils = {
     return result;
   },
 
-  shuffleAnswers: (question: any) => {
+  shuffleAnswers: <T>(question: T[]): T[] => {
     if (!question) {
       return [];
     }
@@ -88,7 +88,7 @@ const Utils = {
     const randomData = Utils.shuffleAnswers(formatData);
 
     randomData.forEach((item, idx) => {
-      randomData[idx].item.id = randomData[idx].item._id;
+      randomData[idx].item.id = randomData[idx].item._id || '';
     });
     return randomData;
   },
