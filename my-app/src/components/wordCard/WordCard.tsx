@@ -16,7 +16,7 @@ import { useContext, useState } from 'react';
 import { UserContext } from '../../App';
 import WordStat from './WordStat';
 import OptionalBtns from './OptinalBtns';
-import { getHardWords, getNewToken, getUserId, getUserToken } from '../../services/WordService';
+// import { getHardWords, getNewToken, getUserId, getUserToken } from '../../services/WordService';
 import { useNavigate } from 'react-router-dom';
 
 interface ExpandMoreProps extends IconButtonProps {

@@ -105,6 +105,35 @@ const Utils = {
     const randomData = Utils.shuffleAnswers(formatData);
     return randomData;
   },
+
+  getUserToken: () => {
+    const LS = localStorage.getItem('CurrentUser' || '{}');
+
+    if (!LS) {
+      return;
+    }
+
+    return JSON.parse(LS).token;
+  },
+  getRefreshToken: () => {
+    const LS = localStorage.getItem('CurrentUser' || '{}');
+
+    if (!LS) {
+      return;
+    }
+
+    return JSON.parse(LS).refreshToken;
+  },
+
+  getUserId: () => {
+    const LS = localStorage.getItem('CurrentUser' || '{}');
+
+    if (!LS) {
+      return;
+    }
+
+    return JSON.parse(LS).userId;
+  },
 };
 
 export default Utils;

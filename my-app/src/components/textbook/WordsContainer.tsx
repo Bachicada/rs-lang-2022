@@ -2,27 +2,31 @@ import * as React from 'react';
 import { useState, useEffect, useContext } from 'react';
 import { CurUser, PageProps, WordItem } from '../../types/types';
 import styles from './textbook.module.css';
-import {
-  getHardWords,
-  getLearnedWords,
-  getNewToken,
-  getPartOfTextbook,
-  getPlayedWords,
-  getUserId,
-  getUserToken,
-} from '../../services/WordService';
+import // getHardWords,
+// getLearnedWords,
+// getNewToken,
+// getPartOfTextbook,
+// getPlayedWords,
+// getUserId,
+// getUserToken,
+'../../services/WordService';
 import WordCard from '../wordCard/WordCard';
 import { LoadingIcon } from '../shared/LoadingIcon';
 import { UserContext } from '../../App';
 import { useNavigate } from 'react-router-dom';
 import { APP_ROUTES } from '../../utils/Constants';
 import ModalExpire from '../shared/ModalExpire';
+import Utils from '../../utils/Utils';
+import { getNewToken } from '../../services/UserService';
+import { getHardWords } from '../../services/old';
+import { getLearnedWords, getPlayedWords } from '../../services/UserWordService';
+import { getPartOfTextbook } from '../../services/WordService';
 
 export default function WordsContainer(props: PageProps) {
   const [loadingState, setLoadingState] = useState(true);
 
-  const userId = getUserId();
-  const token = getUserToken();
+  const userId = Utils.getUserId();
+  const token = Utils.getUserToken();
 
   const userContext = useContext<{
     user: CurUser;

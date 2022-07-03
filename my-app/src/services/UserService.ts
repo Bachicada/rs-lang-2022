@@ -1,27 +1,28 @@
 import { API_URL, ENDPOINTS } from '../utils/Constants';
 import { NewUser } from '../types/types';
+import Utils from '../utils/Utils';
 
 export async function createUser(user: NewUser) {
-  const data = await fetch(`${API_URL}${ENDPOINTS.USERS}`, {
+  const rawResponse = await fetch(`${API_URL}${ENDPOINTS.USERS}`, {
     method: 'POST',
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(user),
-  })
-    .then((response) => {
-      if (response.status === 417) {
-        throw new Error('Пользователь с такими данными уже существует');
-      } else if (response.status === 200) {
-        return response;
-      }
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+  });
 
-  return data;
+  switch (rawResponse.status) {
+    case 417: {
+      throw new Error('Пользователь с такими данными уже существует');
+    }
+    case 200: {
+      return rawResponse;
+    }
+    default: {
+      return rawResponse;
+    }
+  }
 }
 
 export const loginUser = async (user: NewUser) => {
@@ -32,17 +33,38 @@ export const loginUser = async (user: NewUser) => {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(user),
-  })
-    .then((response) => {
-      if (response.status === 404) {
-        throw new Error('Пользователя с таким адресом нет');
-      } else if (response.status === 403) {
-        throw new Error('Введен неверный пароль');
-      } else if (response.status === 200) {
-        return response;
-      }
-    })
-    .catch((error) => console.log(error));
+  });
 
-  return rawResponse;
+  switch (rawResponse.status) {
+    case 404: {
+      throw new Error('Пользователя с таким адресом нет');
+    }
+    case 403: {
+      throw new Error('Введен неверный пароль');
+    }
+    case 200: {
+      return rawResponse;
+    }
+    default: {
+      return rawResponse;
+    }
+  }
+};
+
+export const getNewToken = async () => {
+  const userId = Utils.getUserId();
+  const refreshToken = Utils.getRefreshToken();
+
+  const response = await fetch(`${API_URL}${ENDPOINTS.USERS}/${userId}${ENDPOINTS.TOKENS}`, {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${refreshToken}`,
+    },
+  });
+
+  if (response.ok) {
+    return response;
+  }
+
+  throw new Error('Token error!');
 };

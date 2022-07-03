@@ -2,19 +2,21 @@ import * as React from 'react';
 import { createContext, useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { UserContext } from '../../App';
-import {
-  createWord,
-  deleteWord,
-  getNewToken,
-  getUserId,
-  getUserToken,
-} from '../../services/WordService';
+import // createWord,
+// deleteWord,
+// getNewToken,
+// getUserId,
+// getUserToken,
+'../../services/WordService';
 import { CurUser, OptionBtnsProp, WordItem } from '../../types/types';
 import { API_URL, APP_ROUTES, ENDPOINTS, WORD_STATUS } from '../../utils/Constants';
 import styles from './WordCard.module.css';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
 import AddSnackBar from './AddSnackBar';
+import Utils from '../../utils/Utils';
+import { getNewToken } from '../../services/UserService';
+import { createWord, deleteWord } from '../../services/UserWordService';
 
 export default function OptionalBtns({ word, onDataChanged }: OptionBtnsProp) {
   const userContext = useContext<{
@@ -32,9 +34,9 @@ export default function OptionalBtns({ word, onDataChanged }: OptionBtnsProp) {
 
   const [expireStatus, setExpireStatus] = useState(false);
 
-  const userId = getUserId();
+  const userId = Utils.getUserId();
   const wordId = word.id || (word._id as string);
-  const token = getUserToken();
+  const token = Utils.getUserToken();
 
   const bodyReqHard: BodyInit = JSON.stringify({
     difficulty: `${WORD_STATUS.HARD}`,
@@ -107,7 +109,7 @@ export default function OptionalBtns({ word, onDataChanged }: OptionBtnsProp) {
   };
 
   const setLearnedWord = async () => {
-    const userId = getUserId();
+    const userId = Utils.getUserId();
     const wordId = word.id || (word._id as string);
     const wordStatus = WORD_STATUS.LEARNED;
 

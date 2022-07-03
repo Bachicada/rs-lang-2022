@@ -1,5 +1,7 @@
 import { StringLiteralLike } from 'typescript';
+import { WordItem } from '../types/types';
 import { API_URL, ENDPOINTS, WORD_STATUS } from '../utils/Constants';
+import Utils from '../utils/Utils';
 
 interface UserWordOptional {
   failCounter: number;
@@ -198,4 +200,117 @@ export const updateUserWord = async ({ wordId, word }: ICreateUserWord) => {
 
   console.log(options.method === 'POST' ? 'created word is ' : 'updated word is ', content);
   return content;
+};
+
+// NEW PASTED
+
+export const createWord = async ({
+  userId,
+  wordId,
+  word,
+  wordStatus,
+}: {
+  userId: string;
+  wordId: string;
+  word: WordItem;
+  wordStatus: string;
+}) => {
+  const token = Utils.getUserToken();
+  console.log(token);
+  const bodyReq: BodyInit = JSON.stringify({
+    difficulty: `${wordStatus}`,
+    optional: {
+      group: `${word.group}`,
+      page: `${word.page}`,
+      failCounter: 0,
+      successCounter: 0,
+    },
+  });
+  const rawResponse = await fetch(`${API_URL}${ENDPOINTS.USERS}/${userId}/words/${wordId}`, {
+    method: 'POST',
+    //withCredentials: true,
+    headers: {
+      Authorization: `Bearer ${token}`,
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+
+    body: bodyReq,
+  });
+  return rawResponse;
+};
+
+export const deleteWord = async ({ userId, wordId }: { userId: string; wordId: string }) => {
+  const token = Utils.getUserToken();
+  const rawResponse = await fetch(`${API_URL}${ENDPOINTS.USERS}/${userId}/words/${wordId}`, {
+    method: 'DELETE',
+    headers: {
+      Authorization: `Bearer ${token}`,
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+  });
+  return rawResponse;
+};
+/*
+  export const getHardWords = async (userId: string, token: string) =>{ 
+    const hardFilter ='{"$and":[{"userWord.difficulty":"hard"}]}' /*, {"page":${page}
+    const data = await fetch(`${API_URL}${ENDPOINTS.USERS}/${userId}/aggregatedwords?wordsPerPage=3600&filter=${hardFilter}`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      }
+    })
+    return data;
+  }
+  */
+
+export const getLearnedWords = async (userId: string, token: string) => {
+  const hardFilter = '{"$and":[{"userWord.difficulty":"learned"}]}'; /*, {"page":${page}*/
+  const data = await fetch(
+    `${API_URL}${ENDPOINTS.USERS}/${userId}/aggregatedwords?wordsPerPage=3600&filter=${hardFilter}`,
+    {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+    }
+  );
+  return data;
+};
+
+export const getPlayedWords = async (userId: string, token: string) => {
+  const hardFilter = '{"$and":[{"userWord.difficulty":"new"}]}'; /*, {"page":${page}*/
+  try {
+    const data = await fetch(
+      `${API_URL}${ENDPOINTS.USERS}/${userId}/aggregatedwords?wordsPerPage=3600&filter=${hardFilter}`,
+      {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getAllUserWords = async (userId: string, token: string) => {
+  const data = await fetch(`${API_URL}${ENDPOINTS.USERS}/${userId}${ENDPOINTS.WORDS}`, {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${token}`,
+      Accept: 'application/json',
+    },
+  });
+
+  return await data.json();
 };
