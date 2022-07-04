@@ -13,8 +13,8 @@ import { Line } from 'react-chartjs-2';
 import {
   createUserWord,
   deleteUserWord,
-  getUserWord,
-  getUserWords,
+  getUserWordById,
+  getUserAllWords,
 } from '../../services/UserWordService';
 import { createUserStatistics, getUserStatistics } from '../../services/UserStatisticsService';
 

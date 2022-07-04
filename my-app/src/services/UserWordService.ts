@@ -1,7 +1,7 @@
-import { StringLiteralLike } from 'typescript';
 import { WordItem } from '../types/types';
 import { API_URL, ENDPOINTS, WORD_STATUS } from '../utils/Constants';
 import Utils from '../utils/Utils';
+import { getUserAggrWord } from './UserAggregatedWordsService';
 
 interface UserWordOptional {
   failCounter: number;
@@ -18,14 +18,15 @@ interface ICreateUserWord {
   word: UserWord;
 }
 
-export const getUserWords = async () => {
+export const getUserAllWords = async () => {
   const userJSON = localStorage.getItem('CurrentUser');
   if (!userJSON) {
-    return 'no info';
+    throw new Error('Need to be logged in!');
   }
+
   const { userId, token } = JSON.parse(userJSON);
 
-  const data = await fetch(`${API_URL}${ENDPOINTS.USERS}/${userId}${ENDPOINTS.WORDS}`, {
+  const response = await fetch(`${API_URL}${ENDPOINTS.USERS}/${userId}${ENDPOINTS.WORDS}`, {
     method: 'GET',
     headers: {
       Authorization: `Bearer ${token}`,
@@ -33,27 +34,36 @@ export const getUserWords = async () => {
     },
   });
 
-  const content = await data.json();
-  return content;
+  if (response.ok) {
+    return response.json();
+  }
+
+  throw new Error('Something went wrong');
 };
 
-export const getUserWord = async (wordId: string) => {
+export const getUserWordById = async (wordId: string) => {
   const userJSON = localStorage.getItem('CurrentUser');
   if (!userJSON) {
     return 'no info';
   }
   const { userId, token } = JSON.parse(userJSON);
 
-  const data = await fetch(`${API_URL}${ENDPOINTS.USERS}/${userId}${ENDPOINTS.WORDS}/${wordId}`, {
-    method: 'GET',
-    headers: {
-      Authorization: `Bearer ${token}`,
-      Accept: 'application/json',
-    },
-  });
+  const response = await fetch(
+    `${API_URL}${ENDPOINTS.USERS}/${userId}${ENDPOINTS.WORDS}/${wordId}`,
+    {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: 'application/json',
+      },
+    }
+  );
 
-  const content = data.status === 200 ? await data.json() : null;
-  return content;
+  if (response.ok) {
+    return response.json();
+  }
+
+  throw new Error('Wrong word id');
 };
 
 export const createUserWord = async ({ wordId, word }: ICreateUserWord) => {
@@ -64,7 +74,7 @@ export const createUserWord = async ({ wordId, word }: ICreateUserWord) => {
   const { userId, token } = JSON.parse(userJSON);
 
   const options = {
-    method: (await getUserWord(wordId)) ? 'PUT' : 'POST',
+    method: (await getUserWordById(wordId)) ? 'PUT' : 'POST',
     headers: {
       Authorization: `Bearer ${token}`,
       Accept: 'application/json',
@@ -78,9 +88,11 @@ export const createUserWord = async ({ wordId, word }: ICreateUserWord) => {
     options
   );
 
-  const content = await rawResponse.json();
+  if (rawResponse.ok) {
+    return rawResponse.json();
+  }
 
-  console.log('created word is ', content);
+  throw new Error('Something went wrong while word create');
 };
 
 export const deleteUserWord = async (wordId: string) => {
@@ -90,31 +102,10 @@ export const deleteUserWord = async (wordId: string) => {
   }
   const { userId, token } = JSON.parse(userJSON);
 
-  const data = await fetch(`${API_URL}${ENDPOINTS.USERS}/${userId}${ENDPOINTS.WORDS}/${wordId}`, {
-    method: 'DELETE',
-    headers: {
-      Authorization: `Bearer ${token}`,
-      Accept: 'application/json',
-    },
-  });
-  if (data.status === 204) console.log('WORD HAS BEEN DELETED SUCCESSFULLY');
-  else console.log('DELETING GOES WRONG!');
-};
-
-export const getUserAggrWords = async () => {
-  const userJSON = localStorage.getItem('CurrentUser');
-  if (!userJSON) {
-    return 'no info';
-  }
-  const { userId, token } = JSON.parse(userJSON);
-  // const smth = '{"$or":[{"userWord.difficulty":"hard"},{"group": 5}]}'
-  // const smth = '{$and: [{"userWord.difficulty":"hard"}, { "group": 2 }]}'
-  // const smth = '{"$and":[{"userWord.difficulty":"new"},{"wordsPerPage": 3600}]}'
-  const smth = '{"userWord.difficulty":"new"}';
-  const data = await fetch(
-    `${API_URL}${ENDPOINTS.USERS}/${userId}/AggregatedWords?filter=${smth}`,
+  const response = await fetch(
+    `${API_URL}${ENDPOINTS.USERS}/${userId}${ENDPOINTS.WORDS}/${wordId}`,
     {
-      method: 'GET',
+      method: 'DELETE',
       headers: {
         Authorization: `Bearer ${token}`,
         Accept: 'application/json',
@@ -122,49 +113,11 @@ export const getUserAggrWords = async () => {
     }
   );
 
-  const content = await data.json();
-  return content;
-};
-
-export const getHardWords = async () => {
-  const userJSON = localStorage.getItem('CurrentUser');
-  if (!userJSON) {
-    return 'no info';
+  if (response.status === 204) {
+    console.log('DELETED SUCCESSFULLY');
+  } else {
+    console.log('DELETING GOES WRONG');
   }
-  const { userId, token } = JSON.parse(userJSON);
-  const smth = '{"userWord.difficulty":"hard"}';
-  const data = await fetch(
-    `${API_URL}${ENDPOINTS.USERS}/${userId}/aggregatedwords?wordsPerPage=3600&filter=${smth}`,
-    {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer ${token}`,
-        Accept: 'application/json',
-      },
-    }
-  );
-
-  const content = await data.json();
-  return content;
-};
-
-export const getUserAggrWord = async (wordId: string) => {
-  const userJSON = localStorage.getItem('CurrentUser');
-  if (!userJSON) {
-    return 'no info';
-  }
-  const { userId, token } = JSON.parse(userJSON);
-
-  const data = await fetch(`${API_URL}${ENDPOINTS.USERS}/${userId}/AggregatedWords/${wordId}`, {
-    method: 'GET',
-    headers: {
-      Authorization: `Bearer ${token}`,
-      Accept: 'application/json',
-    },
-  });
-
-  const content = await data.json();
-  return content;
 };
 
 export const updateUserWord = async ({ wordId, word }: ICreateUserWord) => {
@@ -172,7 +125,9 @@ export const updateUserWord = async ({ wordId, word }: ICreateUserWord) => {
   if (!userJSON) {
     return null;
   }
+
   const { userId, token } = JSON.parse(userJSON);
+
   const options = {
     method: 'POST',
     headers: {
@@ -202,7 +157,8 @@ export const updateUserWord = async ({ wordId, word }: ICreateUserWord) => {
   return content;
 };
 
-// NEW PASTED
+// NEW PASTED (from word service)
+// TODO: REMOVE LATER
 
 export const createWord = async ({
   userId,

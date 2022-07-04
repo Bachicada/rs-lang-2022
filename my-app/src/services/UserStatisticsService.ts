@@ -1,6 +1,6 @@
 import OptionalBtns from '../components/wordCard/OptinalBtns';
 import { API_URL, ENDPOINTS } from '../utils/Constants';
-import { getUserAggrWords } from './UserWordService';
+import { getUserAggrWords } from './UserAggregatedWordsService';
 
 interface UserStatisticsOptional {
   audiocall?: string;

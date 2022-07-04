@@ -5,7 +5,7 @@ import styles from './Game.module.css';
 import GameTableResult from '../Game/GameTableResult';
 import Utils from '../../../utils/Utils';
 import { getPartOfTextbook } from '../../../services/WordService';
-import { getHardWords } from '../../../services/UserWordService';
+// import { getHardWords } from '../../../services/UserWordService';
 import CircularProgress from '@mui/material/CircularProgress';
 import GameTableControls from '../Game/GameTableControls';
 import { useSprintContext } from '../../../store/hooks';
