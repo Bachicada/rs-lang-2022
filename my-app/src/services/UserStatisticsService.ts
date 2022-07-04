@@ -1,6 +1,5 @@
-import OptionalBtns from '../components/wordCard/OptinalBtns';
 import { API_URL, ENDPOINTS } from '../utils/Constants';
-import { getUserAggrWords } from './UserAggregatedWordsService';
+import { getNewWords } from './UserAggregatedWordsService';
 
 interface UserStatisticsOptional {
   audiocall?: string;
@@ -27,8 +26,12 @@ export const getUserStatistics = async () => {
       Accept: 'application/json',
     },
   });
-  const content = rawResponse.status === 200 ? await rawResponse.json() : null;
-  return content;
+
+  if (rawResponse.ok) {
+    return rawResponse.json();
+  }
+
+  throw new Error('Something went wrong with statistics');
 };
 
 export const createUserStatistics = async (statistics: UserStatistics) => {
@@ -37,7 +40,7 @@ export const createUserStatistics = async (statistics: UserStatistics) => {
     return 'no info';
   }
   const { userId, token } = JSON.parse(userJSON);
-  const prom = await getUserAggrWords();
+  const prom = await getNewWords();
   const newWordsCount = prom[0].totalCount[0].count;
   const options = {
     method: 'PUT',

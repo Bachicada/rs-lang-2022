@@ -1,7 +1,7 @@
 import { WordItem } from '../types/types';
 import { API_URL, ENDPOINTS, WORD_STATUS } from '../utils/Constants';
 import Utils from '../utils/Utils';
-import { getUserAggrWord } from './UserAggregatedWordsService';
+import { getUserAggrWordById } from './UserAggregatedWordsService';
 
 interface UserWordOptional {
   failCounter: number;
@@ -138,7 +138,7 @@ export const updateUserWord = async ({ wordId, word }: ICreateUserWord) => {
     body: JSON.stringify(word),
   };
 
-  const aggrWord = await getUserAggrWord(wordId);
+  const aggrWord = await getUserAggrWordById(wordId);
   if (aggrWord[0].userWord?.difficulty) {
     options.method = 'PUT';
     const updWord = { ...word };
