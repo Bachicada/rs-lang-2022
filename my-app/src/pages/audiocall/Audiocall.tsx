@@ -1,6 +1,6 @@
 // import Game from '../../components/audiocall/Game';
 import AudiocallGame from '../../components/REFACTORING/AudiocallGame/AudiocallGame';
-import AudiocallContext from '../../store/audiocallContext';
+import AudiocallContext from '../../store/contexts/audiocallContext';
 import { useAudiocallReducer } from '../../store/hooks';
 
 const Sprint = () => {

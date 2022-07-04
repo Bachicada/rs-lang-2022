@@ -1,5 +1,5 @@
 import { createContext } from 'react';
-import { IAudiocallContext, InitialAudiocallState } from '../types/audiocallTypes';
+import { IAudiocallContext, InitialAudiocallState } from '../../types/audiocallTypes';
 
 export const initialAudiocallState: InitialAudiocallState = {
   questions: [],

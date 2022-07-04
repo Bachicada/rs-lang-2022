@@ -1,5 +1,5 @@
 import { useSprintReducer } from '../../store/hooks';
-import SprintContext from '../../store/sprintContext';
+import SprintContext from '../../store/contexts/sprintContext';
 import SprintGame from '../../components/REFACTORING/SprintGame/SprintGame';
 
 const Sprint = () => {

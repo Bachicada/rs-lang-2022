@@ -5,7 +5,7 @@ import {
   SprintActionTypes,
 } from '../../types/sprintTypes';
 import { POINTS } from '../../utils/Constants';
-import { initialSprintState } from '../sprintContext';
+import { initialSprintState } from '../contexts/sprintContext';
 
 const sprintReducer: Reducer<InitialSprintState, SprintReducerAction> = (state, action) => {
   switch (action.type) {

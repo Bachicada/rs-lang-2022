@@ -1,5 +1,5 @@
 import { createContext } from 'react';
-import { InitialSprintState, ISprintContext } from '../types/sprintTypes';
+import { InitialSprintState, ISprintContext } from '../../types/sprintTypes';
 
 export const initialSprintState: InitialSprintState = {
   questions: [],

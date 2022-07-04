@@ -5,7 +5,7 @@ import {
   AudiocallReducerAction,
 } from '../../types/audiocallTypes';
 import { POINTS } from '../../utils/Constants';
-import { initialAudiocallState } from '../audiocallContext';
+import { initialAudiocallState } from '../contexts/audiocallContext';
 
 const audiocallReducer: Reducer<InitialAudiocallState, AudiocallReducerAction> = (
   state,
