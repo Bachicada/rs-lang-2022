@@ -4,7 +4,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import WordsContainer from './WordsContainer';
 import PaginationComponent from './PaginationComponent';
-import { Typography } from '@mui/material';
+import { styled, Typography } from '@mui/material';
 
 export default function PartOfTextBook() {
   const [pageNumber, setPageNumber] = useState('0');
@@ -25,10 +25,16 @@ export default function PartOfTextBook() {
 
   return (
     <div>
-      <Typography variant="h5">Раздел {!isHardWords ? +part + 1 : 'Сложные слова'}</Typography>
+      <StyledTypography variant="h5">
+        Раздел {!isHardWords ? +part + 1 : 'Сложные слова'}
+      </StyledTypography>
 
       <WordsContainer page={(Number(pageNumber) - 1).toString()} part={params.part} />
       <PaginationComponent page={params.page ?? ''} part={params.part ?? ''} />
     </div>
   );
 }
+
+const StyledTypography = styled(Typography)`
+  margin-bottom: 15px;
+`;

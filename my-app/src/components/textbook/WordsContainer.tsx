@@ -260,7 +260,6 @@ export default function WordsContainer(props: PageProps) {
   return (
     <div>
       <ModalExpire open={expireStatus} />
-      <h4>Слова</h4>
       <div className={styles.wordsCont}>
         {loadingState ? <LoadingIcon /> : ''}
 
