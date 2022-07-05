@@ -42,7 +42,12 @@ interface ExpandWordCardProp extends WordCardProp {
 export default function WordCard({ word, userWords, onDataChanged }: ExpandWordCardProp) {
   const [expanded, setExpanded] = React.useState(false);
 
-  const difficulty = userWords.find((userWord) => word.id === userWord.wordId)?.difficulty;
+  const userWord = userWords.find((userWord) => word.id === userWord.wordId);
+  const {
+    difficulty,
+    optional: { failCounter, successCounter },
+  } = userWord || { optional: { failCounter: 0, successCounter: 0 } };
+
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
