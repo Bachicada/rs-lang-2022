@@ -7,8 +7,8 @@ import CardActions from '@mui/material/CardActions';
 import Collapse from '@mui/material/Collapse';
 import IconButton, { IconButtonProps } from '@mui/material/IconButton';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { CurUser, WordCardProp, WordItem } from '../../types/types';
-import { API_URL, APP_ROUTES } from '../../utils/Constants';
+import { CurUser, IUserWord, UserWordItem, WordCardProp, WordItem } from '../../types/types';
+import { API_URL, APP_ROUTES, WORD_STATUS } from '../../utils/Constants';
 import styles from './WordCard.module.css';
 import { Chip } from '@mui/material';
 import DoneIcon from '@mui/icons-material/Done';
@@ -35,9 +35,14 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
   }),
 }));
 
-export default function WordCard({ word, onDataChanged }: WordCardProp) {
+interface ExpandWordCardProp extends WordCardProp {
+  userWords: IUserWord[];
+}
+
+export default function WordCard({ word, userWords, onDataChanged }: ExpandWordCardProp) {
   const [expanded, setExpanded] = React.useState(false);
 
+  const difficulty = userWords.find((userWord) => word.id === userWord.wordId)?.difficulty;
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
@@ -99,13 +104,19 @@ export default function WordCard({ word, onDataChanged }: WordCardProp) {
   const [userContext, dispatch] = useUserContext();
 
   const checkBg = () => {
-    let bg;
-    if (word.isHardWord) {
-      bg = '#f77e3d8f';
-    } else if (word.isLearnedWord) {
-      bg = '#36a33854';
+    if (!difficulty) {
+      return;
     }
-    return bg;
+
+    type Colors = {
+      [key in WORD_STATUS]?: string;
+    };
+    const colors: Colors = {
+      [WORD_STATUS.HARD]: '#f77e3d8f',
+      [WORD_STATUS.LEARNED]: '#36a33854',
+    };
+
+    return colors[difficulty];
   };
 
   return (

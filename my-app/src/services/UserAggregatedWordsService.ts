@@ -1,4 +1,4 @@
-import { API_URL, ENDPOINTS } from '../utils/Constants';
+import { API_URL, ENDPOINTS, WORD_STATUS } from '../utils/Constants';
 
 export const getNewWords = async () => {
   const userJSON = localStorage.getItem('CurrentUser');
@@ -27,6 +27,33 @@ export const getNewWords = async () => {
   }
 
   throw new Error('Something wrong with new words getting');
+};
+
+export const getAggregatedWordsByType = async (type: WORD_STATUS) => {
+  const userJSON = localStorage.getItem('CurrentUser');
+  if (!userJSON) {
+    throw new Error('User must be logged in!');
+  }
+
+  const { userId, token } = JSON.parse(userJSON);
+  const filter = `{"userWord.difficulty":"${type}"}`;
+
+  const response = await fetch(
+    `${API_URL}${ENDPOINTS.USERS}/${userId}/AggregatedWords?filter=${filter}`,
+    {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: 'application/json',
+      },
+    }
+  );
+
+  if (response.ok) {
+    return response.json();
+  }
+
+  throw new Error('Something wrong with aggregated words getting');
 };
 
 export const getHardWords = async () => {

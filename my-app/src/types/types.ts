@@ -1,3 +1,5 @@
+import { WORD_STATUS } from '../utils/Constants';
+
 export interface NewUser {
   userId?: string;
   name?: string | null;
@@ -74,6 +76,18 @@ export interface UserWord {
     failCounter: number;
     successCounter: number;
   };
+}
+
+export interface IUserWord {
+  difficulty: WORD_STATUS;
+  id: string;
+  optional: {
+    failCounter: number;
+    group: string;
+    page: string;
+    successCounter: number;
+  };
+  wordId: string;
 }
 
 export interface WordCardProp {
