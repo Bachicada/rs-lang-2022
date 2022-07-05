@@ -12,7 +12,7 @@ import // getHardWords,
 '../../services/WordService';
 import WordCard from '../wordCard/WordCard';
 import { LoadingIcon } from '../shared/LoadingIcon';
-import { UserContext } from '../../App';
+// import { UserContext } from '../../App';
 import { useNavigate } from 'react-router-dom';
 import { APP_ROUTES } from '../../utils/Constants';
 import ModalExpire from '../shared/ModalExpire';
@@ -21,6 +21,7 @@ import { getNewToken } from '../../services/UserService';
 import { getHardWords } from '../../services/old';
 import { getLearnedWords, getPlayedWords } from '../../services/UserWordService';
 import { getPartOfTextbook } from '../../services/WordService';
+import { useUserContext } from '../../store/hooks';
 
 export default function WordsContainer(props: PageProps) {
   const [loadingState, setLoadingState] = useState(true);
@@ -28,10 +29,11 @@ export default function WordsContainer(props: PageProps) {
   const userId = Utils.getUserId();
   const token = Utils.getUserToken();
 
-  const userContext = useContext<{
-    user: CurUser;
-    dispatchUserEvent: (actionType: string, payload: CurUser) => void;
-  }>(UserContext);
+  // const userContext = useContext<{
+  //   user: CurUser;
+  //   dispatchUserEvent: (actionType: string, payload: CurUser) => void;
+  // }>(UserContext);
+  const [userContext, dispatch] = useUserContext();
 
   const [expireStatus, setExpireStatus] = useState(false);
 
@@ -39,7 +41,8 @@ export default function WordsContainer(props: PageProps) {
 
   const checkSignIn = () => {
     localStorage.clear();
-    userContext.dispatchUserEvent('CLEAR_USER', {});
+    // userContext.dispatchUserEvent('CLEAR_USER', {});
+    dispatch({ type: 'CLEAR_USER', payload: {} });
     navigate(`${APP_ROUTES.SIGNIN}`);
   };
 
@@ -73,7 +76,8 @@ export default function WordsContainer(props: PageProps) {
             newDataUser.token = newToken.token;
             newDataUser.refreshToken = newToken.refreshToken;
             localStorage.setItem('CurrentUser', JSON.stringify(newDataUser));
-            userContext.dispatchUserEvent('UPDATE_USER', newDataUser);
+            // userContext.dispatchUserEvent('UPDATE_USER', newDataUser);
+            dispatch({ type: 'UPDATE_USER', payload: newDataUser });
           } else if (LS && newTokenRes.status === 401) {
             setExpireStatus(true);
             setTimeout(checkSignIn, 1000);
@@ -106,7 +110,8 @@ export default function WordsContainer(props: PageProps) {
           newDataUser.token = newToken.token;
           newDataUser.refreshToken = newToken.refreshToken;
           localStorage.setItem('CurrentUser', JSON.stringify(newDataUser));
-          userContext.dispatchUserEvent('UPDATE_USER', newDataUser);
+          // userContext.dispatchUserEvent('UPDATE_USER', newDataUser);
+          dispatch({ type: 'UPDATE_USER', payload: newDataUser });
         }
       }
     });
@@ -138,7 +143,8 @@ export default function WordsContainer(props: PageProps) {
             newDataUser.token = newToken.token;
             newDataUser.refreshToken = newToken.refreshToken;
             localStorage.setItem('CurrentUser', JSON.stringify(newDataUser));
-            userContext.dispatchUserEvent('UPDATE_USER', newDataUser);
+            // userContext.dispatchUserEvent('UPDATE_USER', newDataUser);
+            dispatch({ type: 'UPDATE_USER', payload: newDataUser });
           }
         }
     });

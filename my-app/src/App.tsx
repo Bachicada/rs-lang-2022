@@ -11,63 +11,50 @@ import Audiocall from './pages/audiocall/Audiocall';
 import Stat from './components/statistics/Stat';
 import SignInForm from './components/REFACTORING/Authorisation/SignInForm';
 import RegForm from './components/REFACTORING/Authorisation/RegisterForm';
-import { createContext } from 'react';
 import { CurUser } from './types/types';
 import { ThemeProvider } from '@mui/material';
 import theme from './theme';
-
-export const UserContext = createContext({
-  user: {},
-  dispatchUserEvent: (actionType: string, payload: CurUser) => {},
-});
+import UserContext from './store/contexts/userContext';
+import { useUserReducer } from './store/hooks';
+import UserChecker from './hocs/UserChecker';
 
 function App() {
-  const [user, setUser] = useState<CurUser>({});
+  // const [user, setUser] = useState<CurUser>({});
 
-  useEffect(() => {
-    dispatchUserEvent('UPDATE_USER', JSON.parse(localStorage.getItem('CurrentUser') || '{}'));
-  }, []);
+  // useEffect(() => {
+  //   dispatchUserEvent('UPDATE_USER', JSON.parse(localStorage.getItem('CurrentUser') || '{}'));
+  // }, []);
 
-  const dispatchUserEvent = (actionType: string, payload: CurUser) => {
-    switch (actionType) {
-      case 'UPDATE_USER':
-        setUser((prev: CurUser) => ({
-          ...prev,
-          ...(payload || {}),
-        }));
-        return;
-      case 'CLEAR_USER':
-        setUser({});
-        return;
-      default:
-        return;
-    }
-  };
   // https://icons8.com/illustrations/illustration/bubble-gum-head-of-boy-in-graduation-cap
+  const value = useUserReducer();
+
   return (
     <ThemeProvider theme={theme}>
-      <UserContext.Provider value={{ user, dispatchUserEvent }}>
-        <div className="App">
-          <Header />
-          <div id="mainContainer">
-            <Routes>
-              <Route path={APP_ROUTES.MAIN} element={<Landing />} />
-              <Route path={APP_ROUTES.SIGNIN} element={<SignInForm />} />
-              <Route path={APP_ROUTES.REGFORM} element={<RegForm />} />
-              <Route path={APP_ROUTES.TEXTBOOK} element={<Textbook />} />
+      {/* <UserContext.Provider value={{ user, dispatchUserEvent }}> */}
+      <UserContext.Provider value={value}>
+        <UserChecker>
+          <div className="App">
+            <Header />
+            <div id="mainContainer">
+              <Routes>
+                <Route path={APP_ROUTES.MAIN} element={<Landing />} />
+                <Route path={APP_ROUTES.SIGNIN} element={<SignInForm />} />
+                <Route path={APP_ROUTES.REGFORM} element={<RegForm />} />
+                <Route path={APP_ROUTES.TEXTBOOK} element={<Textbook />} />
 
-              <Route path={`${APP_ROUTES.TEXTBOOK}/:part`} element={<Textbook />} />
-              <Route path={`${APP_ROUTES.TEXTBOOK}/:part/:page`} element={<Textbook />} />
+                <Route path={`${APP_ROUTES.TEXTBOOK}/:part`} element={<Textbook />} />
+                <Route path={`${APP_ROUTES.TEXTBOOK}/:part/:page`} element={<Textbook />} />
 
-              <Route path={APP_ROUTES.SPRINT} element={<Sprint />} />
-              <Route path={APP_ROUTES.AUDIOCALL} element={<Audiocall />} />
-              <Route path={APP_ROUTES.STATISTICS} element={<Stat />} />
+                <Route path={APP_ROUTES.SPRINT} element={<Sprint />} />
+                <Route path={APP_ROUTES.AUDIOCALL} element={<Audiocall />} />
+                <Route path={APP_ROUTES.STATISTICS} element={<Stat />} />
 
-              <Route path="*" element={<Landing />} />
-            </Routes>
+                <Route path="*" element={<Landing />} />
+              </Routes>
+            </div>
+            <Footer />
           </div>
-          <Footer />
-        </div>
+        </UserChecker>
       </UserContext.Provider>
     </ThemeProvider>
   );

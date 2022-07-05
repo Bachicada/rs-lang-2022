@@ -13,11 +13,12 @@ import styles from './WordCard.module.css';
 import { Chip } from '@mui/material';
 import DoneIcon from '@mui/icons-material/Done';
 import { useContext, useState } from 'react';
-import { UserContext } from '../../App';
+// import { UserContext } from '../../App';
 import WordStat from './WordStat';
 import OptionalBtns from './OptinalBtns';
 // import { getHardWords, getNewToken, getUserId, getUserToken } from '../../services/WordService';
 import { useNavigate } from 'react-router-dom';
+import { useUserContext } from '../../store/hooks';
 
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
@@ -91,10 +92,11 @@ export default function WordCard({ word, onDataChanged }: WordCardProp) {
     }
   }
 
-  const userContext = useContext<{
-    user: CurUser;
-    dispatchUserEvent: (actionType: string, payload: CurUser) => void;
-  }>(UserContext);
+  // const userContext = useContext<{
+  //   user: CurUser;
+  //   dispatchUserEvent: (actionType: string, payload: CurUser) => void;
+  // }>(UserContext);
+  const [userContext, dispatch] = useUserContext();
 
   const checkBg = () => {
     let bg;
@@ -108,7 +110,8 @@ export default function WordCard({ word, onDataChanged }: WordCardProp) {
 
   return (
     <Card sx={{ maxWidth: 345, backgroundColor: checkBg }}>
-      {userContext.user.name ? <WordStat word={word} /> : ''}
+      {/* {userContext.user.name ? <WordStat word={word} /> : ''} */}
+      {userContext.name ? <WordStat word={word} /> : ''}
       <CardMedia component="img" height="140" image={`${API_URL}/${word.image}`} alt={word.word} />
       <div className={styles.cardContent}>
         <div className={styles.wordTitle} style={{ borderLeft: `8px solid ${checkBorder(word)}` }}>
@@ -127,7 +130,8 @@ export default function WordCard({ word, onDataChanged }: WordCardProp) {
         </div>
       </div>
       <CardActions disableSpacing>
-        {userContext.user.name ? <OptionalBtns word={word} onDataChanged={onDataChanged} /> : ''}
+        {/* {userContext.user.name ? <OptionalBtns word={word} onDataChanged={onDataChanged} /> : ''} */}
+        {userContext.name ? <OptionalBtns word={word} onDataChanged={onDataChanged} /> : ''}
         <ExpandMore
           expand={expanded}
           onClick={handleExpandClick}

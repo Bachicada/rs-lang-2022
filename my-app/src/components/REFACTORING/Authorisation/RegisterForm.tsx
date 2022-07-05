@@ -16,8 +16,9 @@ import { Link, useNavigate } from 'react-router-dom';
 import { CurUser, NewUser } from '../../../types/types';
 import { APP_ROUTES } from '../../../utils/Constants';
 import styles from './autorisation.module.css';
-import { UserContext } from '../../../App';
+// import { UserContext } from '../../../App';
 import { LoadingIcon } from '../../shared/LoadingIcon';
+import { useUserContext } from '../../../store/hooks';
 
 const theme = createTheme();
 
@@ -93,10 +94,7 @@ export default function RegForm() {
   const [alreadyRegError, setAlreadyRegError] = useState(false);
   const [loadingState, setLoadingState] = useState(false);
 
-  const userContext = useContext<{
-    user: CurUser;
-    dispatchUserEvent: any;
-  }>(UserContext);
+  const [user, dispatch] = useUserContext();
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -123,7 +121,8 @@ export default function RegForm() {
         user.refreshToken = currentUser.refreshToken;
         user.name = currentUser.name;
         localStorage.setItem('CurrentUser', JSON.stringify(user));
-        userContext.dispatchUserEvent('UPDATE_USER', user);
+        dispatch({ type: 'UPDATE_USER', payload: user });
+        // userContext.dispatchUserEvent('UPDATE_USER', user);
       }
       setAlreadyRegError(false);
       setSuccess(true);

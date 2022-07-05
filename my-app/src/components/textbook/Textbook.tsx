@@ -5,14 +5,16 @@ import GamesMenu from './GamesMenu';
 import { APP_ROUTES } from '../../utils/Constants';
 import { useParams, useNavigate } from 'react-router-dom';
 import PartOfTextBook from './PartOfTextbook';
-import { UserContext } from '../../App';
+// import { UserContext } from '../../App';
 import { CurUser } from '../../types/types';
+import { useUserContext } from '../../store/hooks';
 
 export default function Textbook() {
-  const userContext = useContext<{
-    user: CurUser;
-    dispatchUserEvent: (actionType: string, payload: CurUser) => void;
-  }>(UserContext);
+  // const userContext = useContext<{
+  //   user: CurUser;
+  //   dispatchUserEvent: (actionType: string, payload: CurUser) => void;
+  // }>(UserContext);
+  const [userContext, dispatch] = useUserContext();
 
   const params = useParams<string>();
   const navigate = useNavigate();
@@ -56,7 +58,8 @@ export default function Textbook() {
         <li className={styles.partItem5} data-part="5" onClick={(event) => checkNav(event)}>
           Раздел 6
         </li>
-        {userContext.user.name ? (
+        {/* {userContext.user.name ? ( */}
+        {userContext.name ? (
           <li
             className={styles.partItem5}
             data-part="hardWords"

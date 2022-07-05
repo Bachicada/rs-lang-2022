@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { createContext, useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { UserContext } from '../../App';
+// import { UserContext } from '../../App';
 import // createWord,
 // deleteWord,
 // getNewToken,
@@ -17,18 +17,21 @@ import AddSnackBar from './AddSnackBar';
 import Utils from '../../utils/Utils';
 import { getNewToken } from '../../services/UserService';
 import { createWord, deleteWord } from '../../services/UserWordService';
+import { useUserContext } from '../../store/hooks';
 
 export default function OptionalBtns({ word, onDataChanged }: OptionBtnsProp) {
-  const userContext = useContext<{
-    user: CurUser;
-    dispatchUserEvent: (actionType: string, payload: CurUser) => void;
-  }>(UserContext);
+  // const userContext = useContext<{
+  //   user: CurUser;
+  //   dispatchUserEvent: (actionType: string, payload: CurUser) => void;
+  // }>(UserContext);
+  const [userContext, dispatch] = useUserContext();
 
   const navigate = useNavigate();
 
   const checkSignIn = () => {
     localStorage.clear();
-    userContext.dispatchUserEvent('CLEAR_USER', {});
+    // userContext.dispatchUserEvent('CLEAR_USER', {});
+    dispatch({ type: 'CLEAR_USER', payload: {} });
     navigate(`${APP_ROUTES.SIGNIN}`);
   };
 
@@ -93,7 +96,8 @@ export default function OptionalBtns({ word, onDataChanged }: OptionBtnsProp) {
             newDataUser.token = newToken.token;
             newDataUser.refreshToken = newToken.refreshToken;
             localStorage.setItem('CurrentUser', JSON.stringify(newDataUser));
-            userContext.dispatchUserEvent('UPDATE_USER', newDataUser);
+            // userContext.dispatchUserEvent('UPDATE_USER', newDataUser);
+            dispatch({ type: 'UPDATE_USER', payload: newDataUser });
           } else if (LS && newTokenRes.status === 401) {
             console.log('все истекло', newTokenRes);
             setExpireStatus(true);

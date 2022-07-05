@@ -1,17 +1,20 @@
 import { Button } from '@mui/material';
 import React, { useContext } from 'react';
-import { UserContext } from '../../../App';
+import { useUserContext } from '../../../store/hooks';
+// import { UserContext } from '../../../App';
 import { CurUser } from '../../../types/types';
 
 const LogOutBtn = () => {
-  const { dispatchUserEvent } = useContext<{
-    user: CurUser;
-    dispatchUserEvent: (actionType: string, payload: CurUser) => void;
-  }>(UserContext);
+  // const { dispatchUserEvent } = useContext<{
+  //   user: CurUser;
+  //   dispatchUserEvent: (actionType: string, payload: CurUser) => void;
+  // }>(UserContext);
+  const [, dispatch] = useUserContext();
 
   function logOut() {
     localStorage.clear();
-    dispatchUserEvent('CLEAR_USER', {});
+    dispatch({ type: 'CLEAR_USER', payload: {} });
+    // dispatchUserEvent('CLEAR_USER', {});
   }
 
   return (

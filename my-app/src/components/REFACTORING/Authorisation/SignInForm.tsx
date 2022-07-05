@@ -17,7 +17,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import { LoadingIcon } from '../../shared/LoadingIcon';
 
 import styles from './autorisation.module.css';
-import { UserContext } from '../../../App';
+import { useUserContext } from '../../../store/hooks';
+// import { UserContext } from '../../../App';
 
 const theme = createTheme();
 
@@ -69,10 +70,12 @@ export default function SignInForm() {
     passValidation(inputPass);
   };
 
-  const { dispatchUserEvent } = React.useContext<{
-    user: CurUser;
-    dispatchUserEvent: (actionType: string, payload: CurUser) => void;
-  }>(UserContext);
+  // const { dispatchUserEvent } = React.useContext<{
+  //   user: CurUser;
+  //   dispatchUserEvent: (actionType: string, payload: CurUser) => void;
+  // }>(UserContext);
+
+  const [user, dispatch] = useUserContext();
 
   const [loadingState, setLoadingState] = useState(false);
 
@@ -112,7 +115,8 @@ export default function SignInForm() {
       userInfo.name = currentUser.name;
 
       localStorage.setItem('CurrentUser', JSON.stringify(userInfo));
-      dispatchUserEvent('UPDATE_USER', userInfo);
+      dispatch({ type: 'UPDATE_USER', payload: userInfo });
+      // dispatchUserEvent('UPDATE_USER', userInfo);
       setValidUser(true);
       setLoadingState(true);
       navigate(APP_ROUTES.MAIN);
