@@ -26,6 +26,7 @@ import { useGetTextbookWords } from '../../hooks/useGetTextbookWords';
 import Loading from '../shared/Loading';
 import { useGetUserAggregatedWords } from '../../hooks/useGetUserAggregatedWords';
 import { useGetUserWords } from '../../hooks/useGetUserWords';
+import { Grid, styled } from '@mui/material';
 
 export default function WordsContainer(props: PageProps) {
   // const userId = Utils.getUserId();
@@ -278,19 +279,21 @@ export default function WordsContainer(props: PageProps) {
   return (
     <div>
       {/* <ModalExpire open={expireStatus} /> */}
-      <div className={styles.wordsCont}>
+      <StyledGrid container spacing={1}>
         {(isLoading || isLoadingUserWords) && <Loading />}
 
-        {response.length &&
-          response.map((item, i) => (
-            <WordCard
-              key={i}
-              word={item}
-              userWords={userWordsResponse}
-              onDataChanged={onDataChanged}
-            />
-          ))}
-      </div>
+        {response.length
+          ? response.map((item, i) => (
+              <Grid item key={i} xs={12} sm={6} lg={4} xl={3}>
+                <WordCard word={item} userWords={userWordsResponse} onDataChanged={onDataChanged} />
+              </Grid>
+            ))
+          : null}
+      </StyledGrid>
     </div>
   );
 }
+
+const StyledGrid = styled(Grid)`
+  margin-bottom: 15px;
+`;
