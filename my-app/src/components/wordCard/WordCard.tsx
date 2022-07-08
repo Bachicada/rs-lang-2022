@@ -78,7 +78,9 @@ export default function WordCard({ word, userWords, isUser, onDataChanged }: Exp
           <Button color="secondary" variant="outlined" size="small" onClick={handleOpen}>
             Описание
           </Button>
-          {isUser ? <OptionalBtns word={word} onDataChanged={onDataChanged} /> : null}
+          {isUser ? (
+            <OptionalBtns word={word} userWord={userWord} onDataChanged={onDataChanged} />
+          ) : null}
         </StyledCardActions>
       </StyledCard>
 

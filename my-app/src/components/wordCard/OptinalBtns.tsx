@@ -8,7 +8,7 @@ import // createWord,
 // getUserId,
 // getUserToken,
 '../../services/WordService';
-import { CurUser, OptionBtnsProp, WordItem } from '../../types/types';
+import { CurUser, IUserWord, OptionBtnsProp, WordItem } from '../../types/types';
 import { API_URL, APP_ROUTES, ENDPOINTS, WORD_STATUS } from '../../utils/Constants';
 import styles from './WordCard.module.css';
 import Snackbar from '@mui/material/Snackbar';
@@ -21,7 +21,11 @@ import { useUserContext } from '../../store/hooks';
 import Button from '@mui/material/Button';
 import styled from '@emotion/styled';
 
-export default function OptionalBtns({ word, onDataChanged }: OptionBtnsProp) {
+interface ExpandOptionBtnsProp extends OptionBtnsProp {
+  userWord: IUserWord | undefined;
+}
+
+export default function OptionalBtns({ word, userWord, onDataChanged }: ExpandOptionBtnsProp) {
   // const [userContext, dispatch] = useUserContext();
 
   // const navigate = useNavigate();
@@ -148,11 +152,23 @@ export default function OptionalBtns({ word, onDataChanged }: OptionBtnsProp) {
   // };
   return (
     <Container>
-      <Button color="error" variant="outlined" size="small" onClick={() => {}}>
+      <Button
+        color="error"
+        variant="outlined"
+        size="small"
+        disabled={userWord?.difficulty === WORD_STATUS.HARD}
+        onClick={() => {}}
+      >
         Сложное
       </Button>
 
-      <Button color="success" variant="outlined" size="small" onClick={() => {}}>
+      <Button
+        color="success"
+        variant="outlined"
+        size="small"
+        disabled={userWord?.difficulty === WORD_STATUS.LEARNED}
+        onClick={() => {}}
+      >
         Изученное
       </Button>
     </Container>
