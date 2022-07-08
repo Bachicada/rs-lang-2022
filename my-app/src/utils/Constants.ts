@@ -4,6 +4,7 @@ import imgLaptop from '../assets/illustrations/manLaptop.png';
 import imgHurry from '../assets/illustrations/womanHurry.png';
 import imgPuzzle from '../assets/illustrations/womanPuzzle.png';
 import imgTablet from '../assets/illustrations/womanTablet.png';
+import { CardColors } from '../types/types';
 
 export const APP_ROUTES = {
   MAIN: '/',
@@ -125,3 +126,8 @@ export const LEVEL_CARDS = [
 ];
 
 export const POINTS = [10, 20, 40, 80];
+
+export const CARD_COLORS: CardColors = {
+  [WORD_STATUS.HARD]: '#d32f2f',
+  [WORD_STATUS.LEARNED]: '#2e7d32',
+};

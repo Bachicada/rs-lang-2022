@@ -18,155 +18,171 @@ import Utils from '../../utils/Utils';
 import { getNewToken } from '../../services/UserService';
 import { createWord, deleteWord } from '../../services/UserWordService';
 import { useUserContext } from '../../store/hooks';
+import Button from '@mui/material/Button';
+import styled from '@emotion/styled';
 
 export default function OptionalBtns({ word, onDataChanged }: OptionBtnsProp) {
-  // const userContext = useContext<{
-  //   user: CurUser;
-  //   dispatchUserEvent: (actionType: string, payload: CurUser) => void;
-  // }>(UserContext);
-  const [userContext, dispatch] = useUserContext();
+  // const [userContext, dispatch] = useUserContext();
 
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
-  const checkSignIn = () => {
-    localStorage.clear();
-    // userContext.dispatchUserEvent('CLEAR_USER', {});
-    dispatch({ type: 'CLEAR_USER', payload: {} });
-    navigate(`${APP_ROUTES.SIGNIN}`);
-  };
+  // const checkSignIn = () => {
+  //   localStorage.clear();
+  //   // userContext.dispatchUserEvent('CLEAR_USER', {});
+  //   dispatch({ type: 'CLEAR_USER', payload: {} });
+  //   navigate(`${APP_ROUTES.SIGNIN}`);
+  // };
 
-  const [expireStatus, setExpireStatus] = useState(false);
+  // const [expireStatus, setExpireStatus] = useState(false);
 
-  const userId = Utils.getUserId();
-  const wordId = word.id || (word._id as string);
-  const token = Utils.getUserToken();
+  // const userId = Utils.getUserId();
+  // const wordId = word.id || (word._id as string);
+  // const token = Utils.getUserToken();
 
-  const bodyReqHard: BodyInit = JSON.stringify({
-    difficulty: `${WORD_STATUS.HARD}`,
-    optional: {
-      group: `${word.group}`,
-      page: `${word.page}`,
-      failCounter: 0,
-      successCounter: 0,
-    },
-  });
+  // const bodyReqHard: BodyInit = JSON.stringify({
+  //   difficulty: `${WORD_STATUS.HARD}`,
+  //   optional: {
+  //     group: `${word.group}`,
+  //     page: `${word.page}`,
+  //     failCounter: 0,
+  //     successCounter: 0,
+  //   },
+  // });
 
-  const bodyReqLearned: BodyInit = JSON.stringify({
-    difficulty: `${WORD_STATUS.LEARNED}`,
-    optional: {
-      group: `${word.group}`,
-      page: `${word.page}`,
-      failCounter: 0,
-      successCounter: 0,
-    },
-  });
+  // const bodyReqLearned: BodyInit = JSON.stringify({
+  //   difficulty: `${WORD_STATUS.LEARNED}`,
+  //   optional: {
+  //     group: `${word.group}`,
+  //     page: `${word.page}`,
+  //     failCounter: 0,
+  //     successCounter: 0,
+  //   },
+  // });
 
-  const setHardWord = async () => {
-    const wordStatus = WORD_STATUS.HARD;
+  // const setHardWord = async () => {
+  //   const wordStatus = WORD_STATUS.HARD;
 
-    if (!word.isHardWord) {
-      console.log('checkedHard');
-      await fetch(`${API_URL}${ENDPOINTS.USERS}/${userId}/words/${wordId}`, {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${token}`,
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-        body: bodyReqHard,
-      }).then(async (response) => {
-        console.log('первый ответ', response);
-        if (response.status === 417) {
-          throw new Error('это слово уже в списке сложных');
-        } else if (response.status === 401) {
-          const newTokenRes = await getNewToken();
+  //   if (!word.isHardWord) {
+  //     console.log('checkedHard');
+  //     await fetch(`${API_URL}${ENDPOINTS.USERS}/${userId}/words/${wordId}`, {
+  //       method: 'POST',
+  //       headers: {
+  //         Authorization: `Bearer ${token}`,
+  //         Accept: 'application/json',
+  //         'Content-Type': 'application/json',
+  //       },
+  //       body: bodyReqHard,
+  //     }).then(async (response) => {
+  //       console.log('первый ответ', response);
+  //       if (response.status === 417) {
+  //         throw new Error('это слово уже в списке сложных');
+  //       } else if (response.status === 401) {
+  //         const newTokenRes = await getNewToken();
 
-          console.log('второй ответ', newTokenRes);
+  //         console.log('второй ответ', newTokenRes);
 
-          const LS = localStorage.getItem('CurrentUser' || '{}');
+  //         const LS = localStorage.getItem('CurrentUser' || '{}');
 
-          if (LS && newTokenRes.status !== 401) {
-            const newToken = await newTokenRes.json();
-            console.log('this new token', newToken);
+  //         if (LS && newTokenRes.status !== 401) {
+  //           const newToken = await newTokenRes.json();
+  //           console.log('this new token', newToken);
 
-            const newDataUser: CurUser = {};
-            newDataUser.message = JSON.parse(LS).message;
-            newDataUser.userId = JSON.parse(LS).userId;
-            newDataUser.name = JSON.parse(LS).name;
-            newDataUser.token = newToken.token;
-            newDataUser.refreshToken = newToken.refreshToken;
-            localStorage.setItem('CurrentUser', JSON.stringify(newDataUser));
-            // userContext.dispatchUserEvent('UPDATE_USER', newDataUser);
-            dispatch({ type: 'UPDATE_USER', payload: newDataUser });
-          } else if (LS && newTokenRes.status === 401) {
-            console.log('все истекло', newTokenRes);
-            setExpireStatus(true);
-            setTimeout(checkSignIn, 1500);
-          }
-          const newWordSet = await createWord({ userId, wordId, word, wordStatus });
-          return newWordSet;
-        }
-      });
-    } else {
-      await deleteWord({ userId, wordId });
-    }
-  };
+  //           const newDataUser: CurUser = {};
+  //           newDataUser.message = JSON.parse(LS).message;
+  //           newDataUser.userId = JSON.parse(LS).userId;
+  //           newDataUser.name = JSON.parse(LS).name;
+  //           newDataUser.token = newToken.token;
+  //           newDataUser.refreshToken = newToken.refreshToken;
+  //           localStorage.setItem('CurrentUser', JSON.stringify(newDataUser));
+  //           // userContext.dispatchUserEvent('UPDATE_USER', newDataUser);
+  //           dispatch({ type: 'UPDATE_USER', payload: newDataUser });
+  //         } else if (LS && newTokenRes.status === 401) {
+  //           console.log('все истекло', newTokenRes);
+  //           setExpireStatus(true);
+  //           setTimeout(checkSignIn, 1500);
+  //         }
+  //         const newWordSet = await createWord({ userId, wordId, word, wordStatus });
+  //         return newWordSet;
+  //       }
+  //     });
+  //   } else {
+  //     await deleteWord({ userId, wordId });
+  //   }
+  // };
 
-  const setLearnedWord = async () => {
-    const userId = Utils.getUserId();
-    const wordId = word.id || (word._id as string);
-    const wordStatus = WORD_STATUS.LEARNED;
+  // const setLearnedWord = async () => {
+  //   const userId = Utils.getUserId();
+  //   const wordId = word.id || (word._id as string);
+  //   const wordStatus = WORD_STATUS.LEARNED;
 
-    if (word.isHardWord) {
-      console.log('checkedLearned');
-      const deleteHardSet = await deleteWord({ userId, wordId });
-      console.log('удалено из сложных', deleteHardSet);
+  //   if (word.isHardWord) {
+  //     console.log('checkedLearned');
+  //     const deleteHardSet = await deleteWord({ userId, wordId });
+  //     console.log('удалено из сложных', deleteHardSet);
 
-      const newWordSet = await createWord({ userId, wordId, word, wordStatus });
-      console.log('добавлено в изученные', await newWordSet.json());
-    } else if (word.isLearnedWord) {
-      await deleteWord({ userId, wordId });
-    } else {
-      await createWord({ userId, wordId, word, wordStatus });
-    }
-  };
+  //     const newWordSet = await createWord({ userId, wordId, word, wordStatus });
+  //     console.log('добавлено в изученные', await newWordSet.json());
+  //   } else if (word.isLearnedWord) {
+  //     await deleteWord({ userId, wordId });
+  //   } else {
+  //     await createWord({ userId, wordId, word, wordStatus });
+  //   }
+  // };
 
-  const onHardBtnClick = async () => {
-    try {
-      await setHardWord();
-      onDataChanged();
-    } catch (e) {
-      console.error(e);
-    }
-  };
+  // const onHardBtnClick = async () => {
+  //   try {
+  //     await setHardWord();
+  //     onDataChanged();
+  //   } catch (e) {
+  //     console.error(e);
+  //   }
+  // };
 
-  const onLearnedBtnClick = async () => {
-    try {
-      await setLearnedWord();
-      onDataChanged();
-    } catch (e) {
-      console.error(e);
-    }
-  };
+  // const onLearnedBtnClick = async () => {
+  //   try {
+  //     await setLearnedWord();
+  //     onDataChanged();
+  //   } catch (e) {
+  //     console.error(e);
+  //   }
+  // };
   return (
-    <div className={styles.btnsCont}>
-      {expireStatus ? <div> нужно зайти опять </div> : ''}
-      <button
-        className={[word.isHardWord ? styles.hardBtnActive : '', styles.wordBtn].join(' ')}
-        onClick={() => {
-          onHardBtnClick();
-        }}
-      >
+    <Container>
+      <Button color="error" variant="outlined" size="small" onClick={() => {}}>
         Сложное
-      </button>
-      <button
-        className={[word.isLearnedWord ? styles.learnedBtnActive : '', styles.wordBtn].join(' ')}
-        onClick={() => {
-          onLearnedBtnClick();
-        }}
-      >
+      </Button>
+
+      <Button color="success" variant="outlined" size="small" onClick={() => {}}>
         Изученное
-      </button>
-    </div>
+      </Button>
+    </Container>
+    // <div className={styles.btnsCont}>
+    //   {expireStatus ? <div> нужно зайти опять </div> : ''}
+    //   <button
+    //     className={[word.isHardWord ? styles.hardBtnActive : '', styles.wordBtn].join(' ')}
+    //     onClick={() => {
+    //       onHardBtnClick();
+    //     }}
+    //   >
+    //     Сложное
+    //   </button>
+    //   <button
+    //     className={[word.isLearnedWord ? styles.learnedBtnActive : '', styles.wordBtn].join(' ')}
+    //     onClick={() => {
+    //       onLearnedBtnClick();
+    //     }}
+    //   >
+    //     Изученное
+    //   </button>
+    // </div>
   );
 }
+
+const Container = styled('div')`
+  display: flex;
+  align-items: center;
+  justify-content: end;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+`;

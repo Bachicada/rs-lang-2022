@@ -12,6 +12,7 @@
     "@testing-library/jest-dom": "^5.16.2",
     "@testing-library/react": "^12.1.2",
     "@testing-library/user-event": "^13.5.0",
+    "interweave": "^13.0.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-router": "^6.2.1",
@@ -50,23 +51,23 @@
     ]
   },
   "devDependencies": {
-    "@types/styled-components": "^5.1.22",
-    "chart.js": "^3.7.1",
-    "gh-pages": "^3.2.3",
-    "react-chartjs-2": "^4.0.1",
-    "recharts": "^2.1.9",
     "@types/node": "^16.11.33",
     "@types/react": "^18.0.8",
     "@types/react-beautiful-dnd": "^13.1.2",
     "@types/react-dom": "^18.0.3",
+    "@types/styled-components": "^5.1.22",
     "@typescript-eslint/eslint-plugin": "^5.22.0",
     "@typescript-eslint/parser": "^5.22.0",
+    "chart.js": "^3.7.1",
     "eslint-config-prettier": "^8.5.0",
     "eslint-config-react": "^1.1.7",
     "eslint-plugin-prettier": "^4.0.0",
+    "gh-pages": "^3.2.3",
     "husky": "^7.0.4",
     "lint-staged": "^12.4.1",
     "prettier": "^2.6.2",
+    "react-chartjs-2": "^4.0.1",
+    "recharts": "^2.1.9",
     "typescript": "^4.6.4"
   }
 }

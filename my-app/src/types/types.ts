@@ -105,3 +105,7 @@ export interface WordStatProp {
 export interface FormProps {
   hasAccount: boolean;
 }
+
+export type CardColors = {
+  [key in WORD_STATUS]?: string;
+};

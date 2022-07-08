@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useState, useEffect, useContext } from 'react';
+import { useState, useEffect, useContext, useRef } from 'react';
 import { CurUser, PageProps, WordItem } from '../../types/types';
 import styles from './textbook.module.css';
 import // getHardWords,
@@ -35,11 +35,14 @@ export default function WordsContainer(props: PageProps) {
   const page = +(props.page || 0);
   const group = +(props.part || 0);
   const { response, error, isLoading } = useGetTextbookWords({ page, group });
+
   const {
     response: userWordsResponse,
     error: userWordsError,
     isLoading: isLoadingUserWords,
   } = useGetUserWords();
+
+  // const [userContext, dispatch] = useUserContext();
 
   // const {
   //   response: aggregatedResponse,
@@ -285,7 +288,12 @@ export default function WordsContainer(props: PageProps) {
         {response.length
           ? response.map((item, i) => (
               <Grid item key={i} xs={12} sm={6} lg={4} xl={3}>
-                <WordCard word={item} userWords={userWordsResponse} onDataChanged={onDataChanged} />
+                <WordCard
+                  word={item}
+                  userWords={userWordsResponse}
+                  isUser={!userWordsError}
+                  onDataChanged={onDataChanged}
+                />
               </Grid>
             ))
           : null}
