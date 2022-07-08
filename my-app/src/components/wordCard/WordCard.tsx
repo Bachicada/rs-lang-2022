@@ -3,20 +3,12 @@ import Card, { CardProps } from '@mui/material/Card';
 import CardMedia from '@mui/material/CardMedia';
 import CardContent from '@mui/material/CardContent';
 import CardActions from '@mui/material/CardActions';
-import Collapse from '@mui/material/Collapse';
-import IconButton, { IconButtonProps } from '@mui/material/IconButton';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { CurUser, IUserWord, UserWordItem, WordCardProp, WordItem } from '../../types/types';
-import { API_URL, APP_ROUTES, CARD_COLORS, WORD_STATUS } from '../../utils/Constants';
-import styles from './WordCard.module.css';
-import { Button, Chip, Typography } from '@mui/material';
-import DoneIcon from '@mui/icons-material/Done';
-import { MutableRefObject, RefObject, useContext, useEffect, useState } from 'react';
-// import { UserContext } from '../../App';
-import OptionalBtns from './OptinalBtns';
-// import { getHardWords, getNewToken, getUserId, getUserToken } from '../../services/WordService';
-import { useNavigate } from 'react-router-dom';
-import { useUserContext } from '../../store/hooks';
+import IconButton from '@mui/material/IconButton';
+import { IUserWord, WordCardProp } from '../../types/types';
+import { API_URL, CARD_COLORS } from '../../utils/Constants';
+import { Button, Typography } from '@mui/material';
+import { useState } from 'react';
+import OptionalBtns from './OptionalBtns';
 import VolumeUpIcon from '@mui/icons-material/VolumeUp';
 import VolumeOffIcon from '@mui/icons-material/VolumeOff';
 import WordCardBackdrop from './WordCardBackdrop';
@@ -31,11 +23,8 @@ export default function WordCard({ word, userWords, isUser, onDataChanged }: Exp
   const [isOpen, setIsOpen] = useState(false);
 
   const userWord = userWords.find((userWord) => word.id === userWord.wordId);
-
-  const {
-    difficulty,
-    optional: { failCounter, successCounter },
-  } = userWord || { optional: { failCounter: 0, successCounter: 0 } };
+  const { difficulty, optional } = userWord || {};
+  const { failCounter, successCounter } = optional || { failCounter: 0, successCounter: 0 };
 
   const { isPlay, switchPlay } = useGetWordAudio({ word });
 
@@ -78,6 +67,7 @@ export default function WordCard({ word, userWords, isUser, onDataChanged }: Exp
           <Button color="secondary" variant="outlined" size="small" onClick={handleOpen}>
             Описание
           </Button>
+
           {isUser ? (
             <OptionalBtns word={word} userWord={userWord} onDataChanged={onDataChanged} />
           ) : null}

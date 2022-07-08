@@ -68,3 +68,22 @@ export const getNewToken = async () => {
 
   throw new Error('Token error!');
 };
+
+type GetNewUserToken = {
+  userId: string;
+  refreshToken: string;
+};
+export const getNewUserToken = async ({ refreshToken, userId }: GetNewUserToken) => {
+  const response = await fetch(`${API_URL}${ENDPOINTS.USERS}/${userId}${ENDPOINTS.TOKENS}`, {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${refreshToken}`,
+    },
+  });
+
+  if (response.ok) {
+    return response.json();
+  }
+
+  throw new Error('Token error!');
+};

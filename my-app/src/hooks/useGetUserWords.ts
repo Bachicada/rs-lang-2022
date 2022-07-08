@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { getUserAllWords } from '../services/UserWordService';
 import { IUserWord } from '../types/types';
 
@@ -7,25 +7,25 @@ export const useGetUserWords = () => {
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const data = await getUserAllWords();
-        if (!data.length) {
-          return;
-        }
-
-        setResponse(data);
-      } catch (err) {
-        const { message } = err as Error;
-        setError(message);
-      } finally {
-        setIsLoading(false);
+  const fetchData = useCallback(async () => {
+    try {
+      const data = await getUserAllWords();
+      if (!data.length) {
+        return;
       }
-    };
 
-    fetchData();
+      setResponse(data);
+    } catch (err) {
+      const { message } = err as Error;
+      setError(message);
+    } finally {
+      setIsLoading(false);
+    }
   }, []);
 
-  return { response, error, isLoading };
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
+
+  return { response, error, isLoading, refetch: fetchData };
 };

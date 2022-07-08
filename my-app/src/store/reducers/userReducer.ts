@@ -4,7 +4,7 @@ import { initialUserState } from '../contexts/userContext';
 
 export type UserReducerAction = {
   type: string;
-  payload: CurUser;
+  payload?: CurUser;
 };
 
 const userReducer: Reducer<CurUser, UserReducerAction> = (state, action) => {

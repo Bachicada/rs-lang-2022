@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { APP_ROUTES } from '../../utils/Constants';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
@@ -29,7 +28,8 @@ export default function PartOfTextBook() {
         Раздел {!isHardWords ? +part + 1 : 'Сложные слова'}
       </StyledTypography>
 
-      <WordsContainer page={(Number(pageNumber) - 1).toString()} part={params.part} />
+      <WordsContainer page={`${+pageNumber - 1}`} part={params.part} />
+
       <PaginationComponent page={params.page ?? ''} part={params.part ?? ''} />
     </div>
   );

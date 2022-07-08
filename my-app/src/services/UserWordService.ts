@@ -13,9 +13,19 @@ interface UserWord {
   optional: UserWordOptional;
 }
 
+interface UpdatedUserWord {
+  difficulty: WORD_STATUS;
+  optional?: UserWordOptional;
+}
+
 interface ICreateUserWord {
   wordId: string;
   word: UserWord;
+}
+
+interface IUpdateUserWord {
+  wordId: string;
+  word: UpdatedUserWord;
 }
 
 export const getUserAllWords = async () => {
@@ -63,7 +73,7 @@ export const getUserWordById = async (wordId: string) => {
     return response.json();
   }
 
-  throw new Error('Wrong word id');
+  return null;
 };
 
 export const createUserWord = async ({ wordId, word }: ICreateUserWord) => {
@@ -92,7 +102,40 @@ export const createUserWord = async ({ wordId, word }: ICreateUserWord) => {
     return rawResponse.json();
   }
 
-  throw new Error('Something went wrong while word create');
+  return null;
+
+  // throw new Error('Something went wrong while word create');
+};
+
+export const changeUserWordType = async ({ wordId, word }: IUpdateUserWord) => {
+  const userJSON = localStorage.getItem('CurrentUser');
+  if (!userJSON) {
+    return 'no info';
+  }
+  const { userId, token } = JSON.parse(userJSON);
+
+  const options = {
+    method: (await getUserWordById(wordId)) ? 'PUT' : 'POST',
+    headers: {
+      Authorization: `Bearer ${token}`,
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(word),
+  };
+
+  const rawResponse = await fetch(
+    `${API_URL}${ENDPOINTS.USERS}/${userId}${ENDPOINTS.WORDS}/${wordId}`,
+    options
+  );
+
+  if (rawResponse.ok) {
+    return rawResponse.json();
+  }
+
+  return null;
+
+  // throw new Error('Something went wrong while word create');
 };
 
 export const deleteUserWord = async (wordId: string) => {
@@ -138,8 +181,8 @@ export const updateUserWord = async ({ wordId, word }: ICreateUserWord) => {
     body: JSON.stringify(word),
   };
 
-  const aggrWord = await getUserAggrWordById(wordId);
-  if (aggrWord[0].userWord?.difficulty) {
+  const [aggrWord] = await getUserAggrWordById(wordId);
+  if (aggrWord.userWord?.difficulty) {
     options.method = 'PUT';
     const updWord = { ...word };
     updWord.optional.failCounter += aggrWord[0].userWord.optional.failCounter;

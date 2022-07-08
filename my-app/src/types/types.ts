@@ -15,14 +15,6 @@ export interface CurUser {
   userId?: string;
 }
 
-export interface PartProps {
-  part: string | undefined;
-}
-
-export interface PageProps extends PartProps {
-  page: string | undefined;
-}
-
 export interface WordItem {
   userWord: any;
   _id?: string;
@@ -91,10 +83,6 @@ export interface IUserWord {
 }
 
 export interface WordCardProp {
-  word: WordItem;
-  onDataChanged: () => void;
-}
-export interface OptionBtnsProp {
   word: WordItem;
   onDataChanged: () => void;
 }
