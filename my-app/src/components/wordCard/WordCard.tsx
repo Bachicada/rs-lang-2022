@@ -1,5 +1,5 @@
 import { styled } from '@mui/material/styles';
-import Card from '@mui/material/Card';
+import Card, { CardProps } from '@mui/material/Card';
 import CardMedia from '@mui/material/CardMedia';
 import CardContent from '@mui/material/CardContent';
 import CardActions from '@mui/material/CardActions';
@@ -39,37 +39,10 @@ export default function WordCard({ word, userWords, isUser, onDataChanged }: Exp
 
   const { isPlay, switchPlay } = useGetWordAudio({ word });
 
-  // useEffect(() => {
-  //   if (!isPlay) {
-  //     return;
-  //   }
-
-  //   audioRef.current = stopAudio;
-  // }, [isPlay, stopAudio]);
-
-  // function togglePlay(word: WordItem) {
-  //   const audioList = [
-  //     new Audio(`${API_URL}/${word.audio}`),
-  //     new Audio(`${API_URL}/${word.audioMeaning}`),
-  //     new Audio(`${API_URL}/${word.audioExample}`),
-  //   ];
-
-  //   if (!isPlay) {
-  //     audioList[0].play();
-  //     audioList[0].addEventListener('ended', () => audioList[1].play());
-  //     audioList[1].addEventListener('ended', () => audioList[2].play());
-  //     setIsPlay(true);
-  //   } else {
-  //     audioList.forEach((item) => item.pause());
-  //     setIsPlay(true);
-  //   }
-  // }
-
   const checkBg = () => {
     if (!difficulty) {
       return;
     }
-
     return CARD_COLORS[difficulty];
   };
 
@@ -83,7 +56,7 @@ export default function WordCard({ word, userWords, isUser, onDataChanged }: Exp
 
   return (
     <>
-      <Card sx={{ minWidth: 280, borderRadius: '12px', backgroundColor: checkBg }}>
+      <StyledCard background={checkBg()}>
         <CardMedia
           component="img"
           height="160"
@@ -91,27 +64,23 @@ export default function WordCard({ word, userWords, isUser, onDataChanged }: Exp
           alt={word.word}
         />
 
-        <CardContent sx={{ position: 'relative' }}>
+        <StyledCardContent>
           <Typography>{word.word}</Typography>
           <Typography sx={{ fontFamily: 'Roboto' }}>{word.transcription}</Typography>
           <Typography>{word.wordTranslate}</Typography>
 
-          <StyledIconButton
-            color="secondary"
-            aria-label="listen translate"
-            onClick={() => switchPlay()}
-          >
+          <StyledIconButton color="secondary" aria-label="listen translate" onClick={switchPlay}>
             {!isPlay ? <VolumeUpIcon /> : <VolumeOffIcon />}
           </StyledIconButton>
-        </CardContent>
+        </StyledCardContent>
 
-        <CardActions sx={{ justifyContent: 'space-between' }}>
+        <StyledCardActions>
           <Button color="secondary" variant="outlined" size="small" onClick={handleOpen}>
             Описание
           </Button>
           {isUser ? <OptionalBtns word={word} onDataChanged={onDataChanged} /> : null}
-        </CardActions>
-      </Card>
+        </StyledCardActions>
+      </StyledCard>
 
       <WordCardBackdrop
         word={word}
@@ -123,6 +92,25 @@ export default function WordCard({ word, userWords, isUser, onDataChanged }: Exp
     </>
   );
 }
+
+interface StyledCardProps extends CardProps {
+  background?: string;
+}
+const StyledCard = styled(Card)<StyledCardProps>(
+  ({ background }) => `
+  min-width: 280px;
+  border-radius: 12px;
+  background-color: ${background};
+`
+);
+
+const StyledCardContent = styled(CardContent)`
+  position: relative;
+`;
+
+const StyledCardActions = styled(CardActions)`
+  justify-content: space-between;
+`;
 
 const StyledIconButton = styled(IconButton)`
   position: absolute;
