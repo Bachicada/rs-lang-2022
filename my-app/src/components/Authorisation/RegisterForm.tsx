@@ -121,13 +121,11 @@ export default function RegForm() {
 
   return (
     <Container component="main" maxWidth="xs">
-      <Box
+      <StyledBox
         sx={{
-          marginBottom: 8,
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
-          padding: 0,
         }}
       >
         <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
@@ -203,7 +201,7 @@ export default function RegForm() {
 
           {userError ? <ErrorBox>{userError}</ErrorBox> : ''}
         </Box>
-      </Box>
+      </StyledBox>
     </Container>
   );
 }
@@ -211,6 +209,17 @@ export default function RegForm() {
 const StyledSpan = styled('span')`
   margin-left: 10px;
   color: blue;
+`;
+
+const StyledBox = styled(Box)`
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 5px 5px 5px rgb(0 0 0 / 14%);
+  background-color: #ffffff9c;
+  cursor: pointer;
+  -webkit-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
+  margin-top: 20px;
 `;
 
 const ErrorBox = styled('div')`
