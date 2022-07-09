@@ -5,10 +5,8 @@ export const getNewWords = async () => {
   if (!userJSON) {
     return 'no info';
   }
+
   const { userId, token } = JSON.parse(userJSON);
-  // const smth = '{"$or":[{"userWord.difficulty":"hard"},{"group": 5}]}'
-  // const smth = '{$and: [{"userWord.difficulty":"hard"}, { "group": 2 }]}'
-  // const smth = '{"$and":[{"userWord.difficulty":"new"},{"wordsPerPage": 3600}]}'
   const filter = '{"userWord.difficulty":"new"}';
 
   const response = await fetch(

@@ -1,4 +1,4 @@
-import React, { FC, PropsWithChildren, useEffect } from 'react';
+import { FC, PropsWithChildren, useEffect } from 'react';
 import { getNewUserToken } from '../services/UserService';
 import { useUserContext } from '../store/hooks';
 

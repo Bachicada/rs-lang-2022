@@ -4,7 +4,7 @@ import CardMedia from '@mui/material/CardMedia';
 import CardContent from '@mui/material/CardContent';
 import CardActions from '@mui/material/CardActions';
 import IconButton from '@mui/material/IconButton';
-import { IUserWord, WordCardProp } from '../../types/types';
+import { IUserWord, WordItem } from '../../types/types';
 import { API_URL, CARD_COLORS } from '../../utils/Constants';
 import { Button, Typography } from '@mui/material';
 import { useState } from 'react';
@@ -14,12 +14,14 @@ import VolumeOffIcon from '@mui/icons-material/VolumeOff';
 import WordCardBackdrop from './WordCardBackdrop';
 import useGetWordAudio from '../../hooks/useGetWordAudio';
 
-interface ExpandWordCardProp extends WordCardProp {
+type Props = {
+  word: WordItem;
   userWords: IUserWord[];
   isUser: boolean;
-}
+  onDataChanged: () => void;
+};
 
-export default function WordCard({ word, userWords, isUser, onDataChanged }: ExpandWordCardProp) {
+export default function WordCard({ word, userWords, isUser, onDataChanged }: Props) {
   const [isOpen, setIsOpen] = useState(false);
 
   const userWord = userWords.find((userWord) => word.id === userWord.wordId);

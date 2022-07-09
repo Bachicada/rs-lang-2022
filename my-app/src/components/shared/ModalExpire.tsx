@@ -1,7 +1,7 @@
-import * as React from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
+import { useState } from 'react';
 
 const style = {
   position: 'absolute' as const,
@@ -16,7 +16,7 @@ const style = {
 };
 
 export default function ModalExpire(props: { open: boolean }) {
-  const [open, setOpen] = React.useState(props.open);
+  const [open, setOpen] = useState(props.open);
   const handleClose = () => setOpen(false);
 
   return (

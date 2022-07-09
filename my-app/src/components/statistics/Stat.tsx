@@ -1,5 +1,4 @@
 import { Box } from '@mui/material';
-import * as React from 'react';
 import styles from './stat.module.css';
 import Utils from '../../utils/Utils';
 import Chart from './Chart';

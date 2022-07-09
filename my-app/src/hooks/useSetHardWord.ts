@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { createUserWord } from '../services/UserWordService';
 import { UserWord } from '../types/types';
 import { WORD_STATUS } from '../utils/Constants';

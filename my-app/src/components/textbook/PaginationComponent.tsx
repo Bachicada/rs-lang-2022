@@ -18,7 +18,6 @@ const PaginationComponent = ({ page, part }: Props) => {
         boundaryCount={4}
         siblingCount={2}
         page={parseInt(page ?? 1, 10)}
-        // page={(page && parseInt(page, 10)) || 1}
         count={30}
         variant="outlined"
         shape="rounded"

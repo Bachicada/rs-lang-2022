@@ -63,7 +63,7 @@ export interface UserWordItem {
 }
 
 export interface UserWord {
-  difficulty: string;
+  difficulty: WORD_STATUS;
   optional: {
     failCounter: number;
     successCounter: number;
@@ -82,18 +82,6 @@ export interface IUserWord {
   wordId: string;
 }
 
-export interface WordCardProp {
-  word: WordItem;
-  onDataChanged: () => void;
-}
-export interface WordStatProp {
-  word: WordItem;
-}
-
-export interface FormProps {
-  hasAccount: boolean;
-}
-
 export type CardColors = {
   [key in WORD_STATUS]?: string;
 };
@@ -101,3 +89,21 @@ export type CardColors = {
 export type CustomError = {
   message: string;
 };
+
+export interface UpdatedUserWord {
+  difficulty: WORD_STATUS;
+  optional?: {
+    failCounter: number;
+    successCounter: number;
+  };
+}
+
+export interface ICreateUserWord {
+  wordId: string;
+  word: UserWord;
+}
+
+export interface IUpdateUserWord {
+  wordId: string;
+  word: UpdatedUserWord;
+}

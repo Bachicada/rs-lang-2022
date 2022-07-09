@@ -1,4 +1,3 @@
-import * as React from 'react';
 import GamesMenu from './GamesMenu';
 import PartOfTextBook from './PartOfTextbook';
 import TextbookPartsMenu from './TextbookPartsMenu';

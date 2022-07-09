@@ -63,7 +63,7 @@ export const getNewToken = async () => {
   });
 
   if (response.ok) {
-    return response;
+    return response.json();
   }
 
   throw new Error('Token error!');

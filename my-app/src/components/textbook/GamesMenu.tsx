@@ -1,16 +1,15 @@
-import * as React from 'react';
 import { APP_ROUTES } from '../../utils/Constants';
 import { Link, useParams } from 'react-router-dom';
-import styles from './textbook.module.css';
 import Utils from '../../utils/Utils';
-import { Button, Menu, MenuItem } from '@mui/material';
+import { Button, Menu, MenuItem, styled } from '@mui/material';
 import SportsEsportsIcon from '@mui/icons-material/SportsEsports';
+import { useState } from 'react';
 
 export default function GamesMenu() {
   const params = useParams<{ part: string; page: string }>();
   Utils.setParams(params);
 
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -44,17 +43,17 @@ export default function GamesMenu() {
         }}
       >
         <MenuItem onClick={handleClose}>
-          <Link to={APP_ROUTES.SPRINT} className={styles.gameLink}>
-            Спринт
-          </Link>
+          <StyledLink to={APP_ROUTES.SPRINT}>Спринт</StyledLink>
         </MenuItem>
 
         <MenuItem onClick={handleClose}>
-          <Link to={APP_ROUTES.AUDIOCALL} className={styles.gameLink}>
-            Аудиовызов
-          </Link>
+          <StyledLink to={APP_ROUTES.AUDIOCALL}>Аудиовызов</StyledLink>
         </MenuItem>
       </Menu>
     </div>
   );
 }
+
+const StyledLink = styled(Link)`
+  color: #000;
+`;

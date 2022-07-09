@@ -33,12 +33,10 @@ export const useGetSprintWords = ({ level, part, page }: Props) => {
         } else if (part === 'hardwords') {
           Utils.getHardQuestions().then((result) => {
             setResponse(result);
-            // dispatch({ type: SprintActionTypes.PRELOAD, payload: { randomData, level: part } });
           });
         } else if (page !== null && part !== null) {
           Utils.getPreparedQuestions(page, +part).then((result) => {
             setResponse(result);
-            // dispatch({ type: SprintActionTypes.PRELOAD, payload: { randomData, level: part } });
           });
         }
       } catch (err) {
