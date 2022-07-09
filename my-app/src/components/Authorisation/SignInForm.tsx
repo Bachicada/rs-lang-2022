@@ -161,6 +161,7 @@ export default function SignInForm() {
             variant="contained"
             sx={{ mt: 3, mb: 1 }}
             disabled={!!passwordError || !!emailError}
+            color="secondary"
           >
             Войти
           </Button>
@@ -168,14 +169,15 @@ export default function SignInForm() {
           <Button
             fullWidth
             variant="contained"
-            sx={{ mb: 2, background: 'darkseagreen' }}
+            sx={{ mb: 2, border: '1px solid' }}
+            color="primary"
             onClick={handleGuestLogin}
           >
             Гостевой вход
           </Button>
 
           <Grid container>
-            <Grid item>
+            <Grid item sx={{ fontFamily: 'Roboto' }}>
               <span>Впервые на сайте? </span>
               <Link to={APP_ROUTES.REGFORM}>
                 <StyledSpan>Создать аккаунт</StyledSpan>
@@ -191,7 +193,6 @@ export default function SignInForm() {
 }
 
 const StyledSpan = styled('span')`
-  margin-left: 10px;
   color: blue;
 `;
 

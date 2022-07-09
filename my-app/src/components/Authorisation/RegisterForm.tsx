@@ -191,7 +191,7 @@ export default function RegForm() {
           </Button>
 
           <Grid container>
-            <Grid item>
+            <Grid item sx={{ fontFamily: 'Roboto' }}>
               <span>Уже есть аккаунт?</span>
               <Link to={APP_ROUTES.SIGNIN}>
                 <StyledSpan>Войти</StyledSpan>
