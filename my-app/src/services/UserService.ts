@@ -43,10 +43,10 @@ export const loginUser = async (user: NewUser) => {
       throw new Error('Введен неверный пароль');
     }
     case 200: {
-      return rawResponse;
+      return rawResponse.json();
     }
     default: {
-      return rawResponse;
+      return rawResponse.json();
     }
   }
 };

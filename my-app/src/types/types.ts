@@ -97,3 +97,7 @@ export interface FormProps {
 export type CardColors = {
   [key in WORD_STATUS]?: string;
 };
+
+export type CustomError = {
+  message: string;
+};

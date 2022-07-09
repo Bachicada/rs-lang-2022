@@ -1,50 +1,42 @@
-import * as React from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
-import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { APP_ROUTES } from '../../../utils/Constants';
 import { loginUser } from '../../../services/UserService';
-import { CurUser, NewUser } from '../../../types/types';
+import { CustomError, NewUser } from '../../../types/types';
 import { Link, useNavigate } from 'react-router-dom';
-import { LoadingIcon } from '../../shared/LoadingIcon';
 
 import styles from './autorisation.module.css';
 import { useUserContext } from '../../../store/hooks';
-// import { UserContext } from '../../../App';
-
-const theme = createTheme();
+import Loading from '../../shared/Loading';
 
 export default function SignInForm() {
-  const [validUser, setValidUser] = useState(true);
-  console.log('a');
-  const userInfo: CurUser = {};
+  const [user, dispatch] = useUserContext();
+  const [userError, setUserError] = useState('');
+
+  const [isLoading, setIsLoading] = useState(false);
+
+  const [email, setEmail] = useState('');
+  const [emailError, setEmailError] = useState('');
+
+  const [password, setPassword] = useState('');
+  const [passwordError, setPasswordError] = useState('');
 
   const navigate = useNavigate();
 
-  const [email, setEmail] = useState('');
-  const [emailError, setEmailError] = useState(false);
-  const [emailErrorText, setEmailErrorText] = useState('');
-
-  const [password, setPassword] = useState('');
-  const [passError, setPassError] = useState(false);
-  const [passErrorText, setPassErrorText] = useState('');
-
   function emailValidation(inputEmail: string) {
-    const regEm = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-    if (regEm.test(inputEmail)) {
-      setEmailError(false);
-      setEmailErrorText('');
+    const regExp = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+
+    if (regExp.test(inputEmail)) {
+      setEmailError('');
     } else {
-      setEmailError(true);
-      setEmailErrorText('Введите корректный адрес почты');
+      setEmailError('Введите корректный адрес почты');
     }
   }
 
@@ -56,11 +48,9 @@ export default function SignInForm() {
 
   function passValidation(inputPass: string) {
     if (inputPass && inputPass.length > 7) {
-      setPassError(false);
-      setPassErrorText('');
+      setPasswordError('');
     } else {
-      setPassError(true);
-      setPassErrorText('Пароль должен содержать минимум 8 символов');
+      setPasswordError('Пароль должен содержать минимум 8 символов');
     }
   }
 
@@ -70,142 +60,134 @@ export default function SignInForm() {
     passValidation(inputPass);
   };
 
-  // const { dispatchUserEvent } = React.useContext<{
-  //   user: CurUser;
-  //   dispatchUserEvent: (actionType: string, payload: CurUser) => void;
-  // }>(UserContext);
-
-  const [user, dispatch] = useUserContext();
-
-  const [loadingState, setLoadingState] = useState(false);
-
   const handleGuestLogin = async (e: React.MouseEvent) => {
     e.preventDefault();
 
-    const curUser: NewUser = {
+    const currentUser: NewUser = {
       email: 'guest@mail.ru',
       password: 'guest1234',
     };
 
-    const dataUser = await loginUser(curUser);
-    updateUser(dataUser);
+    updateUser(currentUser);
   };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    setIsLoading(true);
+
     const data = new FormData(event.currentTarget);
 
-    const curUser: NewUser = {
+    const currentUser: NewUser = {
       email: data.get('email') as string,
       password: data.get('password') as string,
     };
 
-    const dataUser = await loginUser(curUser);
-    updateUser(dataUser);
+    updateUser(currentUser);
   };
 
-  const updateUser = async (dataUser: void | Response | undefined) => {
-    if (dataUser) {
-      const currentUser = (await dataUser.json()) as CurUser;
+  const updateUser = async (currentUser: NewUser) => {
+    try {
+      const dataUser = await loginUser(currentUser);
+      const { message, userId, token, refreshToken, name } = dataUser;
+      const newUser = { message, userId, token, refreshToken, name };
 
-      userInfo.message = currentUser.message;
-      userInfo.userId = currentUser.userId;
-      userInfo.token = currentUser.token;
-      userInfo.refreshToken = currentUser.refreshToken;
-      userInfo.name = currentUser.name;
+      localStorage.setItem('CurrentUser', JSON.stringify(newUser));
+      dispatch({ type: 'UPDATE_USER', payload: newUser });
 
-      localStorage.setItem('CurrentUser', JSON.stringify(userInfo));
-      dispatch({ type: 'UPDATE_USER', payload: userInfo });
-      // dispatchUserEvent('UPDATE_USER', userInfo);
-      setValidUser(true);
-      setLoadingState(true);
+      setUserError('');
       navigate(APP_ROUTES.MAIN);
-    } else {
-      setValidUser(false);
+    } catch (e) {
+      setUserError((e as CustomError).message);
     }
+
+    setIsLoading(false);
   };
+
+  if (isLoading) {
+    return <Loading />;
+  }
 
   return (
-    <ThemeProvider theme={theme}>
-      <Container component="main" maxWidth="xs">
-        <CssBaseline />
-        <Box
-          sx={{
-            marginBottom: 8,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            padding: 0,
-          }}
-        >
-          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-            <LockOutlinedIcon />
-          </Avatar>
-          <Typography component="h1" variant="h5">
-            Авторизация
-          </Typography>
-          <Box component="form" onSubmit={handleSubmit} noValidate>
-            <TextField
-              error={emailError}
-              helperText={emailErrorText}
-              onChange={emailHandler}
-              value={email}
-              margin="normal"
-              required
-              fullWidth
-              id="email"
-              label="Эл.почта"
-              name="email"
-              autoComplete="email"
-              autoFocus
-            />
-            <TextField
-              error={passError}
-              helperText={passErrorText}
-              onChange={passHandler}
-              value={password}
-              margin="normal"
-              required
-              fullWidth
-              name="password"
-              label="Пароль"
-              type="password"
-              id="password"
-              autoComplete="current-password"
-            />
+    <Container component="main" maxWidth="xs">
+      <Box
+        sx={{
+          marginBottom: 8,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          padding: 0,
+        }}
+      >
+        <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+          <LockOutlinedIcon />
+        </Avatar>
 
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 1 }}
-              disabled={passError || emailError}
-            >
-              Войти
-            </Button>
+        <Typography component="h1" variant="h5">
+          Авторизация
+        </Typography>
 
-            <Button
-              fullWidth
-              variant="contained"
-              sx={{ mb: 2, background: 'darkseagreen' }}
-              onClick={handleGuestLogin}
-            >
-              Гостевой вход
-            </Button>
+        <Box component="form" onSubmit={handleSubmit} noValidate>
+          <TextField
+            error={!!emailError}
+            helperText={emailError}
+            onChange={emailHandler}
+            value={email}
+            margin="normal"
+            required
+            fullWidth
+            id="email"
+            label="Эл.почта"
+            name="email"
+            autoComplete="email"
+            autoFocus
+          />
 
-            <Grid container>
-              <Grid item>
-                <span>Впервые на сайте? </span>
-                <Link to={APP_ROUTES.REGFORM}>
-                  <span className={styles.formLink}>Создать аккаунт</span>
-                </Link>
-              </Grid>
+          <TextField
+            error={!!passwordError}
+            helperText={passwordError}
+            onChange={passHandler}
+            value={password}
+            margin="normal"
+            required
+            fullWidth
+            name="password"
+            label="Пароль"
+            type="password"
+            id="password"
+            autoComplete="current-password"
+          />
+
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            sx={{ mt: 3, mb: 1 }}
+            disabled={!!passwordError || !!emailError}
+          >
+            Войти
+          </Button>
+
+          <Button
+            fullWidth
+            variant="contained"
+            sx={{ mb: 2, background: 'darkseagreen' }}
+            onClick={handleGuestLogin}
+          >
+            Гостевой вход
+          </Button>
+
+          <Grid container>
+            <Grid item>
+              <span>Впервые на сайте? </span>
+              <Link to={APP_ROUTES.REGFORM}>
+                <span className={styles.formLink}>Создать аккаунт</span>
+              </Link>
             </Grid>
-            {validUser ? '' : <div className={styles.errorBox}>Неверный логин/пароль</div>}
-            {loadingState ? <LoadingIcon /> : ''}
-          </Box>
+          </Grid>
+
+          {userError ? <div className={styles.errorBox}>{userError}</div> : null}
         </Box>
-      </Container>
-    </ThemeProvider>
+      </Box>
+    </Container>
   );
 }
