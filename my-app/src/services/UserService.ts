@@ -17,10 +17,10 @@ export async function createUser(user: NewUser) {
       throw new Error('Пользователь с такими данными уже существует');
     }
     case 200: {
-      return rawResponse;
+      return rawResponse.json();
     }
     default: {
-      return rawResponse;
+      return rawResponse.json();
     }
   }
 }
