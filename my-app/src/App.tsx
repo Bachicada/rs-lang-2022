@@ -22,9 +22,9 @@ function App() {
 
   return (
     <ThemeProvider theme={theme}>
-      <UserContext.Provider value={value}>
-        <UserChecker>
-          <div className="app">
+      <div className="app">
+        <UserContext.Provider value={value}>
+          <UserChecker>
             <Header />
 
             <div id="mainContainer">
@@ -46,9 +46,9 @@ function App() {
             </div>
 
             <Footer />
-          </div>
-        </UserChecker>
-      </UserContext.Provider>
+          </UserChecker>
+        </UserContext.Provider>
+      </div>
     </ThemeProvider>
   );
 }

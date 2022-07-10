@@ -1,4 +1,4 @@
-import { Box } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import styles from './stat.module.css';
 import Utils from '../../utils/Utils';
 import Chart from './Chart';
@@ -6,10 +6,13 @@ import ChartTitle from './ChartTitle';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import { APP_ROUTES } from '../../utils/Constants';
+import { useUserContext } from '../../store/hooks';
 
 const Statistics = () => {
-  if (!localStorage.getItem('CurrentUser')) {
-    return <p>Войдите в аккаунт, чтобы посмотреть статистику</p>;
+  const [user, dispatch] = useUserContext();
+
+  if (!user.userId) {
+    return <Typography>Войдите в аккаунт, чтобы посмотреть статистику</Typography>;
   }
 
   return (

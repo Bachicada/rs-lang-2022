@@ -51,6 +51,10 @@ const UserChecker: FC<PropsWithChildren> = ({ children }) => {
     checkUser();
   }, [dispatch]);
 
+  if (isLoading) {
+    return <Loading />;
+  }
+
   // {/* <ModalExpire open={expireStatus} /> */}
   return <>{children}</>;
 };
