@@ -107,3 +107,11 @@ export interface IUpdateUserWord {
   wordId: string;
   word: UpdatedUserWord;
 }
+
+export interface UserStatistics {
+  learnedWords: number;
+  optional: {
+    sprint: string;
+    audiocall: string;
+  };
+}
