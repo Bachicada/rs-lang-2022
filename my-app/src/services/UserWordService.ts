@@ -152,11 +152,12 @@ export const updateUserWord = async ({ wordId, word }: ICreateUserWord) => {
   };
 
   const [aggrWord] = await getUserAggrWordById(wordId);
+
   if (aggrWord.userWord?.difficulty) {
     options.method = 'PUT';
     const updWord = { ...word };
-    updWord.optional.failCounter += aggrWord[0].userWord.optional.failCounter;
-    updWord.optional.successCounter += aggrWord[0].userWord.optional.successCounter;
+    updWord.optional.failCounter += aggrWord.userWord.optional.failCounter;
+    updWord.optional.successCounter += aggrWord.userWord.optional.successCounter;
     options.body = JSON.stringify(updWord);
   }
 

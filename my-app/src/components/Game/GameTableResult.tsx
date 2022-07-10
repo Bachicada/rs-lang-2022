@@ -25,6 +25,9 @@ const GameTableResultComponent = ({ answers, newWords, setScore }: Props) => {
   const [open, setOpen] = useState(false);
   const [isMutated, setIsMutated] = useState(false);
 
+  console.log('answers: ', answers);
+  console.log('newWords: ', newWords);
+
   useEffect(() => {
     const userJSON = localStorage.getItem('CurrentUser');
     if (!userJSON) {
