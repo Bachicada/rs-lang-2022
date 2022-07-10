@@ -87,3 +87,23 @@ export const getNewUserToken = async ({ refreshToken, userId }: GetNewUserToken)
 
   throw new Error('Token error!');
 };
+
+type GetUser = {
+  userId: string;
+  token: string;
+};
+
+export const getUser = async ({ userId, token }: GetUser) => {
+  const response = await fetch(`${API_URL}${ENDPOINTS.USERS}/${userId}`, {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  if (response.ok) {
+    return response.json();
+  }
+
+  throw new Error('Access is missing!');
+};

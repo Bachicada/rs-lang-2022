@@ -8,7 +8,7 @@ import { APP_ROUTES } from './utils/Constants';
 import Textbook from './components/textbook/Textbook';
 import Sprint from './pages/sprint/Sprint';
 import Audiocall from './pages/audiocall/Audiocall';
-import Stat from './components/statistics/Stat';
+import Statistics from './components/statistics/Statistics';
 import SignInForm from './components/Authorisation/SignInForm';
 import RegForm from './components/Authorisation/RegisterForm';
 import { ThemeProvider } from '@mui/material';
@@ -39,7 +39,7 @@ function App() {
 
                 <Route path={APP_ROUTES.SPRINT} element={<Sprint />} />
                 <Route path={APP_ROUTES.AUDIOCALL} element={<Audiocall />} />
-                <Route path={APP_ROUTES.STATISTICS} element={<Stat />} />
+                <Route path={APP_ROUTES.STATISTICS} element={<Statistics />} />
 
                 <Route path="*" element={<Landing />} />
               </Routes>
