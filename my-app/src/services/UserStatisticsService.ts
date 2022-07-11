@@ -89,6 +89,7 @@ type UpdateUserStatistics = {
   learnedWords?: number;
   options?: any;
 };
+let body: any;
 
 export const updateUserStatistics = async ({ learnedWords, options }: UpdateUserStatistics) => {
   const userJSON = localStorage.getItem('CurrentUser');
@@ -96,39 +97,39 @@ export const updateUserStatistics = async ({ learnedWords, options }: UpdateUser
     return 'no info';
   }
   const { userId, token } = JSON.parse(userJSON);
-  console.log('PROPS: ', learnedWords, options);
-  const currentStatistics = await getUserStatistics();
-  console.log('curr options : ', currentStatistics?.options?.data);
-  const currentOptions = await JSON.parse(currentStatistics?.options?.data || '[]');
-  console.log('currentStatistics', currentStatistics);
-  console.log('currentOptions', currentOptions);
 
-  let isNewDate = false;
-  const key = Object.keys(options)[0];
+  try {
+    const currentStatistics = await getUserStatistics();
+    const currentOptions = await JSON.parse(currentStatistics?.optional?.data || '[]');
 
-  currentOptions.forEach((item: any) => {
-    if (item[key]) {
-      isNewDate = true;
-      item[key] += options[key];
+    let isNewDate = false;
+    const key = Object.keys(options)[0];
+    console.log('CURRENT OPTIONS: ', currentOptions);
+    currentOptions.forEach((item: any) => {
+      if (item[key]) {
+        isNewDate = true;
+        item[key] += options[key];
+      }
+    });
+
+    if (!isNewDate) {
+      currentOptions.push(options);
     }
-  });
 
-  if (!isNewDate) {
-    currentOptions.push(options);
+    body = {
+      learnedWords,
+      optional: {
+        data: JSON.stringify(currentOptions),
+      },
+    };
+  } catch (e) {
+    body = {
+      learnedWords,
+      optional: {
+        data: JSON.stringify([]),
+      },
+    };
   }
-
-  console.log('currentOptions NEW: ', currentOptions);
-
-  const body = {
-    learnedWords,
-    optional: {
-      data: JSON.stringify(currentOptions),
-      // data: currentOptions,
-    },
-  };
-
-  console.log('body: ', body);
-  console.log('body JSON: ', JSON.stringify(body));
 
   const rawResponse = await fetch(`${API_URL}${ENDPOINTS.USERS}/${userId}${ENDPOINTS.STATISTICS}`, {
     method: 'PUT',

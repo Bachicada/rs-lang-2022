@@ -55,6 +55,7 @@ const GameTableResultComponent = ({ answers, newWords, setScore }: Props) => {
 
     const update = async () => {
       try {
+        console.log('GAMETABLE: NEW DATA SENDED TO UPD: ', newData);
         await updateUserStatistics({ learnedWords: wordsCount, options: newData });
       } catch (e) {
         const { message } = e as Error;

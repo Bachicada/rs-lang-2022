@@ -29,7 +29,7 @@ const Statistics = () => {
     if (response?.optional?.data) {
       const arr = JSON.parse(response.optional.data);
       console.log('statistics : ', arr);
-
+      console.log(Array.isArray(arr));
       const keys = arr.map((item: any) => Object.keys(item)).flat();
       const values = arr.map((item: any) => Object.values(item)).flat();
       setLabels(keys);
@@ -49,7 +49,7 @@ const Statistics = () => {
     <Container maxWidth="lg">
       <Grid container spacing={1}>
         <Grid item xs={4}>
-          Всего новых слов: {response?.learnedWords} слов
+          Всего новых слов: {response?.learnedWords || 0} слов
         </Grid>
         <Grid item xs={4}>
           Сложных: {responseHard.length} слов
@@ -63,19 +63,18 @@ const Statistics = () => {
         <Grid item xs={6}>
           <Chart
             title="Изученные слова за каждый день"
-            labels={['10/07/22', '11/07/22', '12/07/22']}
+            labels={labels}
             lineTitle={'Кол-во слов'}
-            data={[220, 60, 30]}
+            data={values}
           />
         </Grid>
 
         <Grid item xs={6}>
           <Chart
             title="Всего изучено слов"
-            // labels={['10/07/22', '11/07/22', '12/07/22']}
-            labels={labels}
+            labels={['10/07/22', '11/07/22', '12/07/22']}
             lineTitle={'Кол-во слов'}
-            data={values}
+            data={[100, 200, 300]}
           />
         </Grid>
       </Grid>
