@@ -8,12 +8,17 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { Dispatch, forwardRef, memo, useEffect, useMemo, useState } from 'react';
 import { Skeleton } from '@mui/material';
-import { createUserStatistics, getUserStatistics } from '../../services/UserStatisticsService';
+import {
+  createUserStatistics,
+  getUserStatistics,
+  updateUserStatistics,
+} from '../../services/UserStatisticsService';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
 import { GameAnswers, SprintReducerAction, SprintActionTypes } from '../../types/sprintTypes';
 import { WordItem } from '../../types/types';
 import Toast from '../shared/Toast';
+import { useGetUserAggregatedWords } from '../../hooks/useGetAllUserAggregatedWords';
 
 type Props = {
   answers: GameAnswers[];
@@ -25,8 +30,40 @@ const GameTableResultComponent = ({ answers, newWords, setScore }: Props) => {
   const [open, setOpen] = useState(false);
   const [isMutated, setIsMutated] = useState(false);
 
-  console.log('answers: ', answers);
-  console.log('newWords: ', newWords);
+  const { response } = useGetUserAggregatedWords();
+  const wordsCount = response?.totalCount[0].count;
+
+  useEffect(() => {
+    if (!wordsCount || !answers.length) {
+      return;
+    }
+
+    const count = answers.reduce((prev, curr) => {
+      const { failCounter, successCounter } = curr;
+      const counter = (failCounter || 0) + (successCounter || 0);
+
+      if (counter === 1) {
+        return prev + 1;
+      }
+
+      return prev;
+    }, 0);
+
+    const newData = {
+      [new Date().toLocaleDateString()]: count,
+    };
+
+    const update = async () => {
+      try {
+        await updateUserStatistics({ learnedWords: wordsCount, options: newData });
+      } catch (e) {
+        const { message } = e as Error;
+        alert(message);
+      }
+    };
+
+    update();
+  }, [wordsCount]);
 
   useEffect(() => {
     const userJSON = localStorage.getItem('CurrentUser');
@@ -77,7 +114,6 @@ const GameTableResultComponent = ({ answers, newWords, setScore }: Props) => {
 
           <TableBody>
             {answers.map(({ answer, item, failCounter, successCounter }, idx) => {
-              console.log(failCounter, successCounter);
               const isFailCounter = failCounter || failCounter === 0;
               const isSuccessCounter = successCounter || successCounter === 0;
 

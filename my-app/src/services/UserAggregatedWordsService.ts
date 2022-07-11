@@ -101,3 +101,29 @@ export const getUserAggrWordById = async (wordId: string) => {
 
   throw new Error('Something went wrong with aggregated word by id');
 };
+
+export const getAllUserAggrWords = async () => {
+  const userJSON = localStorage.getItem('CurrentUser');
+  if (!userJSON) {
+    return 'no info';
+  }
+  const { userId, token } = JSON.parse(userJSON);
+  const filter = `{"$or":[{"userWord.difficulty":"learned"}, {"userWord.difficulty":"new"}, {"userWord.difficulty":"hard"}]}`;
+
+  const response = await fetch(
+    `${API_URL}${ENDPOINTS.USERS}/${userId}/AggregatedWords?filter=${filter}`,
+    {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: 'application/json',
+      },
+    }
+  );
+
+  if (response.ok) {
+    return response.json();
+  }
+
+  throw new Error('Something went wrong with aggregated words');
+};
