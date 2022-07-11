@@ -8,20 +8,52 @@ export const useGetUserStatistics = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const fetchData = async () => {
+    let isMounted = true;
+
+    const fetchData = () => {
       try {
-        const statistics = await getUserStatistics();
-        setResponse(statistics);
+        getUserStatistics().then((statistics) => {
+          if (isMounted) {
+            setResponse(statistics);
+          }
+        });
       } catch (err) {
         const { message } = err as Error;
-        setError(message);
+        if (isMounted) {
+          setError(message);
+        }
       } finally {
-        setIsLoading(false);
+        if (isMounted) {
+          setIsLoading(false);
+        }
       }
     };
 
-    fetchData();
+    if (isMounted) {
+      fetchData();
+    }
+
+    return () => {
+      isMounted = false;
+    };
   }, []);
+  // useEffect(() => {
+  //   let isMounted = true;
+
+  //   const fetchData = async () => {
+  //     try {
+  //       const statistics = await getUserStatistics();
+  //       setResponse(statistics);
+  //     } catch (err) {
+  //       const { message } = err as Error;
+  //       setError(message);
+  //     } finally {
+  //       setIsLoading(false);
+  //     }
+  //   };
+
+  //   fetchData();
+  // }, []);
 
   return { response, error, isLoading };
 };

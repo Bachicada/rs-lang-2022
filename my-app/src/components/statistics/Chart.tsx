@@ -10,13 +10,6 @@ import {
   Legend,
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
-import {
-  createUserWord,
-  deleteUserWord,
-  getUserWordById,
-  getUserAllWords,
-} from '../../services/UserWordService';
-import { createUserStatistics, getUserStatistics } from '../../services/UserStatisticsService';
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
@@ -27,33 +20,52 @@ interface ChartProps {
   data: number[];
 }
 
-// const userWords = getUserWords();
-//   userWords.then((result) => console.log(result));
-// deleteUserWord('5e9f5ee35eb9e72bc21af718');
-//   getUserWord('5e9f5ee35eb9e72bc21af718').then((res) => console.log(res ? res : 'not found'));
-//   createUserWord({
-//     wordId: "5e9f5ee35eb9e72bc21af718",
-//     word: { difficulty: "hard", optional: {testFieldString: 'tessssst', testFieldBoolean: true} }
-//   });
-// interface UserStatistics {
-//   learnedWords: number;
-//   optional: UserStatisticsOptional;
-// }
-// createUserStatistics({learnedWords: 30, optional: {sprint: '[rightAnswers:30, wrongAnswers:0] 123'}});
-// createUserStatistics({learnedWords: 30, optional: {audiocall: '[rightAnswers:20, wrongAnswers:10] 123'}});
-// createUserStatistics({learnedWords: 333, optional: {}});
-getUserStatistics().then((res) => console.log(res));
+const family = 'Roboto';
 
 const Chart = ({ data, labels, lineTitle, title }: ChartProps) => {
   const options = {
     responsive: true,
+    maintainAspectRatio: false,
+    scales: {
+      x: {
+        ticks: {
+          font: {
+            size: 14,
+            family,
+          },
+        },
+      },
+      y: {
+        ticks: {
+          font: {
+            size: 14,
+            family,
+          },
+        },
+      },
+    },
     plugins: {
       legend: {
         position: 'top' as const,
+        labels: {
+          font: {
+            size: 14,
+            family,
+          },
+        },
       },
       title: {
         display: true,
         text: title,
+        font: {
+          family,
+          weight: '400',
+        },
+      },
+    },
+    elements: {
+      line: {
+        borderWidth: 1,
       },
     },
   };
@@ -64,8 +76,8 @@ const Chart = ({ data, labels, lineTitle, title }: ChartProps) => {
       {
         label: lineTitle,
         data,
-        borderColor: '#000',
-        backgroundColor: '#fff',
+        borderColor: '#eda1cb',
+        backgroundColor: '#5287fb',
       },
     ],
   };

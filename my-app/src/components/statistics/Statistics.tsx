@@ -1,4 +1,4 @@
-import { Box, Container, Grid, Typography } from '@mui/material';
+import { Box, Container, Grid, Stack, styled, Typography } from '@mui/material';
 import styles from './stat.module.css';
 import Utils from '../../utils/Utils';
 import Chart from './Chart';
@@ -10,6 +10,7 @@ import { useUserContext } from '../../store/hooks';
 import { useGetUserStatistics } from '../../hooks/useGetUserStatistics';
 import Loading from '../shared/Loading';
 import { useGetUserAggregatedWords } from '../../hooks/useGetUserAggregatedWords';
+import TextStatistics from './TextStatistics';
 
 const Statistics = () => {
   const [labels, setLabels] = useState<string[]>([]);
@@ -28,10 +29,9 @@ const Statistics = () => {
   useEffect(() => {
     if (response?.optional?.data) {
       const arr = JSON.parse(response.optional.data);
-      console.log('statistics : ', arr);
-      console.log(Array.isArray(arr));
       const keys = arr.map((item: any) => Object.keys(item)).flat();
       const values = arr.map((item: any) => Object.values(item)).flat();
+
       setLabels(keys);
       setValues(values);
     }
@@ -46,40 +46,50 @@ const Statistics = () => {
   }
 
   return (
-    <Container maxWidth="lg">
-      <Grid container spacing={1}>
-        <Grid item xs={4}>
-          Всего новых слов: {response?.learnedWords || 0} слов
-        </Grid>
-        <Grid item xs={4}>
-          Сложных: {responseHard.length} слов
-        </Grid>
-        <Grid item xs={4}>
-          Изученных: {responseLearned.length} слов
-        </Grid>
-      </Grid>
+    <StyledContainer maxWidth="lg">
+      <TextStatistics
+        allWords={response?.learnedWords || 0}
+        hardWords={responseHard.length}
+        learnedWords={responseLearned.length}
+      />
 
-      <Grid container spacing={1}>
-        <Grid item xs={6}>
+      <Stack alignItems="center" direction={{ xs: 'column', lg: 'row' }} spacing={1}>
+        <Item>
           <Chart
             title="Изученные слова за каждый день"
             labels={labels}
             lineTitle={'Кол-во слов'}
             data={values}
           />
-        </Grid>
+        </Item>
 
-        <Grid item xs={6}>
+        <Item>
           <Chart
             title="Всего изучено слов"
             labels={['10/07/22', '11/07/22', '12/07/22']}
             lineTitle={'Кол-во слов'}
             data={[100, 200, 300]}
           />
-        </Grid>
-      </Grid>
-    </Container>
+        </Item>
+      </Stack>
+    </StyledContainer>
   );
 };
+
+const StyledContainer = styled(Container)`
+  padding-top: 20px;
+`;
+
+const Item = styled('div')`
+  width: 100%;
+  height: 300px;
+  padding: 10px;
+  border-radius: 4px;
+  font-family: Roboto;
+  box-shadow: 5px 5px 5pxrgb (0 0 0 / 14%);
+  text-align: center;
+  background-color: #ffffff85;
+  transition: all 0.2s ease-in-out;
+`;
 
 export default Statistics;
