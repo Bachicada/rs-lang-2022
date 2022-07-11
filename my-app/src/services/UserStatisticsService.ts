@@ -98,7 +98,8 @@ export const updateUserStatistics = async ({ learnedWords, options }: UpdateUser
   const { userId, token } = JSON.parse(userJSON);
   console.log('PROPS: ', learnedWords, options);
   const currentStatistics = await getUserStatistics();
-  const currentOptions = JSON.parse(currentStatistics?.options?.data || '[]');
+  console.log('curr options : ', currentStatistics?.options?.data);
+  const currentOptions = await JSON.parse(currentStatistics?.options?.data || '[]');
   console.log('currentStatistics', currentStatistics);
   console.log('currentOptions', currentOptions);
 

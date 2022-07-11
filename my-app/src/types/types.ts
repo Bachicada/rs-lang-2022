@@ -113,5 +113,6 @@ export interface UserStatistics {
   optional: {
     sprint: string;
     audiocall: string;
+    data: string;
   };
 }
