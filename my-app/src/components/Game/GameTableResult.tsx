@@ -6,16 +6,10 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import { Dispatch, forwardRef, memo, useEffect, useMemo, useState } from 'react';
+import { memo, useEffect, useState } from 'react';
 import { Skeleton } from '@mui/material';
-import {
-  createUserStatistics,
-  getUserStatistics,
-  updateUserStatistics,
-} from '../../services/UserStatisticsService';
-import Snackbar from '@mui/material/Snackbar';
-import MuiAlert, { AlertProps } from '@mui/material/Alert';
-import { GameAnswers, SprintReducerAction, SprintActionTypes } from '../../types/sprintTypes';
+import { updateUserStatistics } from '../../services/UserStatisticsService';
+import { GameAnswers } from '../../types/sprintTypes';
 import { WordItem } from '../../types/types';
 import Toast from '../shared/Toast';
 import { useGetUserAggregatedWords } from '../../hooks/useGetAllUserAggregatedWords';
@@ -55,7 +49,6 @@ const GameTableResultComponent = ({ answers, newWords, setScore }: Props) => {
 
     const update = async () => {
       try {
-        console.log('GAMETABLE: NEW DATA SENDED TO UPD: ', newData);
         await updateUserStatistics({ learnedWords: wordsCount, options: newData });
       } catch (e) {
         const { message } = e as Error;
@@ -86,13 +79,6 @@ const GameTableResultComponent = ({ answers, newWords, setScore }: Props) => {
     };
 
     getScores();
-
-    // const obj = [{
-    //   maxAnswersCount: quizState.maxAnswersCount,
-    //   allCorrectCount: quizState.allCorrectCount,
-    //   allIncorrectCount: quizState.allIncorrectCount,
-    //   date: new Date().toLocaleDateString(),
-    // }];
   }, [newWords, setScore]);
 
   return (

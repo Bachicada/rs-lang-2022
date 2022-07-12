@@ -167,6 +167,5 @@ export const updateUserWord = async ({ wordId, word }: ICreateUserWord) => {
   );
   const content = rawResponse.json();
 
-  console.log(options.method === 'POST' ? 'created word is ' : 'updated word is ', content);
   return content;
 };

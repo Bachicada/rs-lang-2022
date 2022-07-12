@@ -1,5 +1,6 @@
 import { FC, PropsWithChildren, useEffect, useState } from 'react';
 import Loading from '../components/shared/Loading';
+import Toast from '../components/shared/Toast';
 import { getNewUserToken, getUser } from '../services/UserService';
 import { useUserContext } from '../store/hooks';
 import { CustomError } from '../types/types';
@@ -7,6 +8,7 @@ import { CustomError } from '../types/types';
 const UserChecker: FC<PropsWithChildren> = ({ children }) => {
   const [user, dispatch] = useUserContext();
   const [isLoading, setIsLoading] = useState(false);
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     const currentUser = JSON.parse(localStorage.getItem('CurrentUser') || '{}');
@@ -23,7 +25,6 @@ const UserChecker: FC<PropsWithChildren> = ({ children }) => {
         dispatch({ type: 'UPDATE_USER', payload: currentUser });
         setIsLoading(false);
       } catch (e) {
-        alert((e as CustomError).message);
         await getRefreshToken();
       }
     };
@@ -41,7 +42,7 @@ const UserChecker: FC<PropsWithChildren> = ({ children }) => {
         });
         setIsLoading(false);
       } catch (e) {
-        alert((e as CustomError).message);
+        setOpen(true);
         dispatch({ type: 'CLEAR_USER' });
         localStorage.removeItem('CurrentUser');
         setIsLoading(false);
@@ -55,8 +56,12 @@ const UserChecker: FC<PropsWithChildren> = ({ children }) => {
     return <Loading />;
   }
 
-  // {/* <ModalExpire open={expireStatus} /> */}
-  return <>{children}</>;
+  return (
+    <>
+      <Toast open={open} title={'Ваша сессия истекла. Повторите попытку входа'} setOpen={setOpen} />
+      {children}
+    </>
+  );
 };
 
 export default UserChecker;

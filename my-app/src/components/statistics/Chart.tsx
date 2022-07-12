@@ -37,6 +37,12 @@ const Chart = ({ data, labels, lineTitle, title }: ChartProps) => {
       },
       y: {
         ticks: {
+          callback: function (value: string | number) {
+            if (Number.isInteger(+value)) {
+              return value;
+            }
+            return '';
+          },
           font: {
             size: 14,
             family,
