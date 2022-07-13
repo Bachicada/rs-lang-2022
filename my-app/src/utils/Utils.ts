@@ -30,12 +30,19 @@ const Utils = {
     const piece = [...arr].flat();
 
     const result = piece.map((item) => {
+      //Determines whether the answer will be the correct translation or not
+      const correct = Utils.random(0, 1) === 1;
+
+      //If need be - random incorrect translate
+      let incorrect = piece[Utils.random(0, piece.length - 1)].wordTranslate;
+      while (incorrect === item.wordTranslate) {
+        incorrect = piece[Utils.random(0, piece.length - 1)].wordTranslate;
+      }
+
       return {
-        item: item,
-        //Determines whether the answer will be the correct translation or not
-        correct: Utils.random(0, 1) === 1 ? true : false,
-        //If need be - random incorrect translate
-        incorrect: piece[Utils.random(0, 29)].wordTranslate,
+        item,
+        correct,
+        incorrect,
       };
     });
 
