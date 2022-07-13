@@ -15,6 +15,7 @@ import styles from './autorisation.module.css';
 import { useUserContext } from '../../store/hooks';
 import Loading from '../shared/Loading';
 import { styled } from '@mui/material';
+import Toast from '../shared/Toast';
 
 export default function RegForm() {
   const navigate = useNavigate();
@@ -27,6 +28,7 @@ export default function RegForm() {
   const [isLoading, setIsLoading] = useState(false);
   const [success, setSuccess] = useState(false);
 
+  const [openUserError, setOpenUserError] = useState(false);
   const [userError, setUserError] = useState('');
   const [user, dispatch] = useUserContext();
 
@@ -98,18 +100,18 @@ export default function RegForm() {
 
   const updateUser = async (newUser: NewUser) => {
     try {
-      const dataUser = await createUser(newUser);
-      const userInfo = await loginUser(dataUser);
+      await createUser(newUser);
 
+      const userInfo = await loginUser(newUser);
       localStorage.setItem('CurrentUser', JSON.stringify(userInfo));
       dispatch({ type: 'UPDATE_USER', payload: userInfo });
 
       setUserError('');
       setSuccess(true);
       checkLocation();
-      navigate(APP_ROUTES.MAIN);
     } catch (e) {
       setUserError((e as CustomError).message);
+      setOpenUserError(true);
     }
 
     setIsLoading(false);
@@ -199,7 +201,7 @@ export default function RegForm() {
             </Grid>
           </Grid>
 
-          {userError ? <ErrorBox>{userError}</ErrorBox> : ''}
+          <Toast open={openUserError} setOpen={setOpenUserError} title={userError} />
         </Box>
       </StyledBox>
     </Container>
