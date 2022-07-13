@@ -25,12 +25,14 @@ const GameTableResultComponent = ({ answers, newWords, setScore }: Props) => {
   const [isMutated, setIsMutated] = useState(false);
 
   const { response } = useGetUserAggregatedWords();
-  const wordsCount = response?.totalCount[0].count;
+  const totalCount = response?.totalCount;
 
   useEffect(() => {
-    if (!wordsCount || !answers.length) {
+    if (!totalCount || !answers.length) {
       return;
     }
+
+    const wordsCount = totalCount[0].count;
 
     const count = answers.reduce((prev, curr) => {
       const { failCounter, successCounter } = curr;
@@ -57,7 +59,7 @@ const GameTableResultComponent = ({ answers, newWords, setScore }: Props) => {
     };
 
     update();
-  }, [wordsCount]);
+  }, [totalCount]);
 
   useEffect(() => {
     const userJSON = localStorage.getItem('CurrentUser');

@@ -14,18 +14,6 @@ const Utils = {
     return min + Math.floor(Math.random() * (max - min + 1));
   },
 
-  getSprintWords: (arr: WordItem[]) => {
-    return arr.map((item) => {
-      return {
-        item,
-        //Determines whether the answer will be the correct translation or not
-        correct: Utils.random(0, 1) === 1 ? true : false,
-        //If need be - random incorrect translate
-        incorrect: arr[Utils.random(0, arr.length - 1)].wordTranslate,
-      };
-    });
-  },
-
   getRandomWords: (arr: WordItem[][]) => {
     const piece = [...arr].flat();
 
@@ -86,31 +74,6 @@ const Utils = {
       .map((a) => ({ sort: Math.random(), value: a }))
       .sort((a, b) => a.sort - b.sort)
       .map((a) => a.value);
-  },
-
-  getHardQuestions: async () => {
-    const prom = await getHardWords();
-    const data = prom[0].paginatedResults;
-    const formatData = Utils.getSprintWords(data.flat());
-    const randomData = Utils.shuffleAnswers(formatData);
-
-    randomData.forEach((item, idx) => {
-      randomData[idx].item.id = randomData[idx].item._id || '';
-    });
-    return randomData;
-  },
-
-  getPreparedQuestions: async (page: number, part: number) => {
-    const idArr: any[] = [];
-    for (let i = page; i >= 0; i--) {
-      idArr.push(i);
-    }
-
-    const prom = idArr.map((page) => getPartOfTextbook(`${page}`, `${part}`));
-    const data = (await Promise.allSettled(prom)).map((item: any) => item.value);
-    const formatData = Utils.getSprintWords(data.flat());
-    const randomData = Utils.shuffleAnswers(formatData);
-    return randomData;
   },
 
   getUserToken: () => {

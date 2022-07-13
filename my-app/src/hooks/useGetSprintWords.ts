@@ -30,14 +30,6 @@ export const useGetSprintWords = ({ level, part, page }: Props) => {
 
           const result = Utils.getRandomWords(data);
           setResponse(result);
-        } else if (part === 'hardwords') {
-          Utils.getHardQuestions().then((result) => {
-            setResponse(result);
-          });
-        } else if (page !== null && part !== null) {
-          Utils.getPreparedQuestions(page, +part).then((result) => {
-            setResponse(result);
-          });
         }
       } catch (err) {
         const { message } = err as Error;
