@@ -41,24 +41,28 @@ const Utils = {
     const piece = [...arr].flat();
 
     const result = piece.map((item) => {
-      const incorrect: number[] = [];
-      for (let i = 0; i < 4; i++) {
-        if (i === 0) incorrect.push(Utils.random(0, piece.length - 1));
-        else {
-          let rand = Utils.random(0, piece.length - 1);
-          while (rand === incorrect[i - 1]) {
-            rand = Utils.random(0, piece.length - 1);
-          }
-          incorrect.push(rand);
+      // 3 incorrect + 1 correct word in arr
+      const incorrect: string[] = new Array(4).fill(null);
+
+      // add 4 incorrect words
+      incorrect.forEach((item, idx, arr) => {
+        const rand = () => Utils.random(0, piece.length - 1);
+        let randomTranslate = piece[rand()].wordTranslate;
+
+        while (arr.includes(randomTranslate)) {
+          randomTranslate = piece[rand()].wordTranslate;
         }
-      }
-      const rightId = Utils.random(0, 3);
+
+        arr[idx] = randomTranslate;
+      });
+
+      // change 1 random incorrect word to correct translate
+      const correctId = Utils.random(0, 3);
+      incorrect[correctId] = item.wordTranslate;
+
       return {
-        item: item,
-        //4 incorrect words
-        incorrect: incorrect.map((num, id) =>
-          id === rightId ? item.wordTranslate : piece[num].wordTranslate
-        ),
+        item,
+        incorrect,
       };
     });
 
