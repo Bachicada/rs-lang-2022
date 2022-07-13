@@ -14,6 +14,8 @@ export const useGetAudioWords = ({ level }: Props) => {
 
   useEffect(() => {
     if (level === null) {
+      setResponse([]);
+      setIsLoading(true);
       return;
     }
 

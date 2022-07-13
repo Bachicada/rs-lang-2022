@@ -33,6 +33,7 @@ const AudiocallGame = () => {
   }, [dispatch, error, level, requestLoading, response]);
 
   const restartGame = () => {
+    setLevel(null);
     dispatch({ type: AudiocallActionTypes.RESTART });
   };
 
