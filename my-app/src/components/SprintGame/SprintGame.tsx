@@ -39,6 +39,7 @@ const SprintGame = () => {
   }, [dispatch, error, level, requestLoading, response]);
 
   const restartGame = () => {
+    setLevel(null);
     dispatch({ type: SprintActionTypes.RESTART });
   };
 

@@ -16,6 +16,8 @@ export const useGetSprintWords = ({ level, part, page }: Props) => {
 
   useEffect(() => {
     if (level === null && part === null) {
+      setResponse([]);
+      setIsLoading(true);
       return;
     }
 
