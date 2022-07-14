@@ -15,7 +15,7 @@ Made on **pure react**, as part of the training
 * MaterialUI: 5.4.0
 	
 ## Setup
-To run thi project, go to [website](https://rslang-timursk.netlify.app/), or install it locally via npm:
+To run this project, go to [website](https://rslang-timursk.netlify.app/), or install it locally via npm:
 ```sh
 cd rslang/my-app
 npm install
