@@ -4,6 +4,9 @@ import { useEffect, useState } from 'react';
 import WordsContainer from './WordsContainer';
 import PaginationComponent from './PaginationComponent';
 import { styled, Typography } from '@mui/material';
+import HardWordsContainer from './HardWordsContainer';
+
+const PARTS = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2', 'Сложные слова'];
 
 export default function PartOfTextBook() {
   const [pageNumber, setPageNumber] = useState('0');
@@ -25,10 +28,14 @@ export default function PartOfTextBook() {
   return (
     <div>
       <StyledTypography variant="h5">
-        Раздел {!isHardWords ? +part + 1 : 'Сложные слова'}
+        Раздел {!isHardWords ? PARTS[+part] : 'Сложные слова'}
       </StyledTypography>
 
-      <WordsContainer page={`${+pageNumber - 1}`} part={params.part} />
+      {!isHardWords ? (
+        <WordsContainer page={`${+pageNumber - 1}`} part={params.part} />
+      ) : (
+        <HardWordsContainer page={`${+pageNumber - 1}`} />
+      )}
 
       <PaginationComponent page={params.page ?? ''} part={params.part ?? ''} />
     </div>

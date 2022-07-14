@@ -1,31 +1,46 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { getUserAllWords } from '../services/UserWordService';
 import { IUserWord } from '../types/types';
+
+let refetch = () => {};
 
 export const useGetUserWords = () => {
   const [response, setResponse] = useState<IUserWord[]>([]);
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(true);
 
-  const fetchData = useCallback(async () => {
-    try {
-      const data = await getUserAllWords();
-      if (!data.length) {
-        return;
-      }
+  useEffect(() => {
+    let isMounted = true;
 
-      setResponse(data);
-    } catch (err) {
-      const { message } = err as Error;
-      setError(message);
-    } finally {
-      setIsLoading(false);
-    }
+    const fetchData = async () => {
+      try {
+        const data = await getUserAllWords();
+        if (!data.length) {
+          return;
+        }
+
+        if (isMounted) {
+          setResponse(data);
+        }
+      } catch (err) {
+        const { message } = err as Error;
+        if (isMounted) {
+          setError(message);
+        }
+      } finally {
+        if (isMounted) {
+          setIsLoading(false);
+        }
+      }
+    };
+
+    fetchData();
+    refetch = fetchData;
+
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
-  useEffect(() => {
-    fetchData();
-  }, [fetchData]);
-
-  return { response, error, isLoading, refetch: fetchData };
+  return { response, error, isLoading, refetch };
 };
