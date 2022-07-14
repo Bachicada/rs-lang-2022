@@ -11,7 +11,6 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { CustomError, NewUser } from '../../types/types';
 import { APP_ROUTES } from '../../utils/Constants';
-import styles from './autorisation.module.css';
 import { useUserContext } from '../../store/hooks';
 import Loading from '../shared/Loading';
 import { styled } from '@mui/material';
@@ -30,7 +29,7 @@ export default function RegForm() {
 
   const [openUserError, setOpenUserError] = useState(false);
   const [userError, setUserError] = useState('');
-  const [user, dispatch] = useUserContext();
+  const [, dispatch] = useUserContext();
 
   const [name, setName] = useState('');
   const [nameError, setNameError] = useState('');
@@ -222,14 +221,4 @@ const StyledBox = styled(Box)`
   -webkit-transition: all 0.2s ease-in-out;
   transition: all 0.2s ease-in-out;
   margin-top: 20px;
-`;
-
-const ErrorBox = styled('div')`
-  margin-top: 15px;
-  background-color: #eca48c;
-  color: rgba(0, 0, 0, 0.582);
-  font-size: 1.3em;
-  border-radius: 10px;
-  border: 2px solid #ec5a2a;
-  text-align: center;
 `;

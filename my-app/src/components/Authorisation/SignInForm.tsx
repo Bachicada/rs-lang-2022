@@ -11,13 +11,12 @@ import { APP_ROUTES } from '../../utils/Constants';
 import { loginUser } from '../../services/UserService';
 import { CustomError, NewUser } from '../../types/types';
 import { Link, useNavigate } from 'react-router-dom';
-import styles from './autorisation.module.css';
 import { useUserContext } from '../../store/hooks';
 import Loading from '../shared/Loading';
 import { styled } from '@mui/material';
 
 export default function SignInForm() {
-  const [user, dispatch] = useUserContext();
+  const [, dispatch] = useUserContext();
   const [userError, setUserError] = useState('');
 
   const [isLoading, setIsLoading] = useState(false);

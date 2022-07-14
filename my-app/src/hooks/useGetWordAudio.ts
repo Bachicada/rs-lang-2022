@@ -40,6 +40,7 @@ const useGetWordAudio = ({ word }: Props) => {
     if (!isPlay && audioList.length) {
       stopAudio();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isPlay, audioList]);
 
   const switchPlay = () => {

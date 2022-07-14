@@ -15,7 +15,7 @@ const Header = () => {
     threshold: 0,
   });
 
-  const [userContext, dispatch] = useUserContext();
+  const [userContext] = useUserContext();
 
   const handleDrawerOpen = () => {
     setOpen(true);

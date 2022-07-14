@@ -59,6 +59,7 @@ const GameTableResultComponent = ({ answers, newWords, setScore }: Props) => {
     };
 
     update();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [totalCount]);
 
   useEffect(() => {
@@ -81,6 +82,7 @@ const GameTableResultComponent = ({ answers, newWords, setScore }: Props) => {
     };
 
     getScores();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [newWords, setScore]);
 
   return (
@@ -102,13 +104,12 @@ const GameTableResultComponent = ({ answers, newWords, setScore }: Props) => {
           </TableHead>
 
           <TableBody>
-            {answers.map(({ answer, item, failCounter, successCounter }, idx) => {
+            {answers.map(({ answer, item, failCounter, successCounter }) => {
               const isFailCounter = failCounter || failCounter === 0;
               const isSuccessCounter = successCounter || successCounter === 0;
 
               return (
                 <StyledTableRow key={item.id} className={answer ? 'success' : 'fail'}>
-                  {/* // <StyledTableRow key={item.id}> */}
                   <StyledTableCell component="th" scope="row" align="left">
                     {item.word}
                   </StyledTableCell>
@@ -141,7 +142,8 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   },
 }));
 
-const StyledTableRow = styled(TableRow)(({ theme }) => ({
+// const StyledTableRow = styled(TableRow)(({ theme }) => ({
+const StyledTableRow = styled(TableRow)(() => ({
   '&.fail': {
     // backgroundColor: theme.palette.error.main,
     backgroundColor: 'rgb(255 240 240)',

@@ -3,10 +3,9 @@ import Loading from '../components/shared/Loading';
 import Toast from '../components/shared/Toast';
 import { getNewUserToken, getUser } from '../services/UserService';
 import { useUserContext } from '../store/hooks';
-import { CustomError } from '../types/types';
 
 const UserChecker: FC<PropsWithChildren> = ({ children }) => {
-  const [user, dispatch] = useUserContext();
+  const [, dispatch] = useUserContext();
   const [isLoading, setIsLoading] = useState(false);
   const [open, setOpen] = useState(false);
 

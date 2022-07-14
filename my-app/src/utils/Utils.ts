@@ -1,5 +1,3 @@
-import { getHardWords } from '../services/UserAggregatedWordsService';
-import { getPartOfTextbook } from '../services/WordService';
 import { WordItem } from '../types/types';
 
 const Utils = {

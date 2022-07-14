@@ -1,16 +1,4 @@
 import { API_URL, ENDPOINTS } from '../utils/Constants';
-import { getNewWords } from './UserAggregatedWordsService';
-
-interface UserStatisticsOptional {
-  audiocall?: string;
-  sprint?: string;
-  allNew?: string;
-}
-
-interface UserStatistics {
-  learnedWords: number;
-  optional: UserStatisticsOptional;
-}
 
 export const getUserStatistics = async () => {
   const userJSON = localStorage.getItem('CurrentUser');
