@@ -10,6 +10,8 @@
 RSlang - front-end part of the learning application. Includes textbook, games and statistics. 
 Made on **pure react**, as part of the training
 
+![image](https://user-images.githubusercontent.com/86415266/179003348-cdea5b5e-be0c-41f0-ad2a-9a5fa8d49a6a.png)
+
 ## Technologies
 * React: 17.0.2
 * MaterialUI: 5.4.0
